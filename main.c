@@ -28,6 +28,7 @@
  *******************************************************************************/
 /* DriverLib Includes */
 #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
+#include <ti/devices/msp432p4xx/driverlib/dma.h>
 #include <ti/devices/msp432p4xx/inc/msp.h>
 
 /* Standard Includes */
@@ -74,6 +75,19 @@ const eUSCI_UART_ConfigV1 pcUartConfig = {
         EUSCI_A_UART_8_BIT_LEN                  // 8 bit data length
 };
 
+
+/* DMA Control Table */
+#if defined(__TI_COMPILER_VERSION__)
+#pragma DATA_ALIGN(MSP_EXP432P401RLP_DMAControlTable, 1024)
+#elif defined(__IAR_SYSTEMS_ICC__)
+#pragma data_alignment=1024
+#elif defined(__GNUC__)
+__attribute__ ((aligned (1024)))
+#elif defined(__CC_ARM)
+__align(1024)
+#endif
+static DMA_ControlTable MSP_EXP432P401RLP_DMAControlTable[32];
+
 int main(void){
     /* Halting WDT  */
     MAP_WDT_A_holdTimer();
@@ -110,8 +124,13 @@ int main(void){
     MAP_Interrupt_enableInterrupt(INT_EUSCIA2);
 //    MAP_UART_enableInterrupt(EUSCI_A0_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT);
 //    MAP_Interrupt_enableInterrupt(INT_EUSCIA0);
-    MAP_Interrupt_enableSleepOnIsrExit();
 
+    //DMA
+    MAP_DMA_enableModule();
+    MAP_DMA_setControlBase(MSP_EXP432P401RLP_DMAControlTable);
+    MAP_DMA_assignChannel(DMA_CH5_EUSCIA2RX);
+
+    MAP_Interrupt_enableSleepOnIsrExit();
     while(1){
         if(stringEnd){
             for(int i = 0; i < dataCount; ++i){
