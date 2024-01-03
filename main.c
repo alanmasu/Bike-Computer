@@ -34,13 +34,18 @@
 /* Standard Includes */
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
+
+#ifndef NULL
+#define NULL (void*)0
+#endif
 
 #define RX_BUFFER_SIZE 256                  //!< Size of RX buffer
                                             //!< Uesed also by DMA as max buffer length
 
 uint8_t TXData = 1;                         //
 uint8_t RXData = 0;                         //
-uint_fast8_t uartData[RX_BUFFER_SIZE];      //!< UART RX buffer
+uint8_t uartData[RX_BUFFER_SIZE];      //!< UART RX buffer
 volatile uint_fast16_t dataCount = 0;       //
 volatile bool stringEnd = false;            //
 
@@ -139,7 +144,7 @@ int main(void){
                      - arbitration size is 1 (one transfer per request)
     */
     DMA_setChannelControl(DMA_CH5_EUSCIA2RX | UDMA_PRI_SELECT,
-                              UDMA_SIZE_8 | UDMA_SRC_INC_NONE | UDMA_DST_INC_8 | UDMA_ARB_1); 
+                              UDMA_SIZE_8 | UDMA_SRC_INC_NONE | UDMA_DST_INC_8 | UDMA_ARB_1);
     /*!
         @brief      Set DMA chennel transfer parameters for EUSCI_A2 RX
         @details    Set DMA chennel for EUSCI_A2 RX to use Primary DMA Mode sets also: 
@@ -149,7 +154,7 @@ int main(void){
                      - Transfer size
     */
     DMA_setChannelTransfer(DMA_CH5_EUSCIA2RX | UDMA_PRI_SELECT,
-                               UDMA_MODE_BASIC, 
+                               UDMA_MODE_BASIC,
                                (void *) UART_getReceiveBufferAddressForDMA(EUSCI_A2_BASE),
                                uartData,
                                RX_BUFFER_SIZE);
@@ -164,17 +169,25 @@ int main(void){
 
 
     MAP_Interrupt_enableSleepOnIsrExit();
+    volatile void* controllBaseAlt = NULL;
+    bool channelEnabled = false;
     while(1){
+        controllBaseAlt = MAP_DMA_getControlBase();
+        channelEnabled =  MAP_DMA_isChannelEnabled(5);
         if(stringEnd){
             for(int i = 0; i < RX_BUFFER_SIZE; ++i){
                 MAP_UART_transmitData(EUSCI_A0_BASE, uartData[i]);
             }
             stringEnd = false;
-//            MAP_Interrupt_enableInterrupt(INT_DMA_INT1);
-//            MAP_DMA_enableInterrupt(INT_DMA_INT1);
+            DMA_setChannelTransfer(DMA_CH5_EUSCIA2RX | UDMA_PRI_SELECT,
+                                   UDMA_MODE_BASIC,
+                                   (void *) UART_getReceiveBufferAddressForDMA(EUSCI_A2_BASE),
+                                   uartData,
+                                   RX_BUFFER_SIZE);
+            MAP_DMA_enableChannel(5);
         }
-//        MAP_Interrupt_enableSleepOnIsrExit();
-//        MAP_PCM_gotoLPM0InterruptSafe();
+        MAP_Interrupt_enableSleepOnIsrExit();
+        MAP_PCM_gotoLPM0InterruptSafe();
     }
 }
 
@@ -210,11 +223,6 @@ int main(void){
 */ 
 void DMA_INT1_IRQHandler(void){
     stringEnd = true;
-    DMA_clearInterruptFlag(0);
-    DMA_clearInterruptFlag(1);
-
     /* Disable the interrupt to allow execution */
     MAP_Interrupt_disableSleepOnIsrExit();
-//    MAP_Interrupt_disableInterrupt(INT_DMA_INT1);
-//    MAP_DMA_disableInterrupt(INT_DMA_INT1);
 }
