@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Bike-Project: File Members</title>
+<title>Bike-Project: DMAModule.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -48,7 +48,6 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
-</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -70,18 +69,55 @@ $(function() {
 </div>
 </div>
 
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">DMAModule.c File Reference</div></div>
+</div><!--header-->
 <div class="contents">
-<div class="textblock">Here is a list of all documented file members with links to the documentation:</div><ul>
-<li>DMA_INT1_IRQHandler()&#160;:&#160;<a class="el" href="_g_p_s_8c.html#a2db538345499749ea158c96b0f4f8318">GPS.c</a></li>
-<li>dmaInit()&#160;:&#160;<a class="el" href="_d_m_a_module_8c.html#a2efa21dedda1992b5cb10ca9335d17f2">DMAModule.c</a>, <a class="el" href="_d_m_a_module_8h.html#a2efa21dedda1992b5cb10ca9335d17f2">DMAModule.h</a></li>
-<li>gpsDMAConfiguration()&#160;:&#160;<a class="el" href="_g_p_s_8c.html#aa65fe8033648cd0d8db16826914854ec">GPS.c</a>, <a class="el" href="_g_p_s_8h.html#aa65fe8033648cd0d8db16826914854ec">GPS.h</a></li>
-<li>gpsDMARestoreChannel()&#160;:&#160;<a class="el" href="_g_p_s_8c.html#af47632cdd5d24f0eba6a351be4d7d965">GPS.c</a>, <a class="el" href="_g_p_s_8h.html#af47632cdd5d24f0eba6a351be4d7d965">GPS.h</a></li>
-<li>gpsUartConfig()&#160;:&#160;<a class="el" href="_g_p_s_8c.html#a4093f2712484f9929c0888ffac40c43e">GPS.c</a>, <a class="el" href="_g_p_s_8h.html#a4093f2712484f9929c0888ffac40c43e">GPS.h</a></li>
-<li>main()&#160;:&#160;<a class="el" href="main_8c.html#a840291bc02cba5474a4cb46a9b9566fe">main.c</a></li>
-<li>pcUartConfig&#160;:&#160;<a class="el" href="main_8c.html#abb21e3a1124e978cf43b8a6870995ea4">main.c</a></li>
-<li>stringEnd&#160;:&#160;<a class="el" href="_g_p_s_8c.html#a39f4a5757801683c2262327235bf9398">GPS.c</a>, <a class="el" href="_g_p_s_8h.html#a39f4a5757801683c2262327235bf9398">GPS.h</a></li>
-<li>uartConfig&#160;:&#160;<a class="el" href="_g_p_s_8c.html#ad359190a2ebcf7279dc06e2c6e41aac6">GPS.c</a></li>
-</ul>
+
+<p>DMA module functions and definitions.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &lt;ti/devices/msp432p4xx/driverlib/driverlib.h&gt;</code><br />
+<code>#include &lt;ti/devices/msp432p4xx/driverlib/dma.h&gt;</code><br />
+<code>#include &lt;ti/devices/msp432p4xx/inc/msp.h&gt;</code><br />
+<code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+<code>#include &lt;<a class="el" href="_d_m_a_module_8h_source.html">DMAModule.h</a>&gt;</code><br />
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a2efa21dedda1992b5cb10ca9335d17f2" id="r_a2efa21dedda1992b5cb10ca9335d17f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2efa21dedda1992b5cb10ca9335d17f2">dmaInit</a> (void)</td></tr>
+<tr class="memdesc:a2efa21dedda1992b5cb10ca9335d17f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">DMA module initialization.  <br /></td></tr>
+<tr class="separator:a2efa21dedda1992b5cb10ca9335d17f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>DMA module functions and definitions. </p>
+<dl class="section date"><dt>Date</dt><dd>03/01/2024 </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Alan Masutti </dd></dl>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a2efa21dedda1992b5cb10ca9335d17f2" name="a2efa21dedda1992b5cb10ca9335d17f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2efa21dedda1992b5cb10ca9335d17f2">&#9670;&#160;</a></span>dmaInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void dmaInit </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>DMA module initialization. </p>
+<p>This function initializes the DMA module </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

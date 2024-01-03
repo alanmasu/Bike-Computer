@@ -11,19 +11,7 @@
  *
  *
  *  MCLK = HSMCLK = SMCLK = DCO of 24MHz
- *
- *               MSP432P401
- *             -----------------
- *            |                 |
- *       RST -|     P3.3/UCA0TXD|----> GPS_L80 RX at 9600 8N1
- *            |                 |
- *           -|                 |
- *            |     P3.2/UCA0RXD|----< GPS_L80 TX at 9600 8N1
- *            |                 |
- *            |             P1.0|---> LED
- *            |                 |
  * 
- * @version 1.0
  * @date 03/01/2024
  */
 
@@ -37,37 +25,16 @@
 #include <stdbool.h>
 #include <string.h>
 
+/* Local Includes */
+#include <GPS.h>
+#include <DMAModule.h>
+
 #ifndef NULL
 #define NULL (void*)0
 #endif
 
-#define RX_BUFFER_SIZE 256                  //! Size of RX buffer
-                                            //! Uesed also by DMA as max buffer length
-
-volatile uint8_t uartData[RX_BUFFER_SIZE];  //! GPS UART RX buffer
-volatile bool stringEnd = false;            //! Flag for end of string
-
 /**
  * @brief Parameters for PC UART initialization
- * @details These are the configuration parameters to
- * make the eUSCI A UART module to operate with a 9600 baud rate whit ClockSource of 24MHz. 
- * These values were calculated using the online calculator that TI provides
- * at: http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html
- */
-const eUSCI_UART_ConfigV1 uartConfig = {
-        EUSCI_A_UART_CLOCKSOURCE_SMCLK,             // SMCLK Clock Source
-        156,                                        // BRDIV = 13
-        4,                                          // UCxBRF = 0
-        0,                                          // UCxBRS = 37
-        EUSCI_A_UART_NO_PARITY,                     // No Parity
-        EUSCI_A_UART_LSB_FIRST,                     // LSB First
-        EUSCI_A_UART_ONE_STOP_BIT,                  // One stop bit
-        EUSCI_A_UART_MODE,                          // UART mode
-        EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION,  // Oversampling
-        EUSCI_A_UART_8_BIT_LEN                      // 8 bit data length
-};
-/**
- * @brief Parameters for GPS UART initialization
  * @details These are the configuration parameters to
  * make the eUSCI A UART module to operate with a 115200 baud rate whit ClockSource of 24MHz. 
  * These values were calculated using the online calculator that TI provides
@@ -85,19 +52,6 @@ const eUSCI_UART_ConfigV1 pcUartConfig = {
         EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION,  // Oversampling
         EUSCI_A_UART_8_BIT_LEN                      // 8 bit data length
 };
-
-
-/* DMA Control Table */
-#if defined(__TI_COMPILER_VERSION__)
-#pragma DATA_ALIGN(MSP_EXP432P401RLP_DMAControlTable, 1024)
-#elif defined(__IAR_SYSTEMS_ICC__)
-#pragma data_alignment=1024
-#elif defined(__GNUC__)
-__attribute__ ((aligned (1024)))
-#elif defined(__CC_ARM)
-__align(1024)
-#endif
-static DMA_ControlTable MSP_EXP432P401RLP_DMAControlTable[32]; //!< DMA control table
 
 
 /*!
@@ -129,58 +83,22 @@ int main(void){
 
 
     /* Configuring UART Modules */
-    //Setting pins
-    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P3,
-                GPIO_PIN2 | GPIO_PIN3, GPIO_PRIMARY_MODULE_FUNCTION);  //GPS
+    //Enable PC UART 
     MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P1,
                 GPIO_PIN2 | GPIO_PIN3, GPIO_PRIMARY_MODULE_FUNCTION);   //PC
-    //Configure module
-    MAP_UART_initModule(EUSCI_A2_BASE, &uartConfig);                    //GPS
     MAP_UART_initModule(EUSCI_A0_BASE, &pcUartConfig);                  //PC
-    // Enable UART module
-    MAP_UART_enableModule(EUSCI_A2_BASE);                               //GPS
     MAP_UART_enableModule(EUSCI_A0_BASE);                               //PC
-    // Enabling UART interrupts
-    // MAP_UART_enableInterrupt(EUSCI_A2_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT);
-    // MAP_Interrupt_enableInterrupt(INT_EUSCIA2);
     // MAP_UART_enableInterrupt(EUSCI_A0_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT);
     // MAP_Interrupt_enableInterrupt(INT_EUSCIA0);
+	//Enable GPS UART
+	gpsUartConfig();
 
-    //DMA
-    MAP_DMA_enableModule();
-    MAP_DMA_setControlBase(MSP_EXP432P401RLP_DMAControlTable);
-    MAP_DMA_assignChannel(DMA_CH5_EUSCIA2RX);
-    /*! 
-        Set DMA chennel for EUSCI_A2 RX
-        Set DMA chennel for EUSCI_A2 RX to use Primary DMA Mode sets also: 
-		 - 8bit data size 
-		 - source address increment is none, (source is fixed)
-		 - destination address increment is 8bit (destination is incremented by 1)
-		 - arbitration size is 1 (one transfer per request)
-    */
-    DMA_setChannelControl(DMA_CH5_EUSCIA2RX | UDMA_PRI_SELECT,
-                              UDMA_SIZE_8 | UDMA_SRC_INC_NONE | UDMA_DST_INC_8 | UDMA_ARB_1);
-    /*!
-        Set DMA chennel transfer parameters for EUSCI_A2 RX
-        Set DMA chennel for EUSCI_A2 RX to use Primary DMA Mode sets also: 
-		 - Basic transfer mode
-		 - Source address
-		 - Destination address
-		 - Transfer size
-    */
-    DMA_setChannelTransfer(DMA_CH5_EUSCIA2RX | UDMA_PRI_SELECT,
-                               UDMA_MODE_BASIC,
-                               (void *) UART_getReceiveBufferAddressForDMA(EUSCI_A2_BASE),
-                               uartData,
-                               RX_BUFFER_SIZE);
-
-    //Enable DMA interrupts
-    MAP_DMA_assignInterrupt(INT_DMA_INT1, 5);               // Assing DMA interrupt 1 to channel 5
-    MAP_DMA_clearInterruptFlag(DMA_CH5_EUSCIA2RX & 0x0F);   // Clear interrupt flag for channel 5
-
-    MAP_Interrupt_enableInterrupt(INT_DMA_INT1);            // Enable DMA interrupt
-    MAP_DMA_enableInterrupt(INT_DMA_INT1);                  // Enable DMA interrupt 1
-    MAP_DMA_enableChannel(5);                               // Enable DMA channel 5
+	/* Configuring DMA module */
+	//Enable DMA module
+	dmaInit();
+	//Enable DMA for EUSCI_A2 RX
+	gpsDMAConfiguration();
+    
 
 
     MAP_Interrupt_enableSleepOnIsrExit();
@@ -190,12 +108,7 @@ int main(void){
                 MAP_UART_transmitData(EUSCI_A0_BASE, uartData[i]);
             }
             stringEnd = false;
-            DMA_setChannelTransfer(DMA_CH5_EUSCIA2RX | UDMA_PRI_SELECT,
-                                   UDMA_MODE_BASIC,
-                                   (void *) UART_getReceiveBufferAddressForDMA(EUSCI_A2_BASE),
-                                   uartData,
-                                   RX_BUFFER_SIZE);
-            MAP_DMA_enableChannel(5);
+            gpsDMARestoreChannel();
         }
         MAP_Interrupt_enableSleepOnIsrExit();
         MAP_PCM_gotoLPM0InterruptSafe();
@@ -212,16 +125,3 @@ int main(void){
 //    }
 //
 //}
-
-
-/*! 
-    @brief      DMA completation interrupt handler
-	@details    This function is called when DMA transfer is completed
-	            so it wakes up the CPU for processing the data by setting the stringEnd flag
-*/ 
-void DMA_INT1_IRQHandler(void){
-	//Set the stringEnd flag
-    stringEnd = true;
-    // Disable the interrupt to allow execution 
-    MAP_Interrupt_disableSleepOnIsrExit();
-}

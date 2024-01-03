@@ -44,3 +44,9 @@ https://drive.google.com/drive/folders/1Llw7UDmaANK1lYZJ6caN6bu0Kb6bvCJu?usp=sha
 ## Project Documentation
 
 - [main.c](#main.c)
+- GPS API
+  - [GPS.h](#GPS.h)
+  - [GPS.c](#GPS.c)
+- DMA API
+  - [DMAModule.h](#DMAModule.h)
+  - [DMAModule.c](#DMAModule.c)

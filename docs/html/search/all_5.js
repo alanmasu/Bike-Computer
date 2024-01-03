@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['stringend_0',['stringEnd',['../main_8c.html#a39f4a5757801683c2262327235bf9398',1,'main.c']]]
+  ['pcuartconfig_0',['pcUartConfig',['../main_8c.html#abb21e3a1124e978cf43b8a6870995ea4',1,'main.c']]],
+  ['project_20documentation_1',['Project Documentation',['../index.html#autotoc_md1',1,'']]]
 ];

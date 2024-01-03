@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['pcuartconfig_0',['pcUartConfig',['../main_8c.html#abb21e3a1124e978cf43b8a6870995ea4',1,'main.c']]],
-  ['project_20documentation_1',['Project Documentation',['../index.html#autotoc_md1',1,'']]]
+  ['main_0',['main',['../main_8c.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main.c']]],
+  ['main_2ec_1',['main.c',['../main_8c.html',1,'']]]
 ];
