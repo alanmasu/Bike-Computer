@@ -17,10 +17,10 @@
  *               MSP432P401
  *             -----------------
  *            |                 |
- *       RST -|     P3.3/UCA0TXD|----> GPS_L80 RX
+ *       RST -|     P3.3/UCA0TXD|----> GPS_L80 RX at 9600 8N1
  *            |                 |
  *           -|                 |
- *            |     P3.2/UCA0RXD|----< GPS_L80 TX
+ *            |     P3.2/UCA0RXD|----< GPS_L80 TX at 9600 8N1
  *            |                 |
  *            |             P1.0|---> LED
  *            |                 |
@@ -40,14 +40,11 @@
 #define NULL (void*)0
 #endif
 
-#define RX_BUFFER_SIZE 256                  //!< Size of RX buffer
-                                            //!< Uesed also by DMA as max buffer length
+#define RX_BUFFER_SIZE 256                  //! Size of RX buffer
+                                            //! Uesed also by DMA as max buffer length
 
-uint8_t TXData = 1;                         //
-uint8_t RXData = 0;                         //
-uint8_t uartData[RX_BUFFER_SIZE];      //!< UART RX buffer
-volatile uint_fast16_t dataCount = 0;       //
-volatile bool stringEnd = false;            //
+volatile uint8_t uartData[RX_BUFFER_SIZE];  //! GPS UART RX buffer
+volatile bool stringEnd = false;            //! Flag for end of string
 
 /* UART Configuration Parameter. These are the configuration parameters to
  * make the eUSCI A UART module to operate with a 115200 baud rate. These
@@ -169,11 +166,7 @@ int main(void){
 
 
     MAP_Interrupt_enableSleepOnIsrExit();
-    volatile void* controllBaseAlt = NULL;
-    bool channelEnabled = false;
     while(1){
-        controllBaseAlt = MAP_DMA_getControlBase();
-        channelEnabled =  MAP_DMA_isChannelEnabled(5);
         if(stringEnd){
             for(int i = 0; i < RX_BUFFER_SIZE; ++i){
                 MAP_UART_transmitData(EUSCI_A0_BASE, uartData[i]);
@@ -190,21 +183,6 @@ int main(void){
         MAP_PCM_gotoLPM0InterruptSafe();
     }
 }
-
-/* EUSCI A0 UART ISR - Echos data back to PC host */
-// void EUSCIA2_IRQHandler(void){
-//     uint32_t status = MAP_UART_getEnabledInterruptStatus(EUSCI_A2_BASE);
-
-//     if(status & EUSCI_A_UART_RECEIVE_INTERRUPT_FLAG){
-//         RXData = MAP_UART_receiveData(EUSCI_A2_BASE);
-//         if(dataCount < RX_BUFFER_SIZE){
-//             uartData[dataCount++] = RXData;
-//         }else if(dataCount > RX_BUFFER_SIZE - 1 || (RXData == '\r' && uartData[dataCount-1] == '\n')){
-//             stringEnd = true;
-//             MAP_Interrupt_disableSleepOnIsrExit();
-//         }
-//     }
-// }
 
 //void EUSCIA0_IRQHandler(void){
 //    uint32_t status = MAP_UART_getEnabledInterruptStatus(EUSCI_A0_BASE);
