@@ -101,10 +101,12 @@ static DMA_ControlTable MSP_EXP432P401RLP_DMAControlTable[32]; //!< DMA control 
 
 
 /*!
-    @brief      Main program
-	@details    This function initializes the UART modules 
-	, transmitting characters
-				that the MSP432 MCU receives.
+    @brief      Main function thats starts my tests
+	@details    This function initializes:
+	 			 - The DC0 module at 24MHz
+				 - The UART modules 
+				 - The DMA module
+				 - The GPIO pins.
 */
 
 int main(void){
@@ -149,22 +151,22 @@ int main(void){
     MAP_DMA_setControlBase(MSP_EXP432P401RLP_DMAControlTable);
     MAP_DMA_assignChannel(DMA_CH5_EUSCIA2RX);
     /*! 
-        @brief      Set DMA chennel for EUSCI_A2 RX
-        @details    Set DMA chennel for EUSCI_A2 RX to use Primary DMA Mode sets also: 
-                     - 8bit data size 
-                     - source address increment is none, (source is fixed)
-                     - destination address increment is 8bit (destination is incremented by 1)
-                     - arbitration size is 1 (one transfer per request)
+        Set DMA chennel for EUSCI_A2 RX
+        Set DMA chennel for EUSCI_A2 RX to use Primary DMA Mode sets also: 
+		 - 8bit data size 
+		 - source address increment is none, (source is fixed)
+		 - destination address increment is 8bit (destination is incremented by 1)
+		 - arbitration size is 1 (one transfer per request)
     */
     DMA_setChannelControl(DMA_CH5_EUSCIA2RX | UDMA_PRI_SELECT,
                               UDMA_SIZE_8 | UDMA_SRC_INC_NONE | UDMA_DST_INC_8 | UDMA_ARB_1);
     /*!
-        @brief      Set DMA chennel transfer parameters for EUSCI_A2 RX
-        @details    Set DMA chennel for EUSCI_A2 RX to use Primary DMA Mode sets also: 
-                     - Basic transfer mode
-                     - Source address
-                     - Destination address
-                     - Transfer size
+        Set DMA chennel transfer parameters for EUSCI_A2 RX
+        Set DMA chennel for EUSCI_A2 RX to use Primary DMA Mode sets also: 
+		 - Basic transfer mode
+		 - Source address
+		 - Destination address
+		 - Transfer size
     */
     DMA_setChannelTransfer(DMA_CH5_EUSCIA2RX | UDMA_PRI_SELECT,
                                UDMA_MODE_BASIC,
@@ -173,12 +175,12 @@ int main(void){
                                RX_BUFFER_SIZE);
 
     //Enable DMA interrupts
-    MAP_DMA_assignInterrupt(INT_DMA_INT1, 5);               //!< Assing DMA interrupt 1 to channel 5
-    MAP_DMA_clearInterruptFlag(DMA_CH5_EUSCIA2RX & 0x0F);   //!< Clear interrupt flag for channel 5
+    MAP_DMA_assignInterrupt(INT_DMA_INT1, 5);               // Assing DMA interrupt 1 to channel 5
+    MAP_DMA_clearInterruptFlag(DMA_CH5_EUSCIA2RX & 0x0F);   // Clear interrupt flag for channel 5
 
-    MAP_Interrupt_enableInterrupt(INT_DMA_INT1);            //!< Enable DMA interrupt
-    MAP_DMA_enableInterrupt(INT_DMA_INT1);                  //!< Enable DMA interrupt 1
-    MAP_DMA_enableChannel(5);                               //!< Enable DMA channel 5
+    MAP_Interrupt_enableInterrupt(INT_DMA_INT1);            // Enable DMA interrupt
+    MAP_DMA_enableInterrupt(INT_DMA_INT1);                  // Enable DMA interrupt 1
+    MAP_DMA_enableChannel(5);                               // Enable DMA channel 5
 
 
     MAP_Interrupt_enableSleepOnIsrExit();
@@ -213,10 +215,13 @@ int main(void){
 
 
 /*! 
-    @brief      DMA interrupt handler and disable interrupts
+    @brief      DMA completation interrupt handler
+	@details    This function is called when DMA transfer is completed
+	            so it wakes up the CPU for processing the data by setting the stringEnd flag
 */ 
 void DMA_INT1_IRQHandler(void){
+	//Set the stringEnd flag
     stringEnd = true;
-    /* Disable the interrupt to allow execution */
+    // Disable the interrupt to allow execution 
     MAP_Interrupt_disableSleepOnIsrExit();
 }
