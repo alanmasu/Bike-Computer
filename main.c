@@ -1,10 +1,8 @@
-/******************************************************************************
- * MSP432 UART - Loopback with 24MHz DCO BRCLK
- *
- * Description:
- * I'm testing UART connections and implementation using DriverLib
- *
- * This demo connects TX to ESP32 RX and RX to ESP32 TX,
+/*!
+ * @file main.c
+ * @brief MSP432 UART - Loopback with 24MHz DCO BRCLK
+ * @details I'm testing UART connections and implementation using DriverLib
+ * 	This demo connects TX to ESP32 RX and RX to ESP32 TX,
  *  The example code shows proper initialization of registers
  *  and interrupts to receive and transmit data.
  *
@@ -24,8 +22,11 @@
  *            |                 |
  *            |             P1.0|---> LED
  *            |                 |
- *
- *******************************************************************************/
+ * 
+ * @version 1.0
+ * @date 03/01/2024
+ */
+
 /* DriverLib Includes */
 #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
 #include <ti/devices/msp432p4xx/driverlib/dma.h>
@@ -46,11 +47,12 @@
 volatile uint8_t uartData[RX_BUFFER_SIZE];  //! GPS UART RX buffer
 volatile bool stringEnd = false;            //! Flag for end of string
 
-/* UART Configuration Parameter. These are the configuration parameters to
- * make the eUSCI A UART module to operate with a 115200 baud rate. These
- * values were calculated using the online calculator that TI provides
- * at:
- * http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html
+/**
+ * @brief Parameters for PC UART initialization
+ * @details These are the configuration parameters to
+ * make the eUSCI A UART module to operate with a 9600 baud rate whit ClockSource of 24MHz. 
+ * These values were calculated using the online calculator that TI provides
+ * at: http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html
  */
 const eUSCI_UART_ConfigV1 uartConfig = {
         EUSCI_A_UART_CLOCKSOURCE_SMCLK,             // SMCLK Clock Source
@@ -64,7 +66,13 @@ const eUSCI_UART_ConfigV1 uartConfig = {
         EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION,  // Oversampling
         EUSCI_A_UART_8_BIT_LEN                      // 8 bit data length
 };
-
+/**
+ * @brief Parameters for GPS UART initialization
+ * @details These are the configuration parameters to
+ * make the eUSCI A UART module to operate with a 115200 baud rate whit ClockSource of 24MHz. 
+ * These values were calculated using the online calculator that TI provides
+ * at: http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html
+ */
 const eUSCI_UART_ConfigV1 pcUartConfig = {
         EUSCI_A_UART_CLOCKSOURCE_SMCLK,             // SMCLK Clock Source
         13,                                         // BRDIV = 13
@@ -89,7 +97,15 @@ __attribute__ ((aligned (1024)))
 #elif defined(__CC_ARM)
 __align(1024)
 #endif
-static DMA_ControlTable MSP_EXP432P401RLP_DMAControlTable[32];
+static DMA_ControlTable MSP_EXP432P401RLP_DMAControlTable[32]; //!< DMA control table
+
+
+/*!
+    @brief      Main program
+	@details    This function initializes the UART modules 
+	, transmitting characters
+				that the MSP432 MCU receives.
+*/
 
 int main(void){
     /* Halting WDT  */
