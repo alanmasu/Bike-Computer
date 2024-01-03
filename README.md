@@ -1,12 +1,13 @@
 # Bike Computer
+
 Embedded Software for the IoT project
 
 Authors:
-- @AlbertoDB20
-- @alanmasu
-- @sofiaz17
-- @pietrocipriani (as external collaborator)
-- @kikalore
+- [@AlbertoDB20](https://github.com/AlbertoDB20)
+- [@alanmasu](https://github.com/alanmasu)
+- [@sofiaz17](https://github.com/Sofiaz17)
+- [@kikalore](https://github.com/kikalore)
+- [@pietrocipriani](https://github.com/pietrocipriani) (as external collaborator)
 
 
 The goal of the project is the realization of a bike computer equipped with many functions common to many odometers on market today, such as reporting instantaneous speed, average speed, clock, distance travelled but also more advanced statistics such as altitude, gps coordinates, automatic management of lights based on external ambient light and a safe system which, in the event of sudden braking, flashes the rear lights to warn other cyclists or cars of the emergency. 
@@ -39,3 +40,7 @@ Ideas for Project:
 
 Google Drive link:
 https://drive.google.com/drive/folders/1Llw7UDmaANK1lYZJ6caN6bu0Kb6bvCJu?usp=sharing
+
+## Project Documentation
+
+- [main.c](#main.c)
