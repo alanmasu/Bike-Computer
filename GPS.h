@@ -33,9 +33,27 @@
 /* Standard Includes */
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
+#include <time.h>
 
 #define RX_BUFFER_SIZE 256                  //! Size of RX buffer
                                             //! Uesed also by DMA as max buffer length
+
+typedef enum {INVALID, GPS_FIX, DGPS, GPS_PPS, IRTK, FRTK, DEAD_RECKONING, MANUAL, SIMULATED} FixData_t;
+typedef struct{
+    char latitude[12];                      //! Latitude
+    char longitude[12];                     //! Longitude
+    char altitude[8];                       //! Altitude
+    char altitude_WSG84[8];                 //! Altitude
+    char speed[8];                          //! Speed
+    char course[8];                         //! Course
+    struct tm timeInfo;                     //! Time info
+    char sats[4];                           //! Satellites
+    FixData_t fix;                          //! Fix
+    char hdop[4];                           //! HDOP
+    char vdop[4];                           //! VDOP
+    char pdop[4];                           //! PDOP
+} GpsGGAData_t;
 
 extern volatile uint8_t uartData[RX_BUFFER_SIZE];
 extern volatile bool stringEnd;
@@ -44,6 +62,8 @@ extern volatile bool stringEnd;
 void gpsUartConfig(void);                   
 void gpsDMAConfiguration(void);
 void gpsDMARestoreChannel(void);
+
+void gpsParseData(); 
 
 
 #endif // __GPS_H__

@@ -4,7 +4,7 @@
     @date   03/01/2024
     @author Alan Masutti
 */
-*/
+
 
 /* DriverLib Includes */
 #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
@@ -14,6 +14,7 @@
 /* Standard Includes */
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 
 /* Local Includes*/
