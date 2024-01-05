@@ -56,8 +56,8 @@
 								<option id="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.DIAG_WRAP.1724464708" name="Wrap diagnostic messages (--diag_wrap)" superClass="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.DIAG_WRAP" useByScannerDiscovery="false" value="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.DIAG_WRAP.off" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.ADVICE__POWER.987650412" name="Enable checking of ULP power rules (--advice:power)" superClass="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.ADVICE__POWER" useByScannerDiscovery="false" value="all" valueType="string"/>
 								<option id="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.LITTLE_ENDIAN.2125765415" name="Little endian code [See 'General' page to edit] (--little_endian, -me)" superClass="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.LITTLE_ENDIAN" useByScannerDiscovery="false" value="true" valueType="boolean"/>
-								<option id="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.C_DIALECT.570064183" superClass="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.C_DIALECT" value="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.C_DIALECT.C11" valueType="enumerated"/>
-								<option id="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.C___DIALECT.148983051" superClass="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.C___DIALECT" value="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.C___DIALECT.CPLUSPLUS14" valueType="enumerated"/>
+								<option id="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.C_DIALECT.570064183" name="C Dialect" superClass="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.C_DIALECT" value="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.C_DIALECT.C11" valueType="enumerated"/>
+								<option id="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.C___DIALECT.148983051" name="C++ Dialect" superClass="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.C___DIALECT" value="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compilerID.C___DIALECT.CPLUSPLUS14" valueType="enumerated"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compiler.inputType__C_SRCS.783258047" name="C Sources" superClass="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compiler.inputType__C_SRCS"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compiler.inputType__CPP_SRCS.540414652" name="C++ Sources" superClass="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compiler.inputType__CPP_SRCS"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compiler.inputType__ASM_SRCS.494107685" name="Assembly Sources" superClass="com.ti.ccstudio.buildDefinitions.MSP432_20.2.compiler.inputType__ASM_SRCS"/>
@@ -189,4 +189,5 @@
 		<project id="template_project.com.ti.ccstudio.buildDefinitions.MSP432.ProjectType.743747335" name="MSP432" projectType="com.ti.ccstudio.buildDefinitions.MSP432.ProjectType"/>
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cproject>
