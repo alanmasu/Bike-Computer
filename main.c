@@ -13,6 +13,7 @@
 #include <Hardware/GPIO_Driver.h>
 #include <Hardware/CS_Driver.h>
 #include <Hardware/TIMERA_Driver.h>
+#include <Hardware/SD_Driver.h>
 #include <fatfs/ff.h>
 #include <fatfs/diskio.h>
 
@@ -21,16 +22,13 @@
 //Standard includes
 #include <string.h>
 
-/*Huge thanks to bluehash @ https://github.com/bluehash/MSP432Launchpad/tree/master/MSP432-Launchpad-FatFS-SDCard*/
-
 /* UART Configuration Parameter. These are the configuration parameters to
  * make the eUSCI A UART module to operate with a 115200 baud rate. These
  * values were calculated using the online calculator that TI provides
  * at:
  * http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html
  */
-eUSCI_UART_ConfigV1 UART0Config =
-{
+eUSCI_UART_ConfigV1 UART0Config = {
      EUSCI_A_UART_CLOCKSOURCE_SMCLK,
      13,
      0,
@@ -44,8 +42,7 @@ eUSCI_UART_ConfigV1 UART0Config =
 
 /* SPI Configuration Parameter. These are the configuration parameters to
  * make the eUSCI B SPI module to operate with a 500KHz clock.*/
-eUSCI_SPI_MasterConfig SPI0MasterConfig =
-{
+eUSCI_SPI_MasterConfig SPI0MasterConfig = {
      EUSCI_B_SPI_CLOCKSOURCE_SMCLK,
      3000000,
      500000,
@@ -54,18 +51,6 @@ eUSCI_SPI_MasterConfig SPI0MasterConfig =
      EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_HIGH,
      EUSCI_B_SPI_3PIN
 };
-
-/* Timer_A UpMode Configuration Parameters */
-Timer_A_UpModeConfig upConfig =
-{
-        TIMER_A_CLOCKSOURCE_SMCLK,              // SMCLK Clock Source
-        TIMER_A_CLOCKSOURCE_DIVIDER_64,         // SMCLK/1 = 3MHz
-        30000,                                  // 1 ms tick period
-        TIMER_A_TAIE_INTERRUPT_DISABLE,         // Disable Timer interrupt
-        TIMER_A_CCIE_CCR0_INTERRUPT_ENABLE ,    // Enable CCR0 interrupt
-        TIMER_A_DO_CLEAR                        // Clear value
-};
-
 
 FATFS FS;
 DIR DI;
@@ -81,7 +66,7 @@ void main(void){
     /*Initialize all hardware required for the SD Card*/
     SPI_Init(EUSCI_B0_BASE, SPI0MasterConfig);
     UART_Init(EUSCI_A0_BASE, UART0Config);
-    TIMERA_Init(TIMER_A1_BASE, UP_MODE, &upConfig, disk_timerproc);
+    SD_Init();
 
     Interrupt_enableMaster();
 
@@ -91,33 +76,33 @@ void main(void){
     r = f_mount(&FS, "0", 1);
     /*Check for errors. Trap MSP432 if there is an error*/
     if(r != FR_OK){
-        MSPrintf(EUSCI_A0_BASE, "Error mounting SD Card, check your connections\r\n");
-        while(1);
+        MSPrintf(EUSCI_A0_BASE, "Error mounting SD Card, mount function returned: %d \r\n", r);
     }
 
     /*Let's try to open the root directory on the SD Card*/
     r = f_opendir(&DI, "/");
     /*Check for errors. Trap MSP432 if there is an error*/
     if(r != FR_OK){
-        MSPrintf(EUSCI_A0_BASE, "Could not open root directory\r\n");
+        MSPrintf(EUSCI_A0_BASE, "Could not open root directory, returned: %d\r\n", r);
         while(1);
     }
 
     //Reading a file
     r = f_open(&file, "/input.txt", FA_READ | FA_WRITE);
     if(r){
-        MSPrintf(EUSCI_A0_BASE,"File, not exixts. Creating now!\n");
+        MSPrintf(EUSCI_A0_BASE,"File, not exixts. Creating now!\r\n");
         r = f_open(&file, "/input.txt", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
         if(r){
-            MSPrintf(EUSCI_A0_BASE,"Error on writing a file!\n");
+            MSPrintf(EUSCI_A0_BASE,"Error on writing a file! Returned: %d\r\n", r);
             while(1);
         }
     }
-    f_printf(&file, "%s\n", myString);
+    f_printf(&file, "%s\r\n", myString);
     if(!r){
-        MSPrintf(EUSCI_A0_BASE,"File writed!\n");
+        MSPrintf(EUSCI_A0_BASE,"File writed!\r\n");
     }
 
     f_close(&file);
+//    f_unmount("");
     while(1);
 }

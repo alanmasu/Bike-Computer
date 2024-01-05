@@ -5,7 +5,7 @@
 #include "diskio.h"
 #include "Hardware/SPI_Driver.h"
 #include "Hardware/GPIO_Driver.h"
-#inlcude "Hardware/SD_Driver.h"
+#include "Hardware/SD_Driver.h"
 
 DSTATUS MMC_disk_initialize (void);
 DSTATUS MMC_disk_status (void);

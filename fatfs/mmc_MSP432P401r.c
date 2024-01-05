@@ -20,10 +20,10 @@
 
 #define SPI_BASE    EUSCI_B0_BASE
 #ifndef MMC_SS_GPIO_PORT
-  #define MMC_SS_GPIO_PORT   GPIO_PORT_P5
+  #error "undefined MMC_SS_GPIO_PORT"
 #endif
 #ifndef MMC_SS_GPIO_PIN
-  #define MMC_SS_GPIO_PIN    GPIO_PIN2
+  #error "undefined MMC_SS_GPIO_PIN"
 #endif
 #define DESELECT    GPIO_High(MMC_SS_GPIO_PORT, MMC_SS_GPIO_PIN);
 #define SELECT      GPIO_Low(MMC_SS_GPIO_PORT, MMC_SS_GPIO_PIN);
