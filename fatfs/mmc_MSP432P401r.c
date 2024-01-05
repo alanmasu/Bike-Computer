@@ -19,9 +19,9 @@
 
 
 #define SPI_BASE    EUSCI_B0_BASE
-#define GPIO_PORT   GPIO_PORT_P5
-#define DESELECT    GPIO_High(GPIO_PORT_P5, GPIO_PIN0);
-#define SELECT      GPIO_Low(GPIO_PORT_P5, GPIO_PIN0);
+#define GPIO_PORT   GPIO_PORT_P5_5
+#define DESELECT    GPIO_High(GPIO_PORT_P5, GPIO_PIN2);
+#define SELECT      GPIO_Low(GPIO_PORT_P5, GPIO_PIN2);
 
 
 static volatile DSTATUS Stat = STA_NOINIT;
