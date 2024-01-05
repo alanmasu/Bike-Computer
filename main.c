@@ -81,7 +81,6 @@ void main(void){
     /*Initialize all hardware required for the SD Card*/
     SPI_Init(EUSCI_B0_BASE, SPI0MasterConfig);
     UART_Init(EUSCI_A0_BASE, UART0Config);
-    GPIO_Init(GPIO_PORT_P5, GPIO_PIN2);
     TIMERA_Init(TIMER_A1_BASE, UP_MODE, &upConfig, disk_timerproc);
 
     Interrupt_enableMaster();
