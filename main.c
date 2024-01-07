@@ -27,13 +27,15 @@
 //Standard includes
 #include <string.h>
 
-
-const char* myString = "This is an input file!";
+//Testing includes
+#include "Test/GPX_Points.h"
 
 //GPX
 #include "GPX.h"
 
 #ifndef SIMULATE_HARDWARE
+
+#define GPX_TEST_FILE "test.gpx"
 
 /*!
  * @brief UART Configuration Parameter.
@@ -92,6 +94,7 @@ void main(void){
         MSPrintf(EUSCI_A0_BASE, "Error mounting SD Card, mount function returned: %d \r\n", r);
     }
 
+
     /*Let's try to open the root directory on the SD Card*/
     r = f_opendir(&DI, "/");
     /*Check for errors. Trap MSP432 if there is an error*/
@@ -100,27 +103,29 @@ void main(void){
         while(1);
     }
 
-    //Reading a file
-    r = f_open(&file, "/input.txt", FA_READ | FA_WRITE);
-    if(r){
-        MSPrintf(EUSCI_A0_BASE,"File, not exixts. Creating now!\r\n");
-        r = f_open(&file, "/input.txt", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
-        if(r){
-            MSPrintf(EUSCI_A0_BASE,"Error on writing a file! Returned: %d\r\n", r);
-            while(1);
-        }
+    //testing SD and GPX features
+    GPXInitFile(GPX_TEST_FILE);
+    MSPrintf(EUSCI_A0_BASE, "Initialized GPX\r\n");
+    GPXAddTrack(GPX_TEST_FILE, "Test Track", "Test Description", "2024-01-03T00:00:00Z");
+    MSPrintf(EUSCI_A0_BASE, "Initialized trak\r\n");
+    GPXAddTrackSegment(GPX_TEST_FILE);
+    MSPrintf(EUSCI_A0_BASE, "Initialized segment\r\n");
+    for(int i = 0; i < CoordinateArray_size; i++){
+        GPXAddTrackPoint(GPX_TEST_FILE, CoordinateArray[i].latitude, CoordinateArray[i].longitude, CoordinateArray[i].altitude, CoordinateArray[i].time);
+//        for(int d = 0; d < 100000; ++d);
     }
-    f_printf(&file, "%s\r\n", myString);
-    if(!r){
-        MSPrintf(EUSCI_A0_BASE,"File writed!\r\n");
-    }
-
-    f_close(&file);
+    MSPrintf(EUSCI_A0_BASE, "Added points in: %f sec\r\n");
+    GPXCloseTrackSegment(GPX_TEST_FILE);
+    MSPrintf(EUSCI_A0_BASE, "Closet segment GPX\r\n");
+    GPXCloseTrack(GPX_TEST_FILE);
+    MSPrintf(EUSCI_A0_BASE, "Closed track \r\n");
+    GPXCloseFile(GPX_TEST_FILE);
+    MSPrintf(EUSCI_A0_BASE, "Closed GPX\r\n");
 //    f_unmount("");
     while(1);
 }
 #else
-#include "Test/GPX_Points.h"
+
 #define GPX_TEST_FILE "Test/results/test.gpx"
 int main(void){
 	GPXInitFile(GPX_TEST_FILE);

@@ -1,4 +1,5 @@
 #include "GPX.h"
+#include <stdio.h>
 
 const char* GPX_HEADER = "\
 <?xml version='1.0' encoding='UTF-8'?>\n\
@@ -7,8 +8,8 @@ xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \
 xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\">\n";
 
 const char* GPX_TRACK_POINT = "\
-            <trkpt lat=\"%f\" lon=\"%f\">\n\
-                <ele>%f</ele>\n\
+            <trkpt lat=\"%s\" lon=\"%s\">\n\
+                <ele>%s</ele>\n\
                 <time>%s</time>\n\
             </trkpt>\n";
 
@@ -20,7 +21,7 @@ void GPXInitFile(const char* filename){
         if(r != FR_OK){
             return;
         }
-        f_printf(&file, "%s\n", GPX_HEADER);
+        f_printf(&file, "%s", GPX_HEADER);
         f_close(&file);
     #else
         FILE *file;
@@ -29,7 +30,7 @@ void GPXInitFile(const char* filename){
             return;
             printf("Error opening file!\n");
         }
-        fprintf(file, "%s\n", GPX_HEADER);
+        fprintf(file, GPX_HEADER);
         fclose(file);
     #endif
 }
@@ -102,19 +103,31 @@ void GPXAddTrackPoint(const char* filename, double lat, double lon, double ele, 
     #ifndef SIMULATE_HARDWARE
         FRESULT r;
         FIL file;
+        char latitude[20];
+        char longitude[20];
+        char altitude[20];
+        snprintf(latitude, 20, "%f", lat);
+        snprintf(longitude, 20, "%f", lon);
+        snprintf(altitude, 20, "%f", ele);
         r = f_open(&file, filename, FA_WRITE | FA_OPEN_APPEND);
         if(r != FR_OK){
             return;
         }
-        f_printf(&file, GPX_TRACK_POINT, lat, lon, ele, time);
+        f_printf(&file, GPX_TRACK_POINT, latitude, longitude, altitude, time);
         f_close(&file);
     #else
         FILE *file;
+        char latitude[20];
+        char longitude[20];
+        char altitude[20];
+        snprintf(latitude, 20, "%f", lat);
+        snprintf(longitude, 20, "%f", lon);
+        snprintf(altitude, 20, "%f", ele);
         file = fopen(filename, "a");
         if(file == NULL){
             return;
         }
-        fprintf(file, GPX_TRACK_POINT, lat, lon, ele, time);
+        fprintf(file, GPX_TRACK_POINT, latitude, longitude, altitude, time);
         fclose(file);
     #endif
 }
