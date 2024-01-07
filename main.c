@@ -4,25 +4,40 @@
  *	@version 1.0
  *	@date 03/01/2024
  */
+// #define SIMULATE_HARDWARE
 
-#include <ti/devices/msp432p4xx/inc/msp.h>
-#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
+#ifndef SIMULATE_HARDWARE
+	#include <ti/devices/msp432p4xx/inc/msp.h>
+	#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
 
-//SD
-#include <Hardware/SPI_Driver.h>
-#include <Hardware/GPIO_Driver.h>
-#include <Hardware/CS_Driver.h>
-#include <Hardware/TIMERA_Driver.h>
-#include <Hardware/SD_Driver.h>
-#include <fatfs/ff.h>
-#include <fatfs/diskio.h>
-
-#include <Devices/MSPIO.h>
+	//SD
+	#include <Hardware/SPI_Driver.h>
+	#include <Hardware/GPIO_Driver.h>
+	#include <Hardware/CS_Driver.h>
+	#include <Hardware/TIMERA_Driver.h>
+	#include <Hardware/SD_Driver.h>
+	#include <fatfs/ff.h>
+	#include <fatfs/diskio.h>
+	#include <Devices/MSPIO.h>
+#else
+	#include <stdio.h>
+	#include <stdlib.h>
+#endif
 
 //Standard includes
 #include <string.h>
 
-/* UART Configuration Parameter. These are the configuration parameters to
+
+const char* myString = "This is an input file!";
+
+//GPX
+#include "GPX.h"
+
+#ifndef SIMULATE_HARDWARE
+
+/*!
+ * @brief UART Configuration Parameter.
+ * @details These are the configuration parameters to
  * make the eUSCI A UART module to operate with a 115200 baud rate. These
  * values were calculated using the online calculator that TI provides
  * at:
@@ -56,8 +71,6 @@ FATFS FS;
 DIR DI;
 FILINFO FI;
 FIL file;
-
-const char* myString = "This is an input file!";
 
 void main(void){
     WDT_A_holdTimer();	// stop watchdog timer
@@ -106,3 +119,19 @@ void main(void){
 //    f_unmount("");
     while(1);
 }
+#else
+#include "Test/GPX_Points.h"
+#define GPX_TEST_FILE "Test/results/test.gpx"
+int main(void){
+	GPXInitFile(GPX_TEST_FILE);
+    GPXAddTrack(GPX_TEST_FILE, "Test Track", "Test Description", "2024-01-03T00:00:00Z");
+    GPXAddTrackSegment(GPX_TEST_FILE);
+    for(int i = 0; i < CoordinateArray_size; i++){
+        GPXAddTrackPoint(GPX_TEST_FILE, CoordinateArray[i].latitude, CoordinateArray[i].longitude, CoordinateArray[i].altitude, CoordinateArray[i].time);
+    }
+    GPXCloseTrackSegment(GPX_TEST_FILE);
+    GPXCloseTrack(GPX_TEST_FILE);
+    GPXCloseFile(GPX_TEST_FILE);
+	return 0;
+}
+#endif
