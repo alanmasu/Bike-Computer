@@ -98,36 +98,22 @@ void GPXAddNewTrackSegment(const char* filename){
         fclose(file);
     #endif
 }
-
-void GPXAddTrackPoint(const char* filename, double lat, double lon, double ele, const char* time){
+void GPXAddTrackPoint(const char* filename, const char* lat, const char* lon, const char* ele, const char* time){
     #ifndef SIMULATE_HARDWARE
         FRESULT r;
         FIL file;
-        char latitude[20];
-        char longitude[20];
-        char altitude[20];
-        snprintf(latitude, 20, "%f", lat);
-        snprintf(longitude, 20, "%f", lon);
-        snprintf(altitude, 20, "%f", ele);
         r = f_open(&file, filename, FA_WRITE | FA_OPEN_APPEND);
         if(r != FR_OK){
             return;
         }
-        f_printf(&file, GPX_TRACK_POINT, latitude, longitude, altitude, time);
+        f_printf(&file, GPX_TRACK_POINT, lat, lon, ele, time);
         f_close(&file);
     #else
         FILE *file;
-        char latitude[20];
-        char longitude[20];
-        char altitude[20];
-        snprintf(latitude, 20, "%f", lat);
-        snprintf(longitude, 20, "%f", lon);
-        snprintf(altitude, 20, "%f", ele);
-        file = fopen(filename, "a");
         if(file == NULL){
             return;
         }
-        fprintf(file, GPX_TRACK_POINT, latitude, longitude, altitude, time);
+        fprintf(file, GPX_TRACK_POINT, lat, lon, ele, time);
         fclose(file);
     #endif
 }
