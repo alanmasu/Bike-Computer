@@ -4,26 +4,28 @@
 #ifndef SIMULATE_HARDWARE
     #include <fatfs/ff.h>
     #include <fatfs/diskio.h>
+    #define FILE_TYPE FIL*
 #else
     #include <stdio.h>
+    #define FILE_TYPE FILE**
 #endif
 #include <string.h>
 
 
-void GPXInitFile(const char* filename);
+void GPXInitFile(FILE_TYPE file, const char* filename);
 
 
-void GPXAddTrack(const char* filename, const char* trackName, const char* trackDesc, const char* time);
-void GPXAddTrackSegment(const char* filename);
-void GPXAddNewTrackSegment(const char* filename);
+void GPXAddTrack(FILE_TYPE file, const char* trackName, const char* trackDesc, const char* time);
+void GPXAddTrackSegment(FILE_TYPE file);
+void GPXAddNewTrackSegment(FILE_TYPE file);
 
-void GPXAddTrackPoint(const char* filename, const char* lat, const char* lon, const char* ele, const char* time);
-void GPXCloseTrackSegment(const char* filename);
-void GPXCloseTrack(const char* filename);
-void GPXCloseFile(const char* filename);
+void GPXAddTrackPoint(FILE_TYPE file, const char* lat, const char* lon, const char* ele, const char* time);
+void GPXCloseTrackSegment(FILE_TYPE file);
+void GPXCloseTrack(FILE_TYPE file);
+void GPXCloseFile(FILE_TYPE file);
 
 //Future implementation
-//void GPXAddWayPoint(const char* filename, double lat, double lon, double ele, const char* time);
+//void GPXAddWayPoint(FILE_TYPE file, double lat, double lon, double ele, const char* time);
 
 
 

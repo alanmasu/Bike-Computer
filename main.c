@@ -35,7 +35,10 @@
 
 #ifndef SIMULATE_HARDWARE
 
-#define GPX_TEST_FILE "test.gpx"
+
+#define GPX_TEST_FILENAME   "test.gpx"
+FIL file;
+#define GPX_TEST_FILE       file
 
 /*!
  * @brief UART Configuration Parameter.
@@ -104,39 +107,41 @@ void main(void){
     }
 
     //testing SD and GPX features
-    GPXInitFile(GPX_TEST_FILE);
+    GPXInitFile(&GPX_TEST_FILE, GPX_TEST_FILENAME);
     MSPrintf(EUSCI_A0_BASE, "Initialized GPX\r\n");
-    GPXAddTrack(GPX_TEST_FILE, "Test Track", "Test Description", "2024-01-03T00:00:00Z");
+    GPXAddTrack(&GPX_TEST_FILE, "Test Track", "Test Description", "2024-01-03T00:00:00Z");
     MSPrintf(EUSCI_A0_BASE, "Initialized trak\r\n");
-    GPXAddTrackSegment(GPX_TEST_FILE);
+    GPXAddTrackSegment(&GPX_TEST_FILE);
     MSPrintf(EUSCI_A0_BASE, "Initialized segment\r\n");
     for(int i = 0; i < CoordinateArray_size; i++){
-        GPXAddTrackPoint(GPX_TEST_FILE, CoordinateArray[i].latitude, CoordinateArray[i].longitude, CoordinateArray[i].altitude, CoordinateArray[i].time);
+        GPXAddTrackPoint(&GPX_TEST_FILE, CoordinateArray[i].latitude, CoordinateArray[i].longitude, CoordinateArray[i].altitude, CoordinateArray[i].time);
 //        for(int d = 0; d < 100000; ++d);
     }
-    MSPrintf(EUSCI_A0_BASE, "Added points in: %f sec\r\n");
-    GPXCloseTrackSegment(GPX_TEST_FILE);
+    MSPrintf(EUSCI_A0_BASE, "Added points\r\n");
+    GPXCloseTrackSegment(&GPX_TEST_FILE);
     MSPrintf(EUSCI_A0_BASE, "Closet segment GPX\r\n");
-    GPXCloseTrack(GPX_TEST_FILE);
+    GPXCloseTrack(&GPX_TEST_FILE);
     MSPrintf(EUSCI_A0_BASE, "Closed track \r\n");
-    GPXCloseFile(GPX_TEST_FILE);
+    GPXCloseFile(&GPX_TEST_FILE);
     MSPrintf(EUSCI_A0_BASE, "Closed GPX\r\n");
 //    f_unmount("");
     while(1);
 }
 #else
 
-#define GPX_TEST_FILE "Test/results/test.gpx"
+#define GPX_TEST_FILENAME   "Test/results/test.gpx"
+#define GPX_TEST_FILE       file
 int main(void){
-	GPXInitFile(GPX_TEST_FILE);
-    GPXAddTrack(GPX_TEST_FILE, "Test Track", "Test Description", "2024-01-03T00:00:00Z");
-    GPXAddTrackSegment(GPX_TEST_FILE);
+    FILE* file;
+	GPXInitFile(&GPX_TEST_FILE, GPX_TEST_FILENAME);
+    GPXAddTrack(&GPX_TEST_FILE, "Test Track", "Test Description", "2024-01-03T00:00:00Z");
+    GPXAddTrackSegment(&GPX_TEST_FILE);
     for(int i = 0; i < CoordinateArray_size; i++){
-        GPXAddTrackPoint(GPX_TEST_FILE, CoordinateArray[i].latitude, CoordinateArray[i].longitude, CoordinateArray[i].altitude, CoordinateArray[i].time);
+        GPXAddTrackPoint(&GPX_TEST_FILE, CoordinateArray[i].latitude, CoordinateArray[i].longitude, CoordinateArray[i].altitude, CoordinateArray[i].time);
     }
-    GPXCloseTrackSegment(GPX_TEST_FILE);
-    GPXCloseTrack(GPX_TEST_FILE);
-    GPXCloseFile(GPX_TEST_FILE);
+    GPXCloseTrackSegment(&GPX_TEST_FILE);
+    GPXCloseTrack(&GPX_TEST_FILE);
+    GPXCloseFile(&GPX_TEST_FILE);
 	return 0;
 }
 #endif

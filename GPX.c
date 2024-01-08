@@ -13,168 +13,97 @@ const char* GPX_TRACK_POINT = "\
                 <time>%s</time>\n\
             </trkpt>\n";
 
-void GPXInitFile(const char* filename){
+void GPXInitFile(FILE_TYPE file, const char* filename){
     #ifndef SIMULATE_HARDWARE
         FRESULT r;
-        FIL file;
-        r = f_open(&file, filename, FA_WRITE | FA_CREATE_ALWAYS);
+        r = f_open(file, filename, FA_WRITE | FA_CREATE_ALWAYS);
         if(r != FR_OK){
             return;
         }
-        f_printf(&file, "%s", GPX_HEADER);
-        f_close(&file);
+        f_printf(file, "%s", GPX_HEADER);
     #else
-        FILE *file;
-        file = fopen(filename, "w");
-        if(file == NULL){
+        *file = fopen(filename, "w");
+        if(*file == NULL){
             return;
             printf("Error opening file!\n");
         }
-        fprintf(file, GPX_HEADER);
-        fclose(file);
+        fprintf(*file, GPX_HEADER);
     #endif
 }
 
 
-void GPXAddTrack(const char* filename, const char* trackName, const char* trackDesc, const char* time){
+void GPXAddTrack(FILE_TYPE file, const char* trackName, const char* trackDesc, const char* time){
     #ifndef SIMULATE_HARDWARE
-        FRESULT r;
-        FIL file;
-        r = f_open(&file, filename, FA_WRITE | FA_OPEN_APPEND);
-        if(r != FR_OK){
-            return;
-        }
-        f_printf(&file, "\t<trk>\n");
-        f_close(&file);
+        f_printf(*file, "\t<trk>\n");
     #else
-        FILE *file;
-        file = fopen(filename, "a");
-        if(file == NULL){
+        if(*file == NULL){
             return;
         }
-        fprintf(file, "\t<trk>\n");
-        fclose(file);
+        fprintf(*file, "\t<trk>\n");
     #endif
 }
-void GPXAddTrackSegment(const char* filename){
+void GPXAddTrackSegment(FILE_TYPE file){
     #ifndef SIMULATE_HARDWARE
-        FRESULT r;
-        FIL file;
-        r = f_open(&file, filename, FA_WRITE | FA_OPEN_APPEND);
-        if(r != FR_OK){
-            return;
-        }
-        f_printf(&file, "\t\t<trkseg>\n");
-        f_close(&file);
+        f_printf(file, "\t\t<trkseg>\n");
     #else
-        FILE *file;
-        file = fopen(filename, "a");
-        if(file == NULL){
+        if(*file == NULL){
             return;
         }
-        fprintf(file, "\t\t<trkseg>\n");
-        fclose(file);
+        fprintf(*file, "\t\t<trkseg>\n");
     #endif
 }
-void GPXAddNewTrackSegment(const char* filename){
+void GPXAddNewTrackSegment(FILE_TYPE file){
     #ifndef SIMULATE_HARDWARE
-        FRESULT r;
-        FIL file;
-        r = f_open(&file, filename, FA_WRITE | FA_OPEN_APPEND);
-        if(r != FR_OK){
-            return;
-        }
-        f_printf(&file, "\t\t</trkseg>\n");
-        f_printf(&file, "\t\t<trkseg>\n");
-        f_close(&file);
+        f_printf(file, "\t\t</trkseg>\n");
+        f_printf(file, "\t\t<trkseg>\n");
     #else
-        FILE *file;
-        file = fopen(filename, "a");
         if(file == NULL){
             return;
         }
-        fprintf(file, "\t\t</trkseg>\n");
-        fprintf(file, "\t\t<trkseg>\n");
-        fclose(file);
+        fprintf(*file, "\t\t</trkseg>\n");
+        fprintf(*file, "\t\t<trkseg>\n");
     #endif
 }
-void GPXAddTrackPoint(const char* filename, const char* lat, const char* lon, const char* ele, const char* time){
+void GPXAddTrackPoint(FILE_TYPE file, const char* lat, const char* lon, const char* ele, const char* time){
     #ifndef SIMULATE_HARDWARE
-        FRESULT r;
-        FIL file;
-        r = f_open(&file, filename, FA_WRITE | FA_OPEN_APPEND);
-        if(r != FR_OK){
-            return;
-        }
-        f_printf(&file, GPX_TRACK_POINT, lat, lon, ele, time);
-        f_close(&file);
+        f_printf(file, GPX_TRACK_POINT, lat, lon, ele, time);
     #else
-        FILE *file;
-        if(file == NULL){
+        if(*file == NULL){
             return;
         }
-        fprintf(file, GPX_TRACK_POINT, lat, lon, ele, time);
-        fclose(file);
+        fprintf(*file, GPX_TRACK_POINT, lat, lon, ele, time);
     #endif
 }
-void GPXCloseTrackSegment(const char* filename){
+void GPXCloseTrackSegment(FILE_TYPE file){
     #ifndef SIMULATE_HARDWARE
-        FRESULT r;
-        FIL file;
-        r = f_open(&file, filename, FA_WRITE | FA_OPEN_APPEND);
-        if(r != FR_OK){
-            return;
-        }
-        f_printf(&file, "\t\t</trkseg>\n");
-        f_close(&file);
+        f_printf(file, "\t\t</trkseg>\n");
     #else
-        FILE *file;
-        file = fopen(filename, "a");
-        if(file == NULL){
+        if(*file == NULL){
             return;
         }
-        fprintf(file, "\t\t</trkseg>\n");
-        fclose(file);
+        fprintf(*file, "\t\t</trkseg>\n");
     #endif
 }
-void GPXCloseTrack(const char* filename){
+void GPXCloseTrack(FILE_TYPE file){
     #ifndef SIMULATE_HARDWARE
-        FRESULT r;
-        FIL file;
-        r = f_open(&file, filename, FA_WRITE | FA_OPEN_APPEND);
-        if(r != FR_OK){
-            return;
-        }
-        f_printf(&file, "\t</trk>\n");
-        f_close(&file);
+        f_printf(file, "\t</trk>\n");
     #else
-        FILE *file;
-        file = fopen(filename, "a");
-        if(file == NULL){
+        if(*file == NULL){
             return;
         }
-        fprintf(file, "\t</trk>\n");
-        fclose(file);
+        fprintf(*file, "\t</trk>\n");
     #endif
 }
 
-void GPXCloseFile(const char* filename){
+void GPXCloseFile(FILE_TYPE file){
     #ifndef SIMULATE_HARDWARE
-        FRESULT r;
-        FIL file;
-        r = f_open(&file, filename, FA_WRITE | FA_OPEN_APPEND);
-        if(r != FR_OK){
-            return;
-        }
-        f_printf(&file, "</gpx>");
-        f_close(&file);
+        f_printf(file, "</gpx>");
+        f_close(file);
     #else
-        FILE *file;
-        file = fopen(filename, "a");
-        if(file == NULL){
+        if(*file == NULL){
             return;
         }
-        fprintf(file, "</gpx>");
-        fclose(file);
+        fprintf(*file, "</gpx>");
+        fclose(*file);
     #endif
 }
