@@ -72,27 +72,129 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a>  </div>
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">main.c File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Main function for the program.  
+<p>This file shows how to use the GPX library to create a GPX file in the SD Card.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;ti/devices/msp432p4xx/inc/msp.h&gt;</code><br />
 <code>#include &lt;ti/devices/msp432p4xx/driverlib/driverlib.h&gt;</code><br />
+<code>#include &lt;Hardware/SPI_Driver.h&gt;</code><br />
+<code>#include &lt;Hardware/GPIO_Driver.h&gt;</code><br />
+<code>#include &lt;Hardware/CS_Driver.h&gt;</code><br />
+<code>#include &lt;Hardware/TIMERA_Driver.h&gt;</code><br />
+<code>#include &lt;Hardware/SD_Driver.h&gt;</code><br />
+<code>#include &lt;fatfs/ff.h&gt;</code><br />
+<code>#include &lt;fatfs/diskio.h&gt;</code><br />
+<code>#include &lt;Devices/MSPIO.h&gt;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+<code>#include &quot;Test/GPX_Points.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="_g_p_x_8h_source.html">GPX.h</a>&quot;</code><br />
 </div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:afb82e31573e9ace9316238172b2c041f" id="r_afb82e31573e9ace9316238172b2c041f"><td class="memItemLeft" align="right" valign="top"><a id="afb82e31573e9ace9316238172b2c041f" name="afb82e31573e9ace9316238172b2c041f"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>GPX_TEST_FILENAME</b>&#160;&#160;&#160;&quot;test.gpx&quot;</td></tr>
+<tr class="separator:afb82e31573e9ace9316238172b2c041f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adea887e1416a3a64837be17743fb8ba5" id="r_adea887e1416a3a64837be17743fb8ba5"><td class="memItemLeft" align="right" valign="top"><a id="adea887e1416a3a64837be17743fb8ba5" name="adea887e1416a3a64837be17743fb8ba5"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>GPX_TEST_FILE</b>&#160;&#160;&#160;file</td></tr>
+<tr class="separator:adea887e1416a3a64837be17743fb8ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a6288eba0f8e8ad3ab1544ad731eb7667" id="r_a6288eba0f8e8ad3ab1544ad731eb7667"><td class="memItemLeft" align="right" valign="top"><a id="a6288eba0f8e8ad3ab1544ad731eb7667" name="a6288eba0f8e8ad3ab1544ad731eb7667"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> (void)</td></tr>
 <tr class="separator:a6288eba0f8e8ad3ab1544ad731eb7667"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a296b3c88b34a2294d0bd990ac963543b" id="r_a296b3c88b34a2294d0bd990ac963543b"><td class="memItemLeft" align="right" valign="top"><a id="a296b3c88b34a2294d0bd990ac963543b" name="a296b3c88b34a2294d0bd990ac963543b"></a>
+FIL&#160;</td><td class="memItemRight" valign="bottom"><b>file</b></td></tr>
+<tr class="separator:a296b3c88b34a2294d0bd990ac963543b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98d493df725185f895d921f2f3263779" id="r_a98d493df725185f895d921f2f3263779"><td class="memItemLeft" align="right" valign="top">eUSCI_UART_ConfigV1&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98d493df725185f895d921f2f3263779">UART0Config</a></td></tr>
+<tr class="memdesc:a98d493df725185f895d921f2f3263779"><td class="mdescLeft">&#160;</td><td class="mdescRight">UART Configuration Parameter.  <br /></td></tr>
+<tr class="separator:a98d493df725185f895d921f2f3263779"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fa7587de22424518659d2dfc05d2446" id="r_a7fa7587de22424518659d2dfc05d2446"><td class="memItemLeft" align="right" valign="top">eUSCI_SPI_MasterConfig&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fa7587de22424518659d2dfc05d2446">SPI0MasterConfig</a></td></tr>
+<tr class="memdesc:a7fa7587de22424518659d2dfc05d2446"><td class="mdescLeft">&#160;</td><td class="mdescRight">SPI Configuration Parameter.  <br /></td></tr>
+<tr class="separator:a7fa7587de22424518659d2dfc05d2446"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52991a2e4fe8bc43bf409dea6197da85" id="r_a52991a2e4fe8bc43bf409dea6197da85"><td class="memItemLeft" align="right" valign="top"><a id="a52991a2e4fe8bc43bf409dea6197da85" name="a52991a2e4fe8bc43bf409dea6197da85"></a>
+FATFS&#160;</td><td class="memItemRight" valign="bottom"><b>FS</b></td></tr>
+<tr class="separator:a52991a2e4fe8bc43bf409dea6197da85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab80e9fe9ad585b4e2066bd1985dddd97" id="r_ab80e9fe9ad585b4e2066bd1985dddd97"><td class="memItemLeft" align="right" valign="top"><a id="ab80e9fe9ad585b4e2066bd1985dddd97" name="ab80e9fe9ad585b4e2066bd1985dddd97"></a>
+DIR&#160;</td><td class="memItemRight" valign="bottom"><b>DI</b></td></tr>
+<tr class="separator:ab80e9fe9ad585b4e2066bd1985dddd97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d01a8e67c1ca06634080accad7ba50a" id="r_a6d01a8e67c1ca06634080accad7ba50a"><td class="memItemLeft" align="right" valign="top"><a id="a6d01a8e67c1ca06634080accad7ba50a" name="a6d01a8e67c1ca06634080accad7ba50a"></a>
+FILINFO&#160;</td><td class="memItemRight" valign="bottom"><b>FI</b></td></tr>
+<tr class="separator:a6d01a8e67c1ca06634080accad7ba50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Main function for the program. </p>
-<p>This file contains the main function for the program </p><dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>03/01/2024 </dd></dl>
-</div></div><!-- contents -->
+<div class="textblock"><p>This file shows how to use the GPX library to create a GPX file in the SD Card. </p>
+<p>The main function calls all hardware configuration functions and then calls the GPX functions to create a GPX file in the SD Card, the file is called test.gpx and it is located in the root directory of the SD Card (or in Test/results/test.gpx for PC version). <br  />
+ The GPX file contains a track with a single segment and 964 points. The points are taken from the GPX_Points.h file. In this file (as in the GPX library) there are two versions of each function, one for the MSP432 and one for the PC. The PC version of the functions are used to test the GPX library without the need of the MSP432 hardware. </p><dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>08/01/2024 </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Alan Masutti</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>For testing Hardware Indipendent part of the GPX library, define SIMULATE_HARDWARE in the preprocessor options of the project. This will use the PC version of the functions instead of the MSP432 version.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="_g_p_x_8h.html" title="GPX file creation and manipulation.">GPX.h</a> </dd></dl>
+</div><h2 class="groupheader">Variable Documentation</h2>
+<a id="a7fa7587de22424518659d2dfc05d2446" name="a7fa7587de22424518659d2dfc05d2446"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fa7587de22424518659d2dfc05d2446">&#9670;&#160;</a></span>SPI0MasterConfig</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">eUSCI_SPI_MasterConfig SPI0MasterConfig</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">     EUSCI_B_SPI_CLOCKSOURCE_SMCLK,</div>
+<div class="line">     3000000,</div>
+<div class="line">     500000,</div>
+<div class="line">     EUSCI_B_SPI_MSB_FIRST,</div>
+<div class="line">     EUSCI_B_SPI_PHASE_DATA_CHANGED_ONFIRST_CAPTURED_ON_NEXT,</div>
+<div class="line">     EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_HIGH,</div>
+<div class="line">     EUSCI_B_SPI_3PIN</div>
+<div class="line">}</div>
+</div><!-- fragment -->
+<p>SPI Configuration Parameter. </p>
+<p>These are the configuration parameters to make the eUSCI B SPI module to operate with a 500KHz clock. </p>
+
+</div>
+</div>
+<a id="a98d493df725185f895d921f2f3263779" name="a98d493df725185f895d921f2f3263779"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98d493df725185f895d921f2f3263779">&#9670;&#160;</a></span>UART0Config</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">eUSCI_UART_ConfigV1 UART0Config</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">     EUSCI_A_UART_CLOCKSOURCE_SMCLK,</div>
+<div class="line">     13,</div>
+<div class="line">     0,</div>
+<div class="line">     37,</div>
+<div class="line">     EUSCI_A_UART_NO_PARITY,</div>
+<div class="line">     EUSCI_A_UART_LSB_FIRST,</div>
+<div class="line">     EUSCI_A_UART_ONE_STOP_BIT,</div>
+<div class="line">     EUSCI_A_UART_MODE,</div>
+<div class="line">     EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION</div>
+<div class="line">}</div>
+</div><!-- fragment -->
+<p>UART Configuration Parameter. </p>
+<p>These are the configuration parameters to make the eUSCI A UART module to operate with a 115200 baud rate. These values were calculated using the online calculator that TI provides at: <a href="http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html">http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html</a> </p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0

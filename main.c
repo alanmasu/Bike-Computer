@@ -1,10 +1,23 @@
-/*! @file main.c
- *  @brief Main function for the program
- *	@details This file contains the main function for the program
- *	@version 1.0
- *	@date 03/01/2024
+/*!
+    @file       main.c
+    @brief      This file shows how to use the GPX library to create a GPX file in the SD Card
+ 	@details      The main function calls all hardware configuration functions and then calls the GPX
+                functions to create a GPX file in the SD Card, the file is called test.gpx and it is
+                located in the root directory of the SD Card (or in Test/results/test.gpx for PC version). <br>
+                The GPX file contains a track with a single segment and 964 points. The points are taken from the GPX_Points.h file.
+                  In this file (as in the GPX library) there are two versions of each function, one
+                for the MSP432 and one for the PC. The PC version of the functions are used to test
+                the GPX library without the need of the MSP432 hardware.
+ 	@version    1.0
+ 	@date       08/01/2024
+    @author     Alan Masutti
+
+    @note       For testing Hardware Indipendent part of the GPX library, define SIMULATE_HARDWARE
+                in the preprocessor options of the project. This will use the PC version of the
+                functions instead of the MSP432 version.
+
+    @see        GPX.h
  */
-// #define SIMULATE_HARDWARE
 
 #ifndef SIMULATE_HARDWARE
 	#include <ti/devices/msp432p4xx/inc/msp.h>
@@ -41,12 +54,11 @@ FIL file;
 #define GPX_TEST_FILE       file
 
 /*!
- * @brief UART Configuration Parameter.
- * @details These are the configuration parameters to
- * make the eUSCI A UART module to operate with a 115200 baud rate. These
- * values were calculated using the online calculator that TI provides
- * at:
- * http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html
+    @brief     UART Configuration Parameter.
+    @details   These are the configuration parameters to
+                make the eUSCI A UART module to operate with a 115200 baud rate. These
+                values were calculated using the online calculator that TI provides
+                at: http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html
  */
 eUSCI_UART_ConfigV1 UART0Config = {
      EUSCI_A_UART_CLOCKSOURCE_SMCLK,
@@ -60,8 +72,11 @@ eUSCI_UART_ConfigV1 UART0Config = {
      EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
 };
 
-/* SPI Configuration Parameter. These are the configuration parameters to
- * make the eUSCI B SPI module to operate with a 500KHz clock.*/
+/*!
+    @brief      SPI Configuration Parameter.
+    @details    These are the configuration parameters to
+                make the eUSCI B SPI module to operate with a 500KHz clock.
+*/
 eUSCI_SPI_MasterConfig SPI0MasterConfig = {
      EUSCI_B_SPI_CLOCKSOURCE_SMCLK,
      3000000,
