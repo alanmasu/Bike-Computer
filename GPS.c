@@ -368,8 +368,34 @@ void gpsParseData(const char* packet){
                         }
                         PRINTF("\n\n");
                     }else if(strcmp(sentenceType, GSV_SENTENCE) == 0){
-
-                    }else if(strcmp(sentenceType, GLL_SENTENCE) == 0){
+                        //Satellites in view
+                        uint8_t satCount = atoi(fields[2]);
+                        uint8_t mgsIndex = atoi(fields[1]);
+                        uint8_t f;
+                        for(uint8_t i = (mgsIndex-1)*4, f = 2; i < (mgsIndex-1)*4+4 && i < satCount; ++i, f+=4){
+                            //Satellite ID
+                            if(fields[f] == NULL) break;
+                            strcpy(gpsGSVData.sats[i].id, fields[f]);
+                            //Elevation
+                            if(fields[f + 1] == NULL) break;
+                            strcpy(gpsGSVData.sats[i].elevation, fields[f+1]);
+                            //Azimuth
+                            if(fields[f + 2] == NULL) break;
+                            strcpy(gpsGSVData.sats[i].azimuth, fields[f+2]);
+                            //SNR
+                            if(fields[f + 3] == NULL) break;
+                            strcpy(gpsGSVData.sats[i].snr, fields[f+3]);
+                        }
+                        if(mgsIndex == 1){
+                            PRINTF("Satellites in view: %s\n", gpsGSVData.satsInView);
+                        }
+                        for(uint8_t i = (mgsIndex-1)*4; i < (mgsIndex-1)*4+4; ++i){
+                            PRINTF("\tSatellite ID: %s\n", gpsGSVData.sats[i].id);
+                            PRINTF("\t\tElevation: %s\n", gpsGSVData.sats[i].elevation);
+                            PRINTF("\t\tAzimuth: %s\n", gpsGSVData.sats[i].azimuth);
+                            PRINTF("\t\tSNR: %s\n", gpsGSVData.sats[i].snr);
+                        }
+                    // }else if(strcmp(sentenceType, GLL_SENTENCE) == 0){
 
                     }else if(strcmp(sentenceType, VTG_SENTENCE) == 0){
 
