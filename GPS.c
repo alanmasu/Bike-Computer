@@ -398,7 +398,19 @@ void gpsParseData(const char* packet){
                     // }else if(strcmp(sentenceType, GLL_SENTENCE) == 0){
 
                     }else if(strcmp(sentenceType, VTG_SENTENCE) == 0){
+                        //Course
+                        strcpy(gpsVTGData.course, fields[0]);
+                        //Reference
+                        strcpy(gpsVTGData.courseM, fields[2]);
+                        //Speed in knots
+                        strcpy(gpsVTGData.speedK, fields[4]);
+                        //Speed in km/h
+                        strcpy(gpsVTGData.speed, fields[6]);
 
+                        PRINTF("Course:%s \tReference:%s \tSpeed in knots:%s \tSpeed in km/h:%s\n\n", gpsVTGData.course,
+                                                                                                    gpsVTGData.courseM,
+                                                                                                    gpsVTGData.speedK,
+                                                                                                    gpsVTGData.speed);
                     }
                 }
                 str = nextSentence;

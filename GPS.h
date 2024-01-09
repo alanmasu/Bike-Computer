@@ -104,6 +104,8 @@ typedef struct{
 //VTG data
 typedef struct{
     char course[8];                         //! Course
+    char courseM[2];                        //! Reference
+    char speedK[8];                         //! Speed in knots
     char speed[8];                          //! Speed in km/h
 } GpsVTGData_t;
 
