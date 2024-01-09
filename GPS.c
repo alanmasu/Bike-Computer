@@ -243,6 +243,27 @@ float getLongitudeFromString(char* str){
     return atof(degrees) + atof(minutes) / 60;
 }
 
+/*!
+    @brief    Split string inplace
+    @details  This function splits a string in place using a delimiter
+    @param    str: String to split
+    @param    delim: Delimiter
+    @param    next: Pointer to the next string
+    @return   Pointer to the first characharacter of the substring
+*/
+char* splitString(char* str, char delim, char** next){
+    if(str != NULL){
+        char* token = strchr(str, delim);
+        if(token != NULL){
+            token[0] = '\0';
+            *next = token + 1;
+        }else{
+            *next = NULL;
+        }
+    }
+    return str;
+}
+
 void gpsParseData(const char* packet){
     char* str;
     char* sentenceType;

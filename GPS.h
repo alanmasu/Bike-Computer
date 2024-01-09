@@ -119,6 +119,8 @@ void gpsDMAConfiguration(void);
 void gpsDMARestoreChannel(void);
 #endif
 
+char* splitString(char* str, char delim, char** next);
+
 void gpsParseData(const char* packet);
 
 

@@ -135,6 +135,19 @@ int main(void){
 #include <stdio.h>
 
 int main(void){
+
+    printf("Testing splitString function\n");
+    char str[] = "$GPRMC,142104.000,A,4604.6229,N,01107.2220,E,0.00,13.60,080124,,,A*5B\r\n";
+    char* nextString = str;
+
+    char* fields[20];
+    int fieldIndex = 0;
+    do{
+        fields[fieldIndex] = splitString(nextString, ',', &nextString);
+    }while(fields[fieldIndex++] != NULL && fieldIndex < 20);
+
+
+    printf("Testing gpsParseData function\n");
     FILE* nmeaData = fopen("Test/NMEAFileCorrected.txt", "r");
     if(nmeaData == NULL){
         printf("Error opening file\n");
