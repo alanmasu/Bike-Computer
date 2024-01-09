@@ -256,7 +256,9 @@ char* splitString(char* str, char delim, char** next){
         char* token = strchr(str, delim);
         if(token != NULL){
             token[0] = '\0';
-            *next = token + 1;
+            if(next != NULL){
+                *next = token + 1;
+            }
         }else{
             *next = NULL;
         }
@@ -280,12 +282,13 @@ void gpsParseData(const char* packet){
                 PRINTF("Valid: %d\n", valid);
                 if(valid){
                     strtok(str, "*");
-                    sentenceType = strtok(str, ",");
+                    char* nextField = str;
+                    sentenceType = splitString(nextField, ',', &nextField);
 
                     //Get fields
                     int fieldIndex = 0;
                     do{
-                        fields[fieldIndex] = strtok(NULL, ",");
+                        fields[fieldIndex] = splitString(nextField, ',', &nextField);
                     }while(fields[fieldIndex++] != NULL && fieldIndex < 20);
 
                     int cmpResult = strcmp(sentenceType, RMC_SENTENCE);
@@ -361,13 +364,10 @@ void gpsParseData(const char* packet){
                         //Satellites
                         int i;
                         for(i = 0; i < 12; ++i){
-                            char* coma = strchr(fields[2+i]+3, ',');
-                            gpsGSAData.sats[i] = (int8_t)atoi(fields[2 + i] ? fields[2 + i] : -1);
-                            if(coma != NULL){
-                                for(int j = i; j < 12; ++j){
-                                    gpsGSAData.sats[j] = -1;
-                                }
-                                break;
+                            if(*fields[2 + i] == '\0'){
+                                gpsGSAData.sats[i] = -1;
+                            }else{
+                                gpsGSAData.sats[i] = (int8_t)atoi(fields[2 + i]);
                             }
                         }
                         //PDOP
@@ -384,7 +384,7 @@ void gpsParseData(const char* packet){
                                                                                         gpsGSAData.hdop,
                                                                                         gpsGSAData.vdop);
                         PRINTF("Sats: \n");
-                        for(int i = 0; gpsGSAData.sats[i] != -1; ++i){
+                        for(int i = 0; gpsGSAData.sats[i] != -1 && i < 12; ++i){
                             PRINTF("\t%d ", gpsGSAData.sats[i]);
                         }
                         PRINTF("\n\n");
@@ -395,16 +395,16 @@ void gpsParseData(const char* packet){
                         uint8_t f;
                         for(uint8_t i = (mgsIndex-1)*4, f = 2; i < (mgsIndex-1)*4+4 && i < satCount; ++i, f+=4){
                             //Satellite ID
-                            if(fields[f] == NULL) break;
+                            if(fields[f][0] == 0) break;
                             strcpy(gpsGSVData.sats[i].id, fields[f]);
                             //Elevation
-                            if(fields[f + 1] == NULL) break;
+                            if(fields[f + 1][0] == 0) break;
                             strcpy(gpsGSVData.sats[i].elevation, fields[f+1]);
                             //Azimuth
-                            if(fields[f + 2] == NULL) break;
+                            if(fields[f + 2][0] == 0) break;
                             strcpy(gpsGSVData.sats[i].azimuth, fields[f+2]);
                             //SNR
-                            if(fields[f + 3] == NULL) break;
+                            if(fields[f + 3][0] == 0) break;
                             strcpy(gpsGSVData.sats[i].snr, fields[f+3]);
                         }
                         if(mgsIndex == 1){

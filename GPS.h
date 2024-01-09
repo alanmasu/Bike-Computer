@@ -89,7 +89,7 @@ typedef struct{
 
 //GSV data
 typedef struct {
-    char id[2];                             //! Satellite ID
+    char id[4];                             //! Satellite ID
     char elevation[3];                      //! Elevation
     char azimuth[3];                        //! Azimuth
     char snr[3];                            //! SNR
