@@ -292,7 +292,7 @@ void gpsParseData(const char* packet){
                         //Altitude WSG84
                         strcpy(gpsGGAData.altitude_WSG84, fields[10]);
 
-                        PRINTF("%d\t(%s,\t%s) \tFix:%d \tsats:%s \thdop:%s \talt:%s \taltGeo:%s\n", gpsGGAData.time,
+                        PRINTF("%d\t(%s,\t%s) \tFix:%d \tsats:%s \thdop:%s \talt:%s \taltGeo:%s\n\n", gpsGGAData.time,
                                                                                                 gpsGGAData.latitude,
                                                                                                 gpsGGAData.longitude,
                                                                                                 gpsGGAData.fix,
@@ -323,7 +323,7 @@ void gpsParseData(const char* packet){
                         //Others
                         strcpy(gpsRMCData.others, fields[9]);
 
-                        PRINTF("(%s,\t%s) \tValid:%d \tspeed:%s \tcourse:%s \tdate:%d/%d/%d \tothers:%s\n",     gpsRMCData.latitude,
+                        PRINTF("(%s,\t%s) \tValid:%d \tspeed:%s \tcourse:%s \tdate:%d/%d/%d \tothers:%s\n\n",     gpsRMCData.latitude,
                                                                                                                     gpsRMCData.longitude,
                                                                                                                     gpsRMCData.valid,
                                                                                                                     gpsRMCData.speed,
@@ -333,7 +333,40 @@ void gpsParseData(const char* packet){
                                                                                                                     gpsRMCData.timeInfo.tm_year+1900,
                                                                                                                     gpsRMCData.others);
                     }else if(strcmp(sentenceType, GSA_SENTENCE) == 0){
+                        //Mode
+                        strcpy(gpsGSAData.mode, fields[0]);
+                        //Fix
+                        strcpy(gpsGSAData.fix, fields[1]);
+                        //Satellites
+                        int i;
+                        for(i = 0; i < 12; ++i){
+                            char* coma = strchr(fields[2+i]+3, ',');
+                            gpsGSAData.sats[i] = (int8_t)atoi(fields[2 + i] ? fields[2 + i] : -1);
+                            if(coma != NULL){
+                                for(int j = i; j < 12; ++j){
+                                    gpsGSAData.sats[j] = -1;
+                                }
+                                break;
+                            }
+                        }
+                        //PDOP
+                        i+=2;
+                        strcpy(gpsGSAData.pdop, fields[i]);
+                        //HDOP
+                        strcpy(gpsGSAData.hdop, fields[i+1]);
+                        //VDOP
+                        strcpy(gpsGSAData.vdop, fields[i+2]);
 
+                        PRINTF("Mode:%s \tFix:%s \tPDOP:%s \tHDOP:%s \tVDOP:%s\n",  gpsGSAData.mode,
+                                                                                        gpsGSAData.fix,
+                                                                                        gpsGSAData.pdop,
+                                                                                        gpsGSAData.hdop,
+                                                                                        gpsGSAData.vdop);
+                        PRINTF("Sats: \n");
+                        for(int i = 0; gpsGSAData.sats[i] != -1; ++i){
+                            PRINTF("\t%d ", gpsGSAData.sats[i]);
+                        }
+                        PRINTF("\n\n");
                     }else if(strcmp(sentenceType, GSV_SENTENCE) == 0){
 
                     }else if(strcmp(sentenceType, GLL_SENTENCE) == 0){

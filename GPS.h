@@ -79,10 +79,9 @@ typedef struct{
 
 //GSA data
 typedef struct{
-    time_t time;                            //! Time
     char mode[2];                           //! Mode
     char fix[2];                            //! Fix
-    uint8_t sats[13];                       //! Satellites
+    int8_t sats[13];                        //! Satellites
     char pdop[4];                           //! PDOP
     char hdop[4];                           //! HDOP
     char vdop[4];                           //! VDOP
