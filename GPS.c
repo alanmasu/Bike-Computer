@@ -195,6 +195,54 @@ time_t getTimeFromString(char* str){
     return atoi(hours) * 3600 + atoi(minutes) * 60 + atoi(seconds);
 }
 
+struct tm getDateFromString(const char* time, const char* date){
+    char hours[3];
+    char minutes[3];
+    char seconds[5];
+    memcpy(hours,time , 2);
+    memcpy(minutes, time + 2, 2);
+    memcpy(seconds, time + 4, 2);
+    hours[2] = '\0';
+    minutes[2] = '\0';
+    seconds[4] = '\0';
+    char day[3];
+    char month[3];
+    char year[3];
+    memcpy(day,date , 2);
+    memcpy(month, date + 2, 2);
+    memcpy(year, date + 4, 2);
+    day[2] = '\0';
+    month[2] = '\0';
+    year[4] = '\0';
+    return (struct tm){.tm_mday = atoi(day),
+                       .tm_mon = atoi(month),
+                       .tm_year = atoi(year) + 100,
+                       .tm_hour = atoi(hours),
+                       .tm_min = atoi(minutes),
+                       .tm_sec = atoi(seconds)
+                       };
+}
+
+float getLatitudeFromString(char* str){
+    char degrees[3];
+    char minutes[9];
+    memcpy(degrees, str, 2);
+    memcpy(minutes, str + 2, 8);
+    degrees[2] = '\0';
+    minutes[7] = '\0';
+    return atof(degrees) + atof(minutes) / 60;
+}
+
+float getLongitudeFromString(char* str){
+    char degrees[4];
+    char minutes[9];
+    memcpy(degrees, str, 3);
+    memcpy(minutes, str + 3, 8);
+    degrees[3] = '\0';
+    minutes[7] = '\0';
+    return atof(degrees) + atof(minutes) / 60;
+}
+
 void gpsParseData(const char* packet){
     char* str;
     char* sentenceType;
@@ -219,12 +267,12 @@ void gpsParseData(const char* packet){
                         fields[fieldIndex] = strtok(NULL, ",");
                     }while(fields[fieldIndex++] != NULL && fieldIndex < 20);
 
-                    int cmpResult = strcmp(sentenceType, GGA_SENTENCE);
+                    int cmpResult = strcmp(sentenceType, RMC_SENTENCE);
                     if(strcmp(sentenceType, GGA_SENTENCE) == 0){
                         //Parse GGA data
                         gpsGGAData.time = getTimeFromString(fields[0]);
-                        float latitude = atof(fields[1]);
-                        float longitude = atof(fields[3]);
+                        float latitude = getLatitudeFromString(fields[1]);
+                        float longitude = getLongitudeFromString(fields[3]);
                         if(fields[2][0] == 'S'){
                             latitude *= -1;
                         }
@@ -253,7 +301,37 @@ void gpsParseData(const char* packet){
                                                                                                 gpsGGAData.altitude,
                                                                                                 gpsGGAData.altitude_WSG84);
                     }else if(strcmp(sentenceType, RMC_SENTENCE) == 0){
+                        //Parse RMC data
+                        float latitude = getLatitudeFromString(fields[2]);
+                        float longitude = getLongitudeFromString(fields[4]);
+                        if(fields[3][0] == 'S'){
+                            latitude *= -1;
+                        }
+                        if(fields[5][0] == 'W'){
+                            longitude *= -1;
+                        }
+                        snprintf(gpsRMCData.latitude, 12, "%f", latitude);
+                        snprintf(gpsRMCData.longitude, 12, "%f", longitude);
+                        //Valid
+                        gpsRMCData.valid = fields[1][0] == 'A';
+                        //Speed
+                        strcpy(gpsRMCData.speed, fields[6]);
+                        //Course
+                        strcpy(gpsRMCData.course, fields[7]);
+                        //Date
+                        gpsRMCData.timeInfo = getDateFromString(fields[0], fields[8]);
+                        //Others
+                        strcpy(gpsRMCData.others, fields[9]);
 
+                        PRINTF("(%s,\t%s) \tValid:%d \tspeed:%s \tcourse:%s \tdate:%d/%d/%d \tothers:%s\n",     gpsRMCData.latitude,
+                                                                                                                    gpsRMCData.longitude,
+                                                                                                                    gpsRMCData.valid,
+                                                                                                                    gpsRMCData.speed,
+                                                                                                                    gpsRMCData.course,
+                                                                                                                    gpsRMCData.timeInfo.tm_mday,
+                                                                                                                    gpsRMCData.timeInfo.tm_mon+1,
+                                                                                                                    gpsRMCData.timeInfo.tm_year+1900,
+                                                                                                                    gpsRMCData.others);
                     }else if(strcmp(sentenceType, GSA_SENTENCE) == 0){
 
                     }else if(strcmp(sentenceType, GSV_SENTENCE) == 0){

@@ -50,7 +50,10 @@
 #define RX_BUFFER_SIZE 512                  //! Size of RX buffer
                                             //! Uesed also by DMA as max buffer length
 
+//GGA fix data
 typedef enum {INVALID = 0, GPS_FIX, DGPS, GPS_PPS, IRTK, FRTK, DEAD_RECKONING, MANUAL, SIMULATED} GGAFixData_t;
+
+//GGA data
 typedef struct{
     time_t time;                            //! Time
     char latitude[12];                      //! Latitude
@@ -62,6 +65,7 @@ typedef struct{
     char altitude_WSG84[8];                 //! Altitude
 } GpsGGAData_t;
 
+//RMC data
 typedef struct{
     bool valid;                             //! Valid data
     char latitude[12];                      //! Latitude
@@ -75,6 +79,7 @@ typedef struct{
 
 //GSA data
 typedef struct{
+    time_t time;                            //! Time
     char mode[2];                           //! Mode
     char fix[2];                            //! Fix
     uint8_t sats[13];                       //! Satellites
