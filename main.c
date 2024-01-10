@@ -120,6 +120,7 @@ int main(void){
             for(int i = 0; i < RX_BUFFER_SIZE; ++i){
                 MAP_UART_transmitData(EUSCI_A0_BASE, uartData[i]);
             }
+            gpsParseData((const char*)uartData);
             stringEnd = false;
             gpsDMARestoreChannel();
         }

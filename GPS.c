@@ -21,12 +21,19 @@
 #include <string.h>
 #include <stdio.h>
 
-#ifndef SIMULATE_HARDWARE
-    #define PRINTF(...)
-#else
-    #define PRINTF(...) printf(__VA_ARGS__)
+#ifndef PRINTF
+    #ifndef SIMULATE_HARDWARE
+        #ifndef DEBUG
+            #define PRINTF(...)
+        #else
+            #include <stdio.h>
+            #define PRINTF(...) printf(__VA_ARGS__)
+        #endif
+    #else
+        #include <stdio.h>
+        #define PRINTF(...) printf(__VA_ARGS__)
+    #endif
 #endif
-
 /*!
     @addtogroup GPS_Module
     @{
@@ -445,8 +452,8 @@ void gpsParseData(const char* packet){
                         PRINTF("\n\n");
                     }else if(strcmp(sentenceType, GSV_SENTENCE) == 0){
                         //Satellites in view
-                        uint8_t satCount = atoi(fields[2]);
-                        uint8_t mgsIndex = atoi(fields[1]);
+                        uint8_t satCount = (uint8_t)atoi(fields[2]);
+                        uint8_t mgsIndex = (uint8_t)atoi(fields[1]);
                         for(uint8_t i = (mgsIndex-1)*4, f = 2; i < (mgsIndex-1)*4+4 && i < satCount; ++i, f+=4){
                             //Satellite ID
                             if(fields[f][0] == 0) break;
@@ -464,6 +471,7 @@ void gpsParseData(const char* packet){
                         if(mgsIndex == 1){
                             PRINTF("Satellites in view: %s\n", gpsGSVData.satsInView);
                         }
+                        PRINTF("Msg ID: %d\n", mgsIndex);
                         for(uint8_t i = (mgsIndex-1)*4; i < (mgsIndex-1)*4+4; ++i){
                             PRINTF("\tSatellite ID: %s\n", gpsGSVData.sats[i].id);
                             PRINTF("\t\tElevation: %s\n", gpsGSVData.sats[i].elevation);

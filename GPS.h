@@ -101,13 +101,13 @@ typedef struct {
     char id[4];                             //! Satellite ID
     char elevation[3];                      //! Elevation
     char azimuth[3];                        //! Azimuth
-    char snr[3];                            //! SNR
+    char snr[4];                            //! SNR
 } SatData_t;
 
 //! GSV data Structure
 typedef struct{
     char satsInView[4];                     //! Satellites in view
-    SatData_t sats[12];                     //! Satellites
+    SatData_t sats[30];                     //! Satellites
 } GpsGSVData_t;
 
 //! VTG data Structure
