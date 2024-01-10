@@ -1,7 +1,8 @@
 /*!
     @file   GPS.c
-    @brief  GPS module functions and definitions
-    @date   03/01/2024
+    @ingroup GPS_Module
+    @brief  GPS module function implementations
+    @date   10/01/2024
     @author Alan Masutti
 */
 
@@ -26,6 +27,10 @@
     #define PRINTF(...) printf(__VA_ARGS__)
 #endif
 
+/*!
+    @addtogroup GPS_Module
+    @{
+*/
 
 /* Local Includes*/
 #include "GPS.h"
@@ -33,16 +38,17 @@
 #include <DMAModule.h>
 #endif
 
-volatile uint8_t uartData[RX_BUFFER_SIZE];  //! GPS UART RX buffer
-volatile bool stringEnd = false;            //! Flag for end of string
+volatile uint8_t uartData[RX_BUFFER_SIZE];  //!< GPS UART RX buffer
+volatile bool stringEnd = false;            //!< Flag for end of string
 
-GpsGGAData_t gpsGGAData;                    //! GGA data
-GpsRMCData_t gpsRMCData;                    //! RMC data
-GpsGSAData_t gpsGSAData;                    //! GSA data
-GpsGSVData_t gpsGSVData;                    //! GSV data
-GpsVTGData_t gpsVTGData;                    //! VTG data
+GpsGGAData_t gpsGGAData;                    //!< GGA data
+GpsRMCData_t gpsRMCData;                    //!< RMC data
+GpsGSAData_t gpsGSAData;                    //!< GSA data
+GpsGSVData_t gpsGSVData;                    //!< GSV data
+GpsVTGData_t gpsVTGData;                    //!< VTG data
 
 #ifndef SIMULATE_HARDWARE
+
 /**
  * @brief Parameters for PC UART initialization
  * @details These are the configuration parameters to
@@ -151,9 +157,18 @@ void DMA_INT1_IRQHandler(void){
     // Disable the interrupt to allow execution
     MAP_Interrupt_disableSleepOnIsrExit();
 }
+
 #endif
 
-bool nmeaChecksumValidate(const char* sentence, char** endOfSentence){
+/*!
+    @brief      Validate NMEA checksum
+    @details    This function validates the checksum of a NMEA sentence
+    @param[in]  sentence: NMEA sentence
+    @param[out] nextSentence: Pointer to the next sentence founded, if returns NULL there is no next sentence
+    @return     true if the checksum is valid, false otherwise
+*/
+
+bool nmeaChecksumValidate(const char* sentence, char** nextSentence){
     char* str;
     char checksum[3];
     uint8_t checksumCalculated = 0;
@@ -162,7 +177,7 @@ bool nmeaChecksumValidate(const char* sentence, char** endOfSentence){
 
     //If found, validate checksum else return false and set nextSentence to NULL
     if(str != NULL){
-        *endOfSentence = strchr(str, '$');
+        *nextSentence = strchr(str, '$');
         //Get checksum
         checksum[0] = *(str + 1);
         checksum[1] = *(str + 2);
@@ -178,11 +193,18 @@ bool nmeaChecksumValidate(const char* sentence, char** endOfSentence){
             return false;
         }
     }
-    *endOfSentence = NULL;
+    *nextSentence = NULL;
     return false;
 }
 
-time_t getTimeFromString(char* str){
+/*!
+    @brief    Get time from string
+    @details  This function gets the time from a string
+    @param    str: String to get the time
+    @return   Time in seconds
+    @note     The string must be in the format HHMMSS<.SSS> where <.SSS> is optional
+*/
+time_t getTimeFromString(const char* str){
     char hours[3];
     char minutes[3];
     char seconds[5];
@@ -195,6 +217,15 @@ time_t getTimeFromString(char* str){
     return atoi(hours) * 3600 + atoi(minutes) * 60 + atoi(seconds);
 }
 
+/*!
+    @brief    Get date from string
+    @details  This function gets the date from a string
+    @param    time: String to get the time
+    @param    date: String to get the date
+    @return   Date in struct tm format
+    @note     The time string must be in the format HHMMSS<.SSS> where <.SSS> is optional
+              The date string must be in the format DDMMYY
+*/
 struct tm getDateFromString(const char* time, const char* date){
     char hours[3];
     char minutes[3];
@@ -223,6 +254,13 @@ struct tm getDateFromString(const char* time, const char* date){
                        };
 }
 
+/*!
+    @brief    Get latitude from string
+    @details  This function gets the latitude from a string
+    @param    str: String to get the latitude
+    @return   Latitude in decimal degrees
+    @note     The string must be in the format DDMM.MMMM
+*/
 float getLatitudeFromString(char* str){
     char degrees[3];
     char minutes[9];
@@ -233,6 +271,13 @@ float getLatitudeFromString(char* str){
     return atof(degrees) + atof(minutes) / 60;
 }
 
+/*!
+    @brief    Get longitude from string
+    @details  This function gets the longitude from a string
+    @param    str: String to get the longitude
+    @return   Longitude in decimal degrees
+    @note     The string must be in the format DDDMM.MMMM
+*/
 float getLongitudeFromString(char* str){
     char degrees[4];
     char minutes[9];
@@ -244,13 +289,18 @@ float getLongitudeFromString(char* str){
 }
 
 /*!
-    @brief    Split string inplace
-    @details  This function splits a string in place using a delimiter
-    @param    str: String to split
-    @param    delim: Delimiter
-    @param    next: Pointer to the next string
-    @return   Pointer to the first characharacter of the substring
+    @brief      Split string inplace
+    @details    This function splits a string in place using a delimiter,
+                the string is modified replacing the first delimiter with '\0' and the next
+                string is returned using the next pointer
+    @param[in]  str: String to split
+    @param[in]  delim: Delimiter
+    @param[out] next: Pointer to the next string.
+                 - if NULL is recieved back there is no next string,
+                 - f NULL is passed the next pointer will be discarded.
+    @return     Pointer to the first characharacter of the substring
 */
+
 char* splitString(char* str, char delim, char** next){
     if(str != NULL){
         char* token = strchr(str, delim);
@@ -266,6 +316,11 @@ char* splitString(char* str, char delim, char** next){
     return str;
 }
 
+/*!
+    @brief    Parse GPS data
+    @details  This function parses the GPS data
+    @param    packet: GPS NMEA data
+*/
 void gpsParseData(const char* packet){
     char* str;
     char* sentenceType;
@@ -347,15 +402,15 @@ void gpsParseData(const char* packet){
                         //Others
                         strcpy(gpsRMCData.others, fields[9]);
 
-                        PRINTF("(%s,\t%s) \tValid:%d \tspeed:%s \tcourse:%s \tdate:%d/%d/%d \tothers:%s\n\n",     gpsRMCData.latitude,
-                                                                                                                    gpsRMCData.longitude,
-                                                                                                                    gpsRMCData.valid,
-                                                                                                                    gpsRMCData.speed,
-                                                                                                                    gpsRMCData.course,
-                                                                                                                    gpsRMCData.timeInfo.tm_mday,
-                                                                                                                    gpsRMCData.timeInfo.tm_mon+1,
-                                                                                                                    gpsRMCData.timeInfo.tm_year+1900,
-                                                                                                                    gpsRMCData.others);
+                        PRINTF("(%s,\t%s) \tValid:%d \tspeed:%s \tcourse:%s \tdate:%d/%d/%d \tothers:%s\n\n",   gpsRMCData.latitude,
+                                                                                                                gpsRMCData.longitude,
+                                                                                                                gpsRMCData.valid,
+                                                                                                                gpsRMCData.speed,
+                                                                                                                gpsRMCData.course,
+                                                                                                                gpsRMCData.timeInfo.tm_mday,
+                                                                                                                gpsRMCData.timeInfo.tm_mon+1,
+                                                                                                                gpsRMCData.timeInfo.tm_year+1900,
+                                                                                                                gpsRMCData.others);
                     }else if(strcmp(sentenceType, GSA_SENTENCE) == 0){
                         //Mode
                         strcpy(gpsGSAData.mode, fields[0]);
@@ -392,7 +447,6 @@ void gpsParseData(const char* packet){
                         //Satellites in view
                         uint8_t satCount = atoi(fields[2]);
                         uint8_t mgsIndex = atoi(fields[1]);
-                        uint8_t f;
                         for(uint8_t i = (mgsIndex-1)*4, f = 2; i < (mgsIndex-1)*4+4 && i < satCount; ++i, f+=4){
                             //Satellite ID
                             if(fields[f][0] == 0) break;
@@ -439,3 +493,4 @@ void gpsParseData(const char* packet){
         }
     }
 }
+/*! @} */ // GPS_Module

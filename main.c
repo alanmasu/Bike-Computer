@@ -1,14 +1,23 @@
 /*!
  * @file main.c
  * @brief MSP432 UART - Loopback with 24MHz DCO BRCLK
- * @details I'm testing UART connections and implementation using DriverLib
- * 	This demo connects TX to ESP32 RX and RX to ESP32 TX,
- *  The example code shows proper initialization of registers
- *  and interrupts to receive and transmit data.
- *
- *  ESP32 is programmed for printing numbers from 0 to 255 when it receives 's' character
- *  and echo on the USB Virtual COM all packets that's receives back
- *
+ * @details I'm testing UART connections and implementation using DriverLib and DMA.
+ * 	I connedted the PC UART to the MSP432P401R LaunchPad (EUSCIA0) and the GPS Module to
+ *  the MSP432 (EUSCIA2). The connections are:
+ * @code
+ *            MSP432P401
+ *      -------------------
+ *      |                 |
+ * RST -|     P3.3/UCA0TXD|----> PC RX at 115200 8N1\
+ *      |                 |                          >  =>  (XDS110 USB to UART)
+ *      |     P3.2/UCA0RXD|----< PC TX at 115200 8N1/
+ *      |                 |
+ *      |     P3.5/UCA2TXD|----> GPS RX at 9600 8N1
+ *      |                 |
+ *      |     P3.6/UCA2RXD|----< GPS TX at 9600 8N1
+ *      |                 |
+ *      -------------------
+ * @endcode
  *
  *  MCLK = HSMCLK = SMCLK = DCO of 24MHz
  *
@@ -119,16 +128,6 @@ int main(void){
     }
 }
 
-//void EUSCIA0_IRQHandler(void){
-//    uint32_t status = MAP_UART_getEnabledInterruptStatus(EUSCI_A0_BASE);
-//
-//
-//    if(status & EUSCI_A_UART_RECEIVE_INTERRUPT_FLAG){
-//        uint_fast8_t data = MAP_UART_receiveData(EUSCI_A0_BASE);
-//        MAP_UART_transmitData(EUSCI_A0_BASE, data);
-//    }
-//
-//}
 #else
 
 //Standard includes

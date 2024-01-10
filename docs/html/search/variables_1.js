@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['stringend_0',['stringEnd',['../_g_p_s_8c.html#a39f4a5757801683c2262327235bf9398',1,'stringEnd:&#160;GPS.c'],['../_g_p_s_8h.html#a39f4a5757801683c2262327235bf9398',1,'stringEnd:&#160;GPS.c']]]
+  ['course_0',['course',['../struct_gps_r_m_c_data__t.html#ae70fbc267f03473adc5185e3c1e527f2',1,'GpsRMCData_t']]],
+  ['coursem_1',['courseM',['../struct_gps_v_t_g_data__t.html#a5ae35bf9911da3cde8ceb9bd4938619f',1,'GpsVTGData_t']]]
 ];

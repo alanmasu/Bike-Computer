@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['computer_0',['Bike Computer',['../index.html',1,'']]]
+  ['bike_20computer_0',['Bike Computer',['../index.html',1,'']]]
 ];

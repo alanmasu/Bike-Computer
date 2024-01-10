@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['uartconfig_0',['uartConfig',['../_g_p_s_8c.html#ad359190a2ebcf7279dc06e2c6e41aac6',1,'GPS.c']]]
+  ['elevation_0',['elevation',['../struct_sat_data__t.html#ad6553ef052ba4f2c587f1aab16ceaaea',1,'SatData_t']]]
 ];

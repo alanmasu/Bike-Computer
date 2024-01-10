@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['dma_5fint1_5firqhandler_0',['DMA_INT1_IRQHandler',['../_g_p_s_8c.html#a2db538345499749ea158c96b0f4f8318',1,'GPS.c']]],
-  ['dmainit_1',['dmaInit',['../_d_m_a_module_8c.html#a2efa21dedda1992b5cb10ca9335d17f2',1,'dmaInit(void):&#160;DMAModule.c'],['../_d_m_a_module_8h.html#a2efa21dedda1992b5cb10ca9335d17f2',1,'dmaInit(void):&#160;DMAModule.c']]],
-  ['dmamodule_2ec_2',['DMAModule.c',['../_d_m_a_module_8c.html',1,'']]],
-  ['dmamodule_2eh_3',['DMAModule.h',['../_d_m_a_module_8h.html',1,'']]],
-  ['documentation_4',['Project Documentation',['../index.html#autotoc_md1',1,'']]]
+  ['computer_0',['Bike Computer',['../index.html',1,'']]],
+  ['course_1',['course',['../struct_gps_r_m_c_data__t.html#ae70fbc267f03473adc5185e3c1e527f2',1,'GpsRMCData_t']]],
+  ['coursem_2',['courseM',['../struct_gps_v_t_g_data__t.html#a5ae35bf9911da3cde8ceb9bd4938619f',1,'GpsVTGData_t']]]
 ];

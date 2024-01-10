@@ -87,7 +87,7 @@ $(function() {
 <code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;string.h&gt;</code><br />
-<code>#include &lt;<a class="el" href="_g_p_s_8h_source.html">GPS.h</a>&gt;</code><br />
+<code>#include &quot;<a class="el" href="_g_p_s_8h_source.html">GPS.h</a>&quot;</code><br />
 <code>#include &lt;<a class="el" href="_d_m_a_module_8h_source.html">DMAModule.h</a>&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
@@ -110,9 +110,19 @@ Variables</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>MSP432 UART - Loopback with 24MHz DCO BRCLK. </p>
-<p>I'm testing UART connections and implementation using DriverLib This demo connects TX to ESP32 RX and RX to ESP32 TX, The example code shows proper initialization of registers and interrupts to receive and transmit data.</p>
-<p>ESP32 is programmed for printing numbers from 0 to 255 when it receives 's' character and echo on the USB Virtual COM all packets that's receives back</p>
-<p>MCLK = HSMCLK = SMCLK = DCO of 24MHz</p>
+<p>I'm testing UART connections and implementation using DriverLib and DMA. I connedted the PC UART to the MSP432P401R LaunchPad (EUSCIA0) and the GPS Module to the MSP432 (EUSCIA2). The connections are: </p><div class="fragment"><div class="line">           MSP432P401</div>
+<div class="line">     -------------------</div>
+<div class="line">     |                 |</div>
+<div class="line">RST -|     P3.3/UCA0TXD|----&gt; PC RX at 115200 8N1\</div>
+<div class="line">     |                 |                          &gt;  =&gt;  (XDS110 USB to UART)</div>
+<div class="line">     |     P3.2/UCA0RXD|----&lt; PC TX at 115200 8N1/</div>
+<div class="line">     |                 |</div>
+<div class="line">     |     P3.5/UCA2TXD|----&gt; GPS RX at 9600 8N1</div>
+<div class="line">     |                 |</div>
+<div class="line">     |     P3.6/UCA2RXD|----&lt; GPS TX at 9600 8N1</div>
+<div class="line">     |                 |</div>
+<div class="line">     -------------------</div>
+</div><!-- fragment --><p>MCLK = HSMCLK = SMCLK = DCO of 24MHz</p>
 <dl class="section date"><dt>Date</dt><dd>03/01/2024 </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
 <a id="a840291bc02cba5474a4cb46a9b9566fe" name="a840291bc02cba5474a4cb46a9b9566fe"></a>
