@@ -504,7 +504,7 @@ void gpsParseData(const char* packet){
     }
 }
 
-void addPointToGPXFromGPS(char* gpsData, FILE_TYPE file){
+bool addPointToGPXFromGPS(char* gpsData, FILE_TYPE file){
     static bool fixOk = false;
     gpsParseData(gpsData);
     if(gpsGGAData.fix != INVALID && gpsRMCData.valid){
@@ -518,12 +518,14 @@ void addPointToGPXFromGPS(char* gpsData, FILE_TYPE file){
                                                                 gpsRMCData.timeInfo.tm_min,
                                                                 gpsRMCData.timeInfo.tm_sec);
         GPXAddTrackPoint(file, gpsGGAData.latitude, gpsGGAData.longitude, gpsGGAData.altitude, timeString);
+        return true;
     }else{
         PRINTF("Point Not Added because GPS has no valid FIX!\n");
         if(fixOk){
             GPXAddNewTrackSegment(file);
             fixOk = false;
         }
+        return false;
     }
 }
 

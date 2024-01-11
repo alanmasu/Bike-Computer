@@ -138,6 +138,18 @@ void main(void){
     WDT_A_holdTimer();	// stop watchdog timer
 	CS_Init();
 
+	//Configuring GPIO for leds!
+    /* P1.0 as output (LED) */
+    MAP_GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0);
+    MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
+    //Set RGB led pins as output
+    MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN0);
+    MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN0);
+    MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN1);
+    MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN1);
+    MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN2);
+    MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN2);
+
     /*Initialize all hardware required for the SD Card*/
     SPI_Init(EUSCI_B0_BASE, SPI0MasterConfig);
     UART_Init(EUSCI_A0_BASE, UART0Config);
@@ -161,6 +173,7 @@ void main(void){
     /*Check for errors. Trap MSP432 if there is an error*/
     if(r != FR_OK){
         PRINTF("Error mounting SD Card, mount function returned: %d \r\n", (int)r);
+        MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
     }else{
         PRINTF("Mounted SD Card!\r\n");
     }
@@ -171,9 +184,11 @@ void main(void){
     /*Check for errors. Trap MSP432 if there is an error*/
     if(r != FR_OK){
         PRINTF("Could not open root directory, returned: %d\r\n", (int)r);
+        MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
         while(1);
     }else{
         PRINTF("Opened DIR!\r\n");
+        MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN1);
     }
 
     //Configuring GPIO for buttons
@@ -187,6 +202,11 @@ void main(void){
         bool status;
         switch (computerState){
         case STOP:
+            //Leds
+            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN1);
+            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN2);
+            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
+
             //Detecting Start button press
             status = !MAP_GPIO_getInputPinValue(BTN_START_PORT, BTN_START_PIN);
             if(status && !btnStartStateP){
@@ -209,20 +229,33 @@ void main(void){
                 /*Check for errors. Trap MSP432 if there is an error*/
                 if(r != FR_OK){
                     PRINTF("Could not open file, returned: %d\r\n", (int)r);
+                    MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
                     while(1);
                 }
                 GPXInitFile(&GPX_TEST_FILE, GPX_TEST_FILENAME);
                 GPXAddTrack(&GPX_TEST_FILE, "Test Track", "Test Description", "2024-01-10T00:00:00Z");
                 GPXAddTrackSegment(&GPX_TEST_FILE);
                 computerState = START;
+                MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN2);
                 PRINTF("START TRACKING!!\r\n");
             }
             btnStartStateP = status;
+
             break;
         case START:
+            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN0);
             //Detecting Stop button press
-//            status = !MAP_GPIO_getInputPinValue(BTN_STOP_PORT, BTN_STOP_PIN);
+            status = !MAP_GPIO_getInputPinValue(BTN_STOP_PORT, BTN_STOP_PIN);
 //            if(status && !btnStopStateP){
+            if(stringEnd){
+                MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN0);
+                bool pointAdded = addPointToGPXFromGPS(&uartData, &GPX_TEST_FILE);
+                if(!pointAdded){
+                    MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN0);
+                }
+                stringEnd = false;
+                gpsDMARestoreChannel();
+            }
             if(status){
                 btnStopStateP = true;
                 GPXCloseTrackSegment(&GPX_TEST_FILE);
@@ -230,13 +263,10 @@ void main(void){
                 GPXCloseFile(&GPX_TEST_FILE);
                 computerState = STOP;
                 PRINTF("STOP TRACKING!!\r\n");
+
+                MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN0);
             }
-            if(stringEnd){
-                addPointToGPXFromGPS(&uartData, &GPX_TEST_FILE);
-                stringEnd = false;
-                gpsDMARestoreChannel();
-                //Go to sleep
-            }
+            //Go to sleep
             MAP_Interrupt_enableSleepOnIsrExit();
             MAP_PCM_gotoLPM0InterruptSafe();
             btnStopStateP = status;

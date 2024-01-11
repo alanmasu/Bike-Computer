@@ -141,7 +141,7 @@ char* splitString(char* str, char delim, char** next);
 void gpsParseData(const char* packet);
 
 //Adding intrgration whit GPX module
-void addPointToGPXFromGPS(char* gpsData, FILE_TYPE file);
+bool addPointToGPXFromGPS(char* gpsData, FILE_TYPE file);
 
 /*! @} */ //End of GPS_Module
 

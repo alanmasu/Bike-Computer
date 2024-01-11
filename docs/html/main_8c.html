@@ -103,7 +103,7 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a1f464e950a4fa11e8821b5c725921a15" id="r_a1f464e950a4fa11e8821b5c725921a15"><td class="memItemLeft" align="right" valign="top"><a id="a1f464e950a4fa11e8821b5c725921a15" name="a1f464e950a4fa11e8821b5c725921a15"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>PRINTF</b>(...)&#160;&#160;&#160;PRINTF(__VA_ARGS__)</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>PRINTF</b>(...)&#160;&#160;&#160;MSPrintf(EUSCI_A0_BASE ,__VA_ARGS__)</td></tr>
 <tr class="separator:a1f464e950a4fa11e8821b5c725921a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a486d722f52dad2310e7eddcc1e70956b" id="r_a486d722f52dad2310e7eddcc1e70956b"><td class="memItemLeft" align="right" valign="top"><a id="a486d722f52dad2310e7eddcc1e70956b" name="a486d722f52dad2310e7eddcc1e70956b"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>BTN_START_PORT</b>&#160;&#160;&#160;GPIO_PORT_P5</td></tr>
@@ -139,12 +139,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> (void)</td><
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a296b3c88b34a2294d0bd990ac963543b" id="r_a296b3c88b34a2294d0bd990ac963543b"><td class="memItemLeft" align="right" valign="top"><a id="a296b3c88b34a2294d0bd990ac963543b" name="a296b3c88b34a2294d0bd990ac963543b"></a>
-FIL&#160;</td><td class="memItemRight" valign="bottom"><b>file</b></td></tr>
-<tr class="separator:a296b3c88b34a2294d0bd990ac963543b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5eb7c740b5b08093f2323d18b9f7d1e" id="r_af5eb7c740b5b08093f2323d18b9f7d1e"><td class="memItemLeft" align="right" valign="top"><a id="af5eb7c740b5b08093f2323d18b9f7d1e" name="af5eb7c740b5b08093f2323d18b9f7d1e"></a>
 ComputerState_t&#160;</td><td class="memItemRight" valign="bottom"><b>computerState</b> = STOP</td></tr>
 <tr class="separator:af5eb7c740b5b08093f2323d18b9f7d1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a296b3c88b34a2294d0bd990ac963543b" id="r_a296b3c88b34a2294d0bd990ac963543b"><td class="memItemLeft" align="right" valign="top"><a id="a296b3c88b34a2294d0bd990ac963543b" name="a296b3c88b34a2294d0bd990ac963543b"></a>
+FIL&#160;</td><td class="memItemRight" valign="bottom"><b>file</b></td></tr>
+<tr class="separator:a296b3c88b34a2294d0bd990ac963543b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98d493df725185f895d921f2f3263779" id="r_a98d493df725185f895d921f2f3263779"><td class="memItemLeft" align="right" valign="top">eUSCI_UART_ConfigV1&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98d493df725185f895d921f2f3263779">UART0Config</a></td></tr>
 <tr class="memdesc:a98d493df725185f895d921f2f3263779"><td class="mdescLeft">&#160;</td><td class="mdescRight">UART Configuration Parameter.  <br /></td></tr>
 <tr class="separator:a98d493df725185f895d921f2f3263779"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,10 +161,10 @@ DIR&#160;</td><td class="memItemRight" valign="bottom"><b>DI</b></td></tr>
 FILINFO&#160;</td><td class="memItemRight" valign="bottom"><b>FI</b></td></tr>
 <tr class="separator:a6d01a8e67c1ca06634080accad7ba50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1d6c61eb3ebf88e94b27ec22717e764" id="r_ae1d6c61eb3ebf88e94b27ec22717e764"><td class="memItemLeft" align="right" valign="top"><a id="ae1d6c61eb3ebf88e94b27ec22717e764" name="ae1d6c61eb3ebf88e94b27ec22717e764"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>btnStartStateP</b> = false</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>btnStartStateP</b> = true</td></tr>
 <tr class="separator:ae1d6c61eb3ebf88e94b27ec22717e764"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2aa59a907c9b2dc0d9961ab10c8b3f31" id="r_a2aa59a907c9b2dc0d9961ab10c8b3f31"><td class="memItemLeft" align="right" valign="top"><a id="a2aa59a907c9b2dc0d9961ab10c8b3f31" name="a2aa59a907c9b2dc0d9961ab10c8b3f31"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>btnStopStateP</b> = false</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>btnStopStateP</b> = true</td></tr>
 <tr class="separator:a2aa59a907c9b2dc0d9961ab10c8b3f31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
