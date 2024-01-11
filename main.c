@@ -1,174 +1,296 @@
 /*!
- * @file main.c
- * @brief MSP432 UART - Loopback with 24MHz DCO BRCLK
- * @details I'm testing UART connections and implementation using DriverLib and DMA.
- * 	I connedted the PC UART to the MSP432P401R LaunchPad (EUSCIA0) and the GPS Module to
- *  the MSP432 (EUSCIA2). The connections are:
- * @code
- *            MSP432P401
- *      -------------------
- *      |                 |
- * RST -|     P3.3/UCA0TXD|----> PC RX at 115200 8N1\
- *      |                 |                          >  =>  (XDS110 USB to UART)
- *      |     P3.2/UCA0RXD|----< PC TX at 115200 8N1/
- *      |                 |
- *      |     P3.5/UCA2TXD|----> GPS RX at 9600 8N1
- *      |                 |
- *      |     P3.6/UCA2RXD|----< GPS TX at 9600 8N1
- *      |                 |
- *      -------------------
- * @endcode
- *
- *  MCLK = HSMCLK = SMCLK = DCO of 24MHz
- *
- * @date 03/01/2024
+    @file       main.c
+    @brief      This file merge the functionalities of the SD-Part whit the GPS part.
+    @details    The main function configure all hardware dipendent patr, start a comunication channel whit the L80 module on UART
+                then start the SD card and mount the fatfs file system. After that the main function sample the GPS data and save
+                it on the SD card in a file called "test.gpx" in the root directory. <br>
+
+                For comunication whit the PC uses EUSCI_A0 and MSPIO library. <br>
+
+                Hardware part: <br>
+                @code
+                        MSP432P401
+                  -------------------
+                  |                 |
+             RST -|     P3.3/UCA0TXD|----> PC RX at 115200 8N1\
+                  |                 |                          >  =>  (XDS110 USB to UART)
+                  |     P3.2/UCA0RXD|----< PC TX at 115200 8N1/
+                  |                 |
+                  |     P3.5/UCA2TXD|----> GPS RX at 9600 8N1
+                  |     P3.6/UCA2RXD|----< GPS TX at 9600 8N1
+                  |                 |
+                  |   P1.7/UCAB0MISO|----> SD SPI MISO
+                  |   P1.6/UCAB0MOSI|----< SD SPI MOSI
+                  |   P1.5/UCAB0SCLK|----< SD SPI CLK
+                  |             P5.2|----> SD SPI CS
+                  |                 |
+                  |             P5.1|----< BTN Start
+                  |             P3.5|----< BTN Stop
+                  -------------------
+             @endcode
+ 	@date       10/01/2024
+    @author     Alan Masutti
  */
 
-/* DriverLib Includes */
 #ifndef SIMULATE_HARDWARE
-    #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
-    #include <ti/devices/msp432p4xx/driverlib/dma.h>
-    #include <ti/devices/msp432p4xx/inc/msp.h>
+	#include <ti/devices/msp432p4xx/inc/msp.h>
+	#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
+
+	//SD
+	#include <Hardware/SPI_Driver.h>
+	#include <Hardware/GPIO_Driver.h>
+	#include <Hardware/CS_Driver.h>
+	#include <Hardware/TIMERA_Driver.h>
+	#include <Hardware/SD_Driver.h>
+	#include <fatfs/ff.h>
+	#include <fatfs/diskio.h>
+	#include <Devices/MSPIO.h>
+    #include <DMAModule.h>
+#else
+	#include <stdio.h>
+	#include <stdlib.h>
 #endif
-/* Standard Includes */
+
+//Standard includes
+#include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
 
-/* Local Includes */
+//Testing includes
+#include "Test/GPX_Points.h"
+
+
+//Local includes
+//GPX
+#include "GPX.h"
+//GPS
 #include "GPS.h"
-#ifndef SIMULATE_HARDWARE
-    #include <DMAModule.h>
-#endif
-
-#ifndef NULL
-    #define NULL (void*)0
-#endif
 
 #ifndef SIMULATE_HARDWARE
-/**
- * @brief Parameters for PC UART initialization
- * @details These are the configuration parameters to
- * make the eUSCI A UART module to operate with a 115200 baud rate whit ClockSource of 24MHz.
- * These values were calculated using the online calculator that TI provides
- * at: http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html
- */
-const eUSCI_UART_ConfigV1 pcUartConfig = {
-        EUSCI_A_UART_CLOCKSOURCE_SMCLK,             // SMCLK Clock Source
-        13,                                         // BRDIV = 13
-        0,                                          // UCxBRF = 0
-        37,                                         // UCxBRS = 37
-        EUSCI_A_UART_NO_PARITY,                     // No Parity
-        EUSCI_A_UART_LSB_FIRST,                     // LSB First
-        EUSCI_A_UART_ONE_STOP_BIT,                  // One stop bit
-        EUSCI_A_UART_MODE,                          // UART mode
-        EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION,  // Oversampling
-        EUSCI_A_UART_8_BIT_LEN                      // 8 bit data length
-};
+    #include <Devices/MSPIO.h>
+    #define PRINTF(...) MSPrintf(EUSCI_A0_BASE ,__VA_ARGS__)
+#else
+    #include <stdio.h>
+    #define PRINTF(...) printf(__VA_ARGS__)
+#endif
 
+typedef enum{STOP = 0, START = 1} ComputerState_t;
+
+ComputerState_t computerState = STOP;
+
+#ifndef SIMULATE_HARDWARE
+
+//Buttons defines
+#define BTN_START_PORT      GPIO_PORT_P5
+#define BTN_START_PIN       GPIO_PIN1
+#define BTN_STOP_PORT       GPIO_PORT_P3
+#define BTN_STOP_PIN        GPIO_PIN5
+
+#define GPX_TEST_FILENAME   "test.gpx"
+FIL file;
+#define GPX_TEST_FILE       file
 
 /*!
-    @brief      Main function thats starts my tests
-	@details    This function initializes:
-	 			 - The DC0 module at 24MHz
-				 - The UART modules
-				 - The DMA module
-				 - The GPIO pins.
+    @brief     UART Configuration Parameter.
+    @details   These are the configuration parameters to
+                make the eUSCI A UART module to operate with a 115200 baud rate. These
+                values were calculated using the online calculator that TI provides
+                at: http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html
+ */
+eUSCI_UART_ConfigV1 UART0Config = {
+     EUSCI_A_UART_CLOCKSOURCE_SMCLK,
+     13,
+     0,
+     37,
+     EUSCI_A_UART_NO_PARITY,
+     EUSCI_A_UART_LSB_FIRST,
+     EUSCI_A_UART_ONE_STOP_BIT,
+     EUSCI_A_UART_MODE,
+     EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
+};
+
+/*!
+    @brief      SPI Configuration Parameter.
+    @details    These are the configuration parameters to
+                make the eUSCI B SPI module to operate with a 500KHz clock.
 */
+eUSCI_SPI_MasterConfig SPI0MasterConfig = {
+     EUSCI_B_SPI_CLOCKSOURCE_SMCLK,
+     3000000,
+     500000,
+     EUSCI_B_SPI_MSB_FIRST,
+     EUSCI_B_SPI_PHASE_DATA_CHANGED_ONFIRST_CAPTURED_ON_NEXT,
+     EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_HIGH,
+     EUSCI_B_SPI_3PIN
+};
 
-int main(void){
-    /* Halting WDT  */
-    WDT_A_holdTimer();
+FATFS FS;
+DIR DI;
+FILINFO FI;
+FIL file;
 
-    /* P1.0 as output (LED) */
-    MAP_GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0);
-    MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
-    //Set RGB led pins as output
-    MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN0);
-    MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN1);
-    MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN2);
-
-    /* Setting DCO to 24MHz (upping Vcore) */
-    FlashCtl_setWaitState(FLASH_BANK0, 1);
-    FlashCtl_setWaitState(FLASH_BANK1, 1);
-    MAP_PCM_setCoreVoltageLevel(PCM_VCORE1);
-    CS_setDCOCenteredFrequency(CS_DCO_FREQUENCY_24);
+bool btnStartStateP = true;
+bool btnStopStateP = true;
 
 
+void main(void){
+    WDT_A_holdTimer();	// stop watchdog timer
+	CS_Init();
+
+    /*Initialize all hardware required for the SD Card*/
+    SPI_Init(EUSCI_B0_BASE, SPI0MasterConfig);
+    UART_Init(EUSCI_A0_BASE, UART0Config);
+    SD_Init();
+
+    /*Initialize all hardware required for the GPS*/
     /* Configuring UART Modules */
-    //Enable PC UART
-    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P1,
-                GPIO_PIN2 | GPIO_PIN3, GPIO_PRIMARY_MODULE_FUNCTION);   //PC
-    MAP_UART_initModule(EUSCI_A0_BASE, &pcUartConfig);                  //PC
-    MAP_UART_enableModule(EUSCI_A0_BASE);                               //PC
-    // MAP_UART_enableInterrupt(EUSCI_A0_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT);
-    // MAP_Interrupt_enableInterrupt(INT_EUSCIA0);
 	//Enable GPS UART
 	gpsUartConfig();
-
-	/* Configuring DMA module */
-	//Enable DMA module
+    //Enable DMA module
 	dmaInit();
 	//Enable DMA for EUSCI_A2 RX
 	gpsDMAConfiguration();
 
+    Interrupt_enableMaster();
+
+    FRESULT r;
+
+    /*First we should mount the SD Card into the Fatfs file system*/
+    r = f_mount(&FS, "0", 1);
+    /*Check for errors. Trap MSP432 if there is an error*/
+    if(r != FR_OK){
+        PRINTF("Error mounting SD Card, mount function returned: %d \r\n", (int)r);
+    }else{
+        PRINTF("Mounted SD Card!\r\n");
+    }
 
 
-    MAP_Interrupt_enableSleepOnIsrExit();
+    /*Let's try to open the root directory on the SD Card*/
+    r = f_opendir(&DI, "/");
+    /*Check for errors. Trap MSP432 if there is an error*/
+    if(r != FR_OK){
+        PRINTF("Could not open root directory, returned: %d\r\n", (int)r);
+        while(1);
+    }else{
+        PRINTF("Opened DIR!\r\n");
+    }
+
+    //Configuring GPIO for buttons
+    MAP_GPIO_setAsInputPin(BTN_START_PORT, BTN_START_PIN);
+    MAP_GPIO_setAsInputPin(BTN_STOP_PORT, BTN_STOP_PIN);
+
+    //testing SD and GPX features
+
+//    f_unmount("");
     while(1){
-        if(stringEnd){
-            for(int i = 0; i < RX_BUFFER_SIZE; ++i){
-                MAP_UART_transmitData(EUSCI_A0_BASE, uartData[i]);
+        bool status;
+        switch (computerState){
+        case STOP:
+            //Detecting Start button press
+            status = !MAP_GPIO_getInputPinValue(BTN_START_PORT, BTN_START_PIN);
+            if(status && !btnStartStateP){
+                btnStartStateP = true;
+                //Open the file
+//                int fileIndex = 1;
+//                r = f_stat(GPX_TEST_FILENAME, &FI);                     //Check if file already exists
+//                if(r == FR_OK){                                         //If file already exists
+//                    char newFileName[15];
+//                    do{
+//                        snprintf(newFileName, 14, "%test%d.gpx", fileIndex);
+//                        fileIndex++;
+//                        r = f_stat(newFileName, &FI);
+//                    }while(r != FR_NO_FILE && fileIndex <= 999);
+//                    r = f_open(&GPX_TEST_FILE, newFileName, FA_WRITE | FA_CREATE_ALWAYS);
+//                }else if(r == FR_NO_FILE){
+//                    r = f_open(&GPX_TEST_FILE, GPX_TEST_FILENAME, FA_WRITE | FA_CREATE_ALWAYS);
+//                }
+                r = f_open(&GPX_TEST_FILE, GPX_TEST_FILENAME, FA_WRITE | FA_CREATE_ALWAYS);
+                /*Check for errors. Trap MSP432 if there is an error*/
+                if(r != FR_OK){
+                    PRINTF("Could not open file, returned: %d\r\n", (int)r);
+                    while(1);
+                }
+                GPXInitFile(&GPX_TEST_FILE, GPX_TEST_FILENAME);
+                GPXAddTrack(&GPX_TEST_FILE, "Test Track", "Test Description", "2024-01-10T00:00:00Z");
+                GPXAddTrackSegment(&GPX_TEST_FILE);
+                computerState = START;
+                PRINTF("START TRACKING!!\r\n");
             }
-            gpsParseData((const char*)uartData);
-            stringEnd = false;
-            gpsDMARestoreChannel();
+            btnStartStateP = status;
+            break;
+        case START:
+            //Detecting Stop button press
+//            status = !MAP_GPIO_getInputPinValue(BTN_STOP_PORT, BTN_STOP_PIN);
+//            if(status && !btnStopStateP){
+            if(status){
+                btnStopStateP = true;
+                GPXCloseTrackSegment(&GPX_TEST_FILE);
+                GPXCloseTrack(&GPX_TEST_FILE);
+                GPXCloseFile(&GPX_TEST_FILE);
+                computerState = STOP;
+                PRINTF("STOP TRACKING!!\r\n");
+            }
+            if(stringEnd){
+                addPointToGPXFromGPS(&uartData, &GPX_TEST_FILE);
+                stringEnd = false;
+                gpsDMARestoreChannel();
+                //Go to sleep
+            }
+            MAP_Interrupt_enableSleepOnIsrExit();
+            MAP_PCM_gotoLPM0InterruptSafe();
+            btnStopStateP = status;
+            break;
         }
-        MAP_Interrupt_enableSleepOnIsrExit();
-        MAP_PCM_gotoLPM0InterruptSafe();
+
     }
 }
-
 #else
 
-//Standard includes
-#include <stdio.h>
-
+#define GPX_TEST_FILENAME   "Test/results/test.gpx"
+#define GPX_TEST_FILE       file
 int main(void){
-
-    printf("Testing splitString function\n");
-    char str[] = "$GPRMC,142104.000,A,4604.6229,N,01107.2220,E,0.00,13.60,080124,,,A*5B\r\n";
-    char* nextString = str;
-
-    char* fields[20];
-    int fieldIndex = 0;
-    do{
-        fields[fieldIndex] = splitString(nextString, ',', &nextString);
-    }while(fields[fieldIndex++] != NULL && fieldIndex < 20);
-
-
-    printf("Testing gpsParseData function\n");
-    FILE* nmeaData = fopen("Test/NMEAFileCorrected.txt", "r");
-    if(nmeaData == NULL){
-        printf("Error opening file\n");
+    FILE* NMEA;
+    FILE* GPX;
+    NMEA = fopen("Test/NMEAFileCorrected.txt", "r");
+    if(NMEA == NULL){
+        printf("Error opening NMEA file!\r\n");
         return -1;
-    }else{
-        printf("File opened\n");
-        char nmeaString[RX_BUFFER_SIZE];
-        char comand;
-        do{
-            size_t size = fread(nmeaString, sizeof(char), RX_BUFFER_SIZE, nmeaData);
-            if(size <= RX_BUFFER_SIZE){
-                printf("String read\n");
-                printf("String: %s\n", nmeaString);
-                stringEnd = true;
-                gpsParseData(nmeaString);
-            }
-            printf("Press 'c' to Continue, press 's' to Stop: c/[s]\n");
-            fflush(stdin);
-            comand = getchar();
-        }while(comand == 'c');
     }
+    GPX = fopen(GPX_TEST_FILENAME, "w");
+    do{
+        PRINTF("Get command: P/s [Play/Stop]\r\n");
+        fflush(stdin);
+        char cmd = getchar();
+        switch(cmd){
+            case 'P':
+            case 'p':
+                PRINTF("Start!\r\n");
+                GPXInitFile(GPX, GPX_TEST_FILENAME);
+                GPXAddTrack(GPX, "Test Track", "Test Description", "2024-01-10T00:00:00Z");
+                GPXAddTrackSegment(GPX);
+                computerState = START;
+                break;
+            case 'C':
+            case 'c':
+                PRINTF("Continue!\r\n");
+                break;
+            case 'S':
+            case 's':
+                PRINTF("Stop!\r\n");
+                GPXCloseTrackSegment(&GPX);
+                GPXCloseTrack(&GPX);
+                GPXCloseFile(&GPX);
+                computerState = STOP;
+                break;
+        }
+        if(computerState == START){
+            char gpsData[RX_BUFFER_SIZE];
+            fread(gpsData, sizeof(char), RX_BUFFER_SIZE, NMEA);
+            stringEnd = true;
+            addPointToGPXFromGPS(gpsData, &GPX);
+        }
+    }while(computerState != STOP);
+	return 0;
 }
-
 #endif

@@ -20,14 +20,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <time.h>
 
-#ifndef PRINTF
+#ifndef PRINTF(...)
     #ifndef SIMULATE_HARDWARE
         #ifndef DEBUG
             #define PRINTF(...)
         #else
-            #include <stdio.h>
-            #define PRINTF(...) printf(__VA_ARGS__)
+            #include <Devices/MSPIO.h>
+            #define PRINTF(...) MSPrintf(EUSCI_A0_BASE ,__VA_ARGS__)
         #endif
     #else
         #include <stdio.h>
@@ -41,6 +42,7 @@
 
 /* Local Includes*/
 #include "GPS.h"
+#include "GPX.h"
 #ifndef SIMULATE_HARDWARE
 #include <DMAModule.h>
 #endif
@@ -251,9 +253,9 @@ struct tm getDateFromString(const char* time, const char* date){
     memcpy(year, date + 4, 2);
     day[2] = '\0';
     month[2] = '\0';
-    year[4] = '\0';
+    year[2] = '\0';
     return (struct tm){.tm_mday = atoi(day),
-                       .tm_mon = atoi(month),
+                       .tm_mon = atoi(month) - 1,
                        .tm_year = atoi(year) + 100,
                        .tm_hour = atoi(hours),
                        .tm_min = atoi(minutes),
@@ -501,4 +503,28 @@ void gpsParseData(const char* packet){
         }
     }
 }
+
+void addPointToGPXFromGPS(char* gpsData, FILE_TYPE file){
+    static bool fixOk = false;
+    gpsParseData(gpsData);
+    if(gpsGGAData.fix != INVALID && gpsRMCData.valid){
+        fixOk = true;
+        char timeString[20];
+        //Convert time to string ISO 8601
+        snprintf(timeString, 20, "%d-%02d-%02dT%02d:%02d:%02dZ", gpsRMCData.timeInfo.tm_year + 1900,
+                                                                gpsRMCData.timeInfo.tm_mon + 1,
+                                                                gpsRMCData.timeInfo.tm_mday,
+                                                                gpsRMCData.timeInfo.tm_hour,
+                                                                gpsRMCData.timeInfo.tm_min,
+                                                                gpsRMCData.timeInfo.tm_sec);
+        GPXAddTrackPoint(file, gpsGGAData.latitude, gpsGGAData.longitude, gpsGGAData.altitude, timeString);
+    }else{
+        PRINTF("Point Not Added because GPS has no valid FIX!\n");
+        if(fixOk){
+            GPXAddNewTrackSegment(file);
+            fixOk = false;
+        }
+    }
+}
+
 /*! @} */ // GPS_Module

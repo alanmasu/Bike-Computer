@@ -41,6 +41,9 @@
 #include <string.h>
 #include <time.h>
 
+/*Local Includes*/
+#include "GPX.h"
+
 /*!
     @defgroup   GPS_Module GPS
     @name       GPS Module
@@ -137,6 +140,8 @@ char* splitString(char* str, char delim, char** next);
 
 void gpsParseData(const char* packet);
 
+//Adding intrgration whit GPX module
+void addPointToGPXFromGPS(char* gpsData, FILE_TYPE file);
 
 /*! @} */ //End of GPS_Module
 

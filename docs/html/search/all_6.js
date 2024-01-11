@@ -20,5 +20,17 @@ var searchData=
   ['gpsrmcdata_5ft_17',['GpsRMCData_t',['../struct_gps_r_m_c_data__t.html',1,'']]],
   ['gpsuartconfig_18',['gpsUartConfig',['../group___g_p_s___module.html#ga4093f2712484f9929c0888ffac40c43e',1,'gpsUartConfig(void):&#160;GPS.c'],['../group___g_p_s___module.html#ga4093f2712484f9929c0888ffac40c43e',1,'gpsUartConfig(void):&#160;GPS.c']]],
   ['gpsvtgdata_19',['gpsVTGData',['../group___g_p_s___module.html#gab28dff0ca96d90889a5d4142fcbc6627',1,'GPS.c']]],
-  ['gpsvtgdata_5ft_20',['GpsVTGData_t',['../struct_gps_v_t_g_data__t.html',1,'']]]
+  ['gpsvtgdata_5ft_20',['GpsVTGData_t',['../struct_gps_v_t_g_data__t.html',1,'']]],
+  ['gpx_2ec_21',['GPX.c',['../_g_p_x_8c.html',1,'']]],
+  ['gpx_2eh_22',['GPX.h',['../_g_p_x_8h.html',1,'']]],
+  ['gpx_5fheader_23',['GPX_HEADER',['../_g_p_x_8c.html#af3c53b51c82c724e7c8d6399de233597',1,'GPX.c']]],
+  ['gpx_5ftrack_5fpoint_24',['GPX_TRACK_POINT',['../_g_p_x_8c.html#aa55a804ab1c1795425317fba826b0393',1,'GPX.c']]],
+  ['gpxaddnewtracksegment_25',['GPXAddNewTrackSegment',['../_g_p_x_8c.html#a9b20d87062d878a816fec95084671e20',1,'GPXAddNewTrackSegment(FILE_TYPE file):&#160;GPX.c'],['../_g_p_x_8h.html#a9b20d87062d878a816fec95084671e20',1,'GPXAddNewTrackSegment(FILE_TYPE file):&#160;GPX.c']]],
+  ['gpxaddtrack_26',['GPXAddTrack',['../_g_p_x_8c.html#afaa095f29b1c45209b8f6aa913fbf019',1,'GPXAddTrack(FILE_TYPE file, const char *trackName, const char *trackDesc, const char *time):&#160;GPX.c'],['../_g_p_x_8h.html#afaa095f29b1c45209b8f6aa913fbf019',1,'GPXAddTrack(FILE_TYPE file, const char *trackName, const char *trackDesc, const char *time):&#160;GPX.c']]],
+  ['gpxaddtrackpoint_27',['GPXAddTrackPoint',['../_g_p_x_8c.html#aeba2828014017709427570a3715b70de',1,'GPXAddTrackPoint(FILE_TYPE file, const char *lat, const char *lon, const char *ele, const char *time):&#160;GPX.c'],['../_g_p_x_8h.html#aeba2828014017709427570a3715b70de',1,'GPXAddTrackPoint(FILE_TYPE file, const char *lat, const char *lon, const char *ele, const char *time):&#160;GPX.c']]],
+  ['gpxaddtracksegment_28',['GPXAddTrackSegment',['../_g_p_x_8c.html#a98fc665328e61104618799da2342c762',1,'GPXAddTrackSegment(FILE_TYPE file):&#160;GPX.c'],['../_g_p_x_8h.html#a98fc665328e61104618799da2342c762',1,'GPXAddTrackSegment(FILE_TYPE file):&#160;GPX.c']]],
+  ['gpxclosefile_29',['GPXCloseFile',['../_g_p_x_8c.html#ac39b6b265c6355806f4ee93dd7020cc4',1,'GPXCloseFile(FILE_TYPE file):&#160;GPX.c'],['../_g_p_x_8h.html#ac39b6b265c6355806f4ee93dd7020cc4',1,'GPXCloseFile(FILE_TYPE file):&#160;GPX.c']]],
+  ['gpxclosetrack_30',['GPXCloseTrack',['../_g_p_x_8c.html#a95fda0a1bace01ffa54496678c0b830b',1,'GPXCloseTrack(FILE_TYPE file):&#160;GPX.c'],['../_g_p_x_8h.html#a95fda0a1bace01ffa54496678c0b830b',1,'GPXCloseTrack(FILE_TYPE file):&#160;GPX.c']]],
+  ['gpxclosetracksegment_31',['GPXCloseTrackSegment',['../_g_p_x_8c.html#a1490a3a2911ac6e4b8283b6151d48032',1,'GPXCloseTrackSegment(FILE_TYPE file):&#160;GPX.c'],['../_g_p_x_8h.html#a1490a3a2911ac6e4b8283b6151d48032',1,'GPXCloseTrackSegment(FILE_TYPE file):&#160;GPX.c']]],
+  ['gpxinitfile_32',['GPXInitFile',['../_g_p_x_8c.html#a4290d61b28e904b6f5343b4c598d2a49',1,'GPXInitFile(FILE_TYPE file, const char *filename):&#160;GPX.c'],['../_g_p_x_8h.html#a4290d61b28e904b6f5343b4c598d2a49',1,'GPXInitFile(FILE_TYPE file, const char *filename):&#160;GPX.c']]]
 ];

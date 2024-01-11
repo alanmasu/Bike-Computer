@@ -37,10 +37,12 @@ var menudata={children:[
 {text:"All",url:"globals.html",children:[
 {text:"d",url:"globals.html#index_d"},
 {text:"g",url:"globals.html#index_g"},
-{text:"m",url:"globals.html#index_m"},
 {text:"n",url:"globals.html#index_n"},
-{text:"p",url:"globals.html#index_p"},
 {text:"s",url:"globals.html#index_s"},
 {text:"u",url:"globals.html#index_u"}]},
-{text:"Functions",url:"globals_func.html"},
+{text:"Functions",url:"globals_func.html",children:[
+{text:"d",url:"globals_func.html#index_d"},
+{text:"g",url:"globals_func.html#index_g"},
+{text:"n",url:"globals_func.html#index_n"},
+{text:"s",url:"globals_func.html#index_s"}]},
 {text:"Variables",url:"globals_vars.html"}]}]}]}

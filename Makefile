@@ -2,10 +2,10 @@ CC = gcc
 CFLAGS = -Wall -g -DSIMULATE_HARDWARE
 
 # Lista dei file .c da includere
-C_SOURCES = main.c GPS.c
+C_SOURCES = main.c GPX.c GPS.c
 
 # Lista dei file .h da includere
-H_HEADERS = GPS.h 
+H_HEADERS = GPX.h Test/GPX_Points.h GPS.h
 
 # Cartella per i file di build
 BUILD_DIR = build
