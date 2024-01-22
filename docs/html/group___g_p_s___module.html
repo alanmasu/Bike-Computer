@@ -78,6 +78,9 @@ $(function() {
   <div class="headertitle"><div class="title">GPS</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>GPS module functions.  
+<a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
@@ -123,9 +126,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga6ccdb8245b89ca23840ec02d748c6ddf" id="r_ga6ccdb8245b89ca23840ec02d748c6ddf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga6ccdb8245b89ca23840ec02d748c6ddf">gpsParseData</a> (const char *packet)</td></tr>
 <tr class="memdesc:ga6ccdb8245b89ca23840ec02d748c6ddf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse GPS data.  <br /></td></tr>
 <tr class="separator:ga6ccdb8245b89ca23840ec02d748c6ddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2afbc7dbcbbe07e79d9e6eb2b39d5e5e" id="r_ga2afbc7dbcbbe07e79d9e6eb2b39d5e5e"><td class="memItemLeft" align="right" valign="top"><a id="ga2afbc7dbcbbe07e79d9e6eb2b39d5e5e" name="ga2afbc7dbcbbe07e79d9e6eb2b39d5e5e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addPointToGPXFromGPS</b> (char *gpsData, FILE_TYPE file)</td></tr>
-<tr class="separator:ga2afbc7dbcbbe07e79d9e6eb2b39d5e5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8933e0536c24ee3aa945ac05ea3ba401" id="r_ga8933e0536c24ee3aa945ac05ea3ba401"><td class="memItemLeft" align="right" valign="top"><a id="ga8933e0536c24ee3aa945ac05ea3ba401" name="ga8933e0536c24ee3aa945ac05ea3ba401"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>addPointToGPXFromGPS</b> (char *gpsData, FILE_TYPE file)</td></tr>
+<tr class="separator:ga8933e0536c24ee3aa945ac05ea3ba401"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -162,6 +165,8 @@ volatile bool&#160;</td><td class="memItemRight" valign="bottom"><b>stringEnd</b
 <tr class="separator:gad359190a2ebcf7279dc06e2c6e41aac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<p>GPS module functions. </p>
+<p>This module contains the functions used to configure and use the GPS module. There are functions dipendent on hardware and functions that can be used also. </p>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ga2db538345499749ea158c96b0f4f8318" name="ga2db538345499749ea158c96b0f4f8318"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga2db538345499749ea158c96b0f4f8318">&#9670;&#160;</a></span>DMA_INT1_IRQHandler()</h2>

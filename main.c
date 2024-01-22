@@ -137,7 +137,16 @@ FIL file;
 bool btnStartStateP = true;
 bool btnStopStateP = true;
 
-
+/*!
+    @brief      Main function
+    @details    This function configure all hardware dipendent patr, start a comunication channel whit the L80
+                module on UART then start the SD card and mount the FAT file system.
+                The program waits a button press on BTNStart to start the GPS data sampling and stop this
+                process when the BTNStop is pressed.
+                After signal a sampling loop save it on the SD card in a file called "test<xxx>.gpx" in
+                the root directory, where <xxx> is a progressive number whit runs;
+                so if the file test.gpx alredy exists then the "test1.gpx" will be created.
+*/
 void main(void){
     WDT_A_holdTimer();	// stop watchdog timer
 	CS_Init();
@@ -202,6 +211,8 @@ void main(void){
     //testing SD and GPX features
 
 //    f_unmount("");
+    bool defaultFile = true;
+    char newFileName[15];
     while(1){
         bool status;
         switch (computerState){
@@ -216,28 +227,33 @@ void main(void){
             if(status && !btnStartStateP){
                 btnStartStateP = true;
                 //Open the file
-//                int fileIndex = 1;
-//                r = f_stat(GPX_TEST_FILENAME, &FI);                     //Check if file already exists
-//                if(r == FR_OK){                                         //If file already exists
-//                    char newFileName[15];
-//                    do{
-//                        snprintf(newFileName, 14, "%test%d.gpx", fileIndex);
-//                        fileIndex++;
-//                        r = f_stat(newFileName, &FI);
-//                    }while(r != FR_NO_FILE && fileIndex <= 999);
-//                    r = f_open(&GPX_TEST_FILE, newFileName, FA_WRITE | FA_CREATE_ALWAYS);
-//                }else if(r == FR_NO_FILE){
-//                    r = f_open(&GPX_TEST_FILE, GPX_TEST_FILENAME, FA_WRITE | FA_CREATE_ALWAYS);
-//                }
-                r = f_open(&GPX_TEST_FILE, GPX_TEST_FILENAME, FA_WRITE | FA_CREATE_ALWAYS);
+                int fileIndex = 1;
+                r = f_stat(GPX_TEST_FILENAME, &FI);                     //Check if file already exists
+                if(r == FR_OK){                                         //If file already exists
+                    defaultFile = false;
+                    do{
+                        snprintf(newFileName, 14, "test%d.gpx", fileIndex);
+                        fileIndex++;
+                        r = f_stat(newFileName, &FI);
+                    }while(r != FR_NO_FILE && fileIndex <= 999);
+                    r = f_open(&GPX_TEST_FILE, newFileName, FA_WRITE | FA_CREATE_ALWAYS);
+                }else if(r == FR_NO_FILE){
+                    r = f_open(&GPX_TEST_FILE, GPX_TEST_FILENAME, FA_WRITE | FA_CREATE_ALWAYS);
+                }
+                // r = f_open(&GPX_TEST_FILE, GPX_TEST_FILENAME, FA_WRITE | FA_CREATE_ALWAYS);
                 /*Check for errors. Trap MSP432 if there is an error*/
                 if(r != FR_OK){
                     PRINTF("Could not open file, returned: %d\r\n", (int)r);
                     MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
                     while(1);
                 }
-                GPXInitFile(&GPX_TEST_FILE, GPX_TEST_FILENAME);
-                GPXAddTrack(&GPX_TEST_FILE, "Test Track", "Test Description", "2024-01-10T00:00:00Z");
+
+                if(defaultFile){
+                    GPXInitFile(&GPX_TEST_FILE, GPX_TEST_FILENAME);
+                }else{
+                    GPXInitFile(&GPX_TEST_FILE, newFileName);
+                }
+                GPXAddTrack(&GPX_TEST_FILE, "2024-01-10T00:00:00Z");
                 GPXAddTrackSegment(&GPX_TEST_FILE);
                 computerState = START;
                 MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN2);
@@ -253,7 +269,7 @@ void main(void){
 //            if(status && !btnStopStateP){
             if(stringEnd){
                 MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN0);
-                bool pointAdded = addPointToGPXFromGPS(&uartData, &GPX_TEST_FILE);
+                bool pointAdded = addPointToGPXFromGPS((char*)&uartData, &GPX_TEST_FILE);
                 if(!pointAdded){
                     MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN0);
                 }

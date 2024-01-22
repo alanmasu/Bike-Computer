@@ -38,6 +38,9 @@
 /*!
     @addtogroup GPS_Module
     @{
+        @brief      GPS module functions
+        @details    This module contains the functions used to configure and use the GPS module.
+                    There are functions dipendent on hardware and functions that can be used also.
 */
 
 /* Local Includes*/

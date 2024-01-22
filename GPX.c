@@ -1,5 +1,6 @@
 /*!
     @file       GPX.c
+    @ingroup    GPX_Module
     @brief      GPX file creation and manipulation
     @details    This file contains the function implementation for the GPX file creation and manipulation
                 functions.
@@ -20,10 +21,19 @@
                     - Declare the GPX schema location
 */
 const char* GPX_HEADER = "\
-<?xml version='1.0' encoding='UTF-8'?>\n\
-<gpx version=\"1.1\" creator=\"IoTProject2023\" xmlns=\"http://www.topografix.com/GPX/1/1\" \
+<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n \
+<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" \
+xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v1\" \
+xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\" \
 xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \
-xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\">\n";
+xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 \
+http://www.topografix.com/GPX/1/1/gpx.xsd \
+http://www.garmin.com/xmlschemas/GpxExtensions/v3 \
+http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd \
+http://www.garmin.com/xmlschemas/TrackPointExtension/v1 \
+http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd\" \
+version=\"1.1\" \
+creator=\"IoTProject2023\">";
 
 
 /*!
@@ -36,9 +46,19 @@ const char* GPX_TRACK_POINT = "\
                 <ele>%s</ele>\n\
                 <time>%s</time>\n\
             </trkpt>\n";
-            
+
+/*!
+    @brief      GPX MetaData Constant String
+    @details    Constant string containing the metadata tag and placeholder for the time;
+                it is used to add the metadata mamespace to the GPX file
+*/
+const char* GPX_METADATA = "\
+    <metadata>\n\
+        <time>%s</time>\n\
+    </metadata>\n";
+
+///@addtogroup GPX_Module
 ///@{
-///    @name    GPX File Manipulation Functions
 ///    @brief   Functions used to create and manipulate GPX files
 
 /*!
@@ -72,6 +92,48 @@ void GPXInitFile(FILE_TYPE file, const char* filename){
 }
 
 /*!
+    @brief      GPXAddTrackName
+    @details    Adds the track name to the file
+    @param      file: Pointer to the file handler
+    @param      name: Name of the track
+
+    @note       The function will not close the file handler, it is the responsibility of the caller
+                to do so by calling @ref GPXCloseFile
+    @pre        @ref GPXInitFile and @ref GPXAddTrack must be called before this function
+*/
+void GPXAddTrackName(FILE_TYPE file, const char* name){
+    #ifndef SIMULATE_HARDWARE
+        f_printf(file, "\t\t<name>%s</name>\n", name);
+    #else
+        if(*file == NULL){
+            return;
+        }
+        fprintf(*file, "\t\t<name>%s</name>\n", name);
+    #endif
+}
+
+/*!
+    @brief      GPXAddTrackName
+    @details    Adds the track name to the file
+    @param      file: Pointer to the file handler
+    @param      name: Name of the track
+
+    @note       The function will not close the file handler, it is the responsibility of the caller
+                to do so by calling @ref GPXCloseFile
+    @pre        @ref GPXInitFile and @ref GPXAddTrack must be called before this function
+*/
+void GPXAddTrackType(FILE_TYPE file, const char* type){
+    #ifndef SIMULATE_HARDWARE
+        f_printf(file, "\t\t<type>%s</type>\n", type);
+    #else
+        if(*file == NULL){
+            return;
+        }
+        fprintf(*file, "\t\t<type>%s</type>\n", type);
+    #endif
+}
+
+/*!
     @brief      GPXAddTrack
     @details    Adds the track namespace to the file
     @param      file: Pointer to the file handler
@@ -83,13 +145,15 @@ void GPXInitFile(FILE_TYPE file, const char* filename){
                 to do so by calling @ref GPXCloseFile
     @pre        @ref GPXInitFile must be called before this function
 */
-void GPXAddTrack(FILE_TYPE file, const char* trackName, const char* trackDesc, const char* time){
+void GPXAddTrack(FILE_TYPE file, const char* time){
     #ifndef SIMULATE_HARDWARE
+        f_printf(file, GPX_METADATA, time);
         f_printf(file, "\t<trk>\n");
     #else
         if(*file == NULL){
             return;
         }
+        fprintf(*file, GPX_METADATA, time);
         fprintf(*file, "\t<trk>\n");
     #endif
 }

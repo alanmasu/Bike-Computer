@@ -1,5 +1,6 @@
 /*!
     @file       GPX.h
+    @ingroup    GPX_Module
     @brief      GPX file creation and manipulation
     @details    This file contains the function definitions for the GPX file creation and manipulation
                 functions. These functions are used to create a GPX file and add track points to it.
@@ -25,11 +26,17 @@
 #include <string.h>
 
 
-/// @{
+/*!
+    @defgroup   GPX_Module GPX
+    @name       GPX Module
+
+    @{
+*/
 void GPXInitFile(FILE_TYPE file, const char* filename);
 
-
-void GPXAddTrack(FILE_TYPE file, const char* trackName, const char* trackDesc, const char* time);
+void GPXAddTrackName(FILE_TYPE file, const char* name);
+void GPXAddTrackType(FILE_TYPE file, const char* type);
+void GPXAddTrack(FILE_TYPE file, const char* time);
 void GPXAddTrackSegment(FILE_TYPE file);
 void GPXAddNewTrackSegment(FILE_TYPE file);
 

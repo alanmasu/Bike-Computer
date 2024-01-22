@@ -47,7 +47,6 @@
 /*!
     @defgroup   GPS_Module GPS
     @name       GPS Module
-
     @{
 */
 
