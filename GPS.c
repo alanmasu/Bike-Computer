@@ -22,9 +22,9 @@
 #include <stdio.h>
 #include <time.h>
 
-#ifndef PRINTF(...)
+#ifndef PRINTF
     #ifndef SIMULATE_HARDWARE
-        #ifndef DEBUG
+        #if !defined(DEBUG) || defined(STAND_ALONE)
             #define PRINTF(...)
         #else
             #include <Devices/MSPIO.h>

@@ -68,8 +68,12 @@
 #include "GPS.h"
 
 #ifndef SIMULATE_HARDWARE
-    #include <Devices/MSPIO.h>
-    #define PRINTF(...) MSPrintf(EUSCI_A0_BASE ,__VA_ARGS__)
+    #if !defined(DEBUG) || defined(STAND_ALONE)
+        #define PRINTF(...)
+    #else
+        #include <Devices/MSPIO.h>
+        #define PRINTF(...) MSPrintf(EUSCI_A0_BASE ,__VA_ARGS__)
+    #endif
 #else
     #include <stdio.h>
     #define PRINTF(...) printf(__VA_ARGS__)

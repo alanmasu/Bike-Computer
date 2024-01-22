@@ -1,4 +1,15 @@
 eclipse.preferences.version=1
+encoding//Debug\ StandAlone/Devices/subdir_rules.mk=UTF-8
+encoding//Debug\ StandAlone/Devices/subdir_vars.mk=UTF-8
+encoding//Debug\ StandAlone/Hardware/subdir_rules.mk=UTF-8
+encoding//Debug\ StandAlone/Hardware/subdir_vars.mk=UTF-8
+encoding//Debug\ StandAlone/fatfs/subdir_rules.mk=UTF-8
+encoding//Debug\ StandAlone/fatfs/subdir_vars.mk=UTF-8
+encoding//Debug\ StandAlone/makefile=UTF-8
+encoding//Debug\ StandAlone/objects.mk=UTF-8
+encoding//Debug\ StandAlone/sources.mk=UTF-8
+encoding//Debug\ StandAlone/subdir_rules.mk=UTF-8
+encoding//Debug\ StandAlone/subdir_vars.mk=UTF-8
 encoding//Debug/Devices/subdir_rules.mk=UTF-8
 encoding//Debug/Devices/subdir_vars.mk=UTF-8
 encoding//Debug/Hardware/subdir_rules.mk=UTF-8
