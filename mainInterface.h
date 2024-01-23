@@ -24,9 +24,9 @@ extern tRectangle distance;
 extern tRectangle coord;
 extern tRectangle menu;
 
-void drawGrid();
+void drawGrid1();
 void graphicsInit();
-char* StringTemp(float temp);
+void showPage1();
 
 #endif /* MAININTERFACE_H_ */
 

@@ -14,14 +14,9 @@
 #include <stdlib.h>
 
 Graphics_Context g_sContext;
-tRectangle temp={0,0,128,17};
-tRectangle avSpeed={0,17,128,34};
-tRectangle instSpeed={0,34,128,51};
-tRectangle acc={0,51,128,68};
-tRectangle distance={0,68,128,85};
-tRectangle coord={0,85,128,102};
-tRectangle menu={0,102,128,128};
-
+tRectangle multipleData={0,0,64,102};
+tRectangle instSpeed={64,0,128,102};
+tRectangle tripTime={0,102,128,128};
 
 void graphicsInit(){
     /* Initializes display */
@@ -35,19 +30,50 @@ void graphicsInit(){
     GrContextFontSet(&g_sContext, &g_sFontFixed6x8);
     Graphics_clearDisplay(&g_sContext);
 }
-void drawGrid(){
-    GrRectDraw(&g_sContext, &temp);
-    GrRectDraw(&g_sContext, &avSpeed);
+void drawGrid1(){
+    GrRectDraw(&g_sContext, &multipleData);
     GrRectDraw(&g_sContext, &instSpeed);
-    GrRectDraw(&g_sContext, &acc);
-    GrRectDraw(&g_sContext, &distance);
-    GrRectDraw(&g_sContext, &coord);
-    GrRectDraw(&g_sContext, &menu);
+    GrRectDraw(&g_sContext, &tripTime);
 }
-char* StringTemp(float temp){
-    char* toPrint = (char*)malloc(10);
-    sprintf(toPrint, "%3.2f C",temp);
-    return toPrint;
+
+void showPage1(){
+    char tmpString[40]="/0";
+
+    //time-altitude-satellites-temperature
+    snprintf(tmpString,39,"Time:");
+    GrStringDraw(&g_sContext,(int8_t*)tmpString,-1,multipleData.xMin+7,multipleData.yMin+2,0);
+    snprintf(tmpString,39,"%.2f",13.15);
+    GrStringDraw(&g_sContext,(int8_t*)tmpString,-1,multipleData.xMin+7,multipleData.yMin+10,0);
+
+    snprintf(tmpString,39,"Altitude:");
+    GrStringDraw(&g_sContext,(int8_t*)tmpString,-1,multipleData.xMin+7,multipleData.yMin+27,0);
+    snprintf(tmpString,39,"%.2f m",600.00);
+    GrStringDraw(&g_sContext,(int8_t*)tmpString,-1,multipleData.xMin+7,multipleData.yMin+35,0);
+
+    snprintf(tmpString,39,"Sats:");
+    GrStringDraw(&g_sContext,(int8_t*)tmpString,-1,multipleData.xMin+7,multipleData.yMin+52,0);
+    snprintf(tmpString,39,"%.2f",4.00);
+    GrStringDraw(&g_sContext,(int8_t*)tmpString,-1,multipleData.xMin+7,multipleData.yMin+60,0);
+
+    snprintf(tmpString,39,"Temp:");
+    GrStringDraw(&g_sContext,(int8_t*)tmpString,-1, multipleData.xMin+7, multipleData.yMin+77,0);
+    snprintf(tmpString,39,"%.2f C",22.5);
+    GrStringDraw(&g_sContext,(int8_t*)tmpString,-1,multipleData.xMin+7,multipleData.yMin+85,0);
+
+    //speed
+    snprintf(tmpString,39,"Speed:");
+    GrStringDrawCentered(&g_sContext,(int8_t*)tmpString,-1,96,42,0);
+    snprintf(tmpString,39,"%.2f km/h",30.5);
+    GrStringDrawCentered(&g_sContext,(int8_t*)tmpString,-1,96,55,0);
+
+    //trip time
+    snprintf(tmpString,39,"Trip Time (h:m:s):");
+    GrStringDrawCentered(&g_sContext,(int8_t*)tmpString,-1,64,110,0);
+    snprintf(tmpString,39,"%2d:%2d:%2d",2,45,50);
+    GrStringDrawCentered(&g_sContext,(int8_t*)tmpString,-1,64,118,0);
+
+
+
 }
 
 
