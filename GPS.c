@@ -510,7 +510,9 @@ void gpsParseData(const char* packet){
 bool addPointToGPXFromGPS(char* gpsData, FILE_TYPE file){
     static bool fixOk = false;
     gpsParseData(gpsData);
-    if(gpsGGAData.fix != INVALID && gpsRMCData.valid){
+    int hdop = atof(gpsGGAData.hdop);
+    int fix = atoi(gpsGSAData.fix);
+    if(fix > 1 && gpsRMCData.valid && hdop < 4){
         fixOk = true;
         char timeString[20];
         //Convert time to string ISO 8601
