@@ -21,7 +21,7 @@
                     - Declare the GPX schema location
 */
 const char* GPX_HEADER = "\
-<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n \
+<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
 <gpx xmlns=\"http://www.topografix.com/GPX/1/1\" \
 xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v1\" \
 xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\" \
@@ -33,7 +33,7 @@ http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd \
 http://www.garmin.com/xmlschemas/TrackPointExtension/v1 \
 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd\" \
 version=\"1.1\" \
-creator=\"IoTProject2023\">";
+creator=\"IoTProject2023\">\n";
 
 
 /*!
