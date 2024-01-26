@@ -16,14 +16,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 extern Graphics_Context g_sContext;
-extern tRectangle temp;
-extern tRectangle avSpeed;
+extern tRectangle mutipleData;
 extern tRectangle instSpeed;
-extern tRectangle acc;
-extern tRectangle distance;
-extern tRectangle coord;
-extern tRectangle menu;
+extern tRectangle tripTime;
+//State machine to implement page scrolling 
+typedef enum{
+    PAGE_1,
+    PAGE_2,
+    PAGE_3,
+}Page_t;
 
+typedef struct{
+    Page_t page;
+    void (*page_function)(void);
+} StateMachine_t;
+
+Page_t current_page = PAGE_1;
+
+StateMachine_t fsm[] = {
+                      {PAGE_1, fn_PAGE_1},
+                      {PAGE_2, fn_PAGE_2},
+                      {PAGE_3, fn_PAGE_3}
+};
+void fn_PAGE_1(void);
+void fn_PAGE_2(void);
+void fn_PAGE_3(void);
+
+void scrollPages();
 void drawGrid1();
 void graphicsInit();
 void showPage1();
