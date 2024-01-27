@@ -8,7 +8,7 @@
 
 int main(void){
     graphicsInit();
-    current_page=PAGE_1;
+    //current_page=PAGE_1;
     drawGrid1();
     showPage1();
     GrFlush(&g_sContext);

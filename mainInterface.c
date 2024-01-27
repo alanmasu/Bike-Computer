@@ -18,6 +18,45 @@ tRectangle multipleData = {0, 0, 64, 102};
 tRectangle instSpeed = {64, 0, 128, 102};
 tRectangle tripTime = {0, 102, 128, 128};
 
+// void _adcInit(){
+//     /* Configures Pin 6.0 and 4.4 as ADC input */
+//         GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P6, GPIO_PIN0, GPIO_TERTIARY_MODULE_FUNCTION);
+//         GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P4, GPIO_PIN4, GPIO_TERTIARY_MODULE_FUNCTION);
+
+//         /* Initializing ADC (ADCOSC/64/8) */
+//         ADC14_enableModule();
+//         ADC14_initModule(ADC_CLOCKSOURCE_ADCOSC, ADC_PREDIVIDER_64, ADC_DIVIDER_8, 0);
+
+//         /* Configuring ADC Memory (ADC_MEM0 - ADC_MEM1 (A15, A9)  with repeat)
+//              * with internal 2.5v reference */
+//         ADC14_configureMultiSequenceMode(ADC_MEM0, ADC_MEM1, true);
+//         ADC14_configureConversionMemory(ADC_MEM0,
+//                 ADC_VREFPOS_AVCC_VREFNEG_VSS,
+//                 ADC_INPUT_A15, ADC_NONDIFFERENTIAL_INPUTS);
+
+//         ADC14_configureConversionMemory(ADC_MEM1,
+//                 ADC_VREFPOS_AVCC_VREFNEG_VSS,
+//                 ADC_INPUT_A9, ADC_NONDIFFERENTIAL_INPUTS);
+
+//         /* Enabling the interrupt when a conversion on channel 1 (end of sequence)
+//          *  is complete and enabling conversions */
+//         ADC14_enableInterrupt(ADC_INT1);
+
+//         /* Enabling Interrupts */
+//         Interrupt_enableInterrupt(INT_ADC14);
+//         Interrupt_enableMaster();
+
+//         /* Setting up the sample timer to automatically step through the sequence
+//          * convert.
+//          */
+//         ADC14_enableSampleTimer(ADC_AUTOMATIC_ITERATION);
+
+//         /* Triggering the start of the sample */
+//         ADC14_enableConversion();
+//         ADC14_toggleConversionTrigger();
+// }
+
+
 void graphicsInit()
 {
     /* Initializes display */
@@ -75,30 +114,30 @@ void showPage1()
     snprintf(tmpString, 39, "%2d:%2d:%2d", 2, 45, 50);
     GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 64, 118, 0);
 }
-void fn_PAGE_1(void)
-{
-    current_page=PAGE_2;
-}
-void fn_PAGE_2(void)
-{
-     current_page=PAGE_3;
-}
-void fn_PAGE_3(void)
-{
-     current_page=PAGE_1;
-}
-void scrollPages()
-{
-    switch (myPage)
-    {
-    case PAGE_1:
-        //
-        break;
-    case PAGE_2:
-        //
-        break;
-    case PAGE_3:
-        //
-        break;
-    }
-}
+// void fn_PAGE_1(void)
+// {
+//     current_page=PAGE_2;
+// }
+// void fn_PAGE_2(void)
+// {
+//      current_page=PAGE_3;
+// }
+// void fn_PAGE_3(void)
+// {
+//      current_page=PAGE_1;
+// }
+// void scrollPages()
+// {
+//     switch (myPage)
+//     {
+//     case PAGE_1:
+//         //
+//         break;
+//     case PAGE_2:
+//         //
+//         break;
+//     case PAGE_3:
+//         //
+//         break;
+//     }
+// }

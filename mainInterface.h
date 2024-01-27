@@ -19,7 +19,8 @@ extern Graphics_Context g_sContext;
 extern tRectangle mutipleData;
 extern tRectangle instSpeed;
 extern tRectangle tripTime;
-//State machine to implement page scrolling 
+/*State machine to implement page scrolling
+
 typedef enum{
     PAGE_1,
     PAGE_2,
@@ -40,7 +41,7 @@ StateMachine_t fsm[] = {
 };
 void fn_PAGE_1(void);
 void fn_PAGE_2(void);
-void fn_PAGE_3(void);
+void fn_PAGE_3(void);*/
 
 void scrollPages();
 void drawGrid1();
