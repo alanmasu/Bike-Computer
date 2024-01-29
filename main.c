@@ -23,6 +23,7 @@ volatile uint32_t cal85;
 volatile float calDifference;
 volatile float tempC;
 volatile float tempF;
+volatile struct toShowPage1 myParamStruct;
 
 int main(void)
 {
@@ -63,15 +64,15 @@ int main(void)
     {
         if (flagTemp)
         {
-            tempC = (conRes / calDifference) + 30.0f;
-            tempF = tempC * 9.0f / 5.0f + 32.0f;
+            myParamStruct.temp = (conRes / calDifference) + 30.0f-19;
+            //tempF = tempC * 9.0f / 5.0f + 32.0f;
             flagTemp == false;
             Interrupt_enableInterrupt(INT_ADC14);
         }
         // current_page=PAGE_1;
         //Graphics_clearDisplay(&g_sContext);
         drawGrid1();
-        showPage1(tempC);
+        showPage1(&myParamStruct);
         GrFlush(&g_sContext);
         Interrupt_enableSleepOnIsrExit();
         //PCM_gotoLPM0();

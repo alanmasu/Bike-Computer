@@ -78,41 +78,41 @@ void drawGrid1()
     GrRectDraw(&g_sContext, &tripTime);
 }
 
-void showPage1(float temp)
+void showPage1(toShowPage1* paramToShow1)
 {
     char tmpString[40] = "/0";
 
     // time-altitude-satellites-temperature
     snprintf(tmpString, 39, "Time:");
     GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 2, 1);
-    snprintf(tmpString, 39, "%.2f", 13.15);
+    snprintf(tmpString, 39, "%s", paramToShow1->time);
     GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 10, 1);
 
     snprintf(tmpString, 39, "Altitude:");
     GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 27, 1);
-    snprintf(tmpString, 39, "%.2f m", 600.00);
+    snprintf(tmpString, 39, "%.2f m", paramToShow1->altitude);
     GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 35, 1);
 
     snprintf(tmpString, 39, "Sats:");
     GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 52, 1);
-    snprintf(tmpString, 39, "%.2f", 4.00);
+    snprintf(tmpString, 39, "%.2f", paramToShow1->sats);
     GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 60, 1);
 
     snprintf(tmpString, 39, "Temp:");
     GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 77, 1);
-    snprintf(tmpString, 39, "%.2f C", temp);
+    snprintf(tmpString, 39, "%.2f C", paramToShow1->temp);
     GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 85, 1);
 
     // speed
     snprintf(tmpString, 39, "Speed:");
     GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 96, 42, 1);
-    snprintf(tmpString, 39, "%.2f km/h", 30.5);
+    snprintf(tmpString, 39, "%.2f km/h", paramToShow1->speed);
     GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 96, 55, 1);
 
     // trip time
     snprintf(tmpString, 39, "Trip Time (h:m:s):");
     GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 64, 110, 1);
-    snprintf(tmpString, 39, "%2d:%2d:%2d", 2, 45, 50);
+    snprintf(tmpString, 39, "%s", paramToShow1->tripTime);
     GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 64, 118, 1);
 }
 // void fn_PAGE_1(void)

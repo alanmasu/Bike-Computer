@@ -43,10 +43,20 @@ void fn_PAGE_1(void);
 void fn_PAGE_2(void);
 void fn_PAGE_3(void);*/
 
+typedef struct toShowPage1{
+    float temp;
+    char time[10];
+    float altitude;
+    int sats;
+    float speed;
+    char tripTime[10];
+}toShowPage1;
+
+
 void scrollPages();
 void drawGrid1();
 void graphicsInit(eUSCI_SPI_MasterConfig*);
-void showPage1(float temp);
+void showPage1(toShowPage1* paramToShow1);
 
 #endif /* MAININTERFACE_H_ */
 
