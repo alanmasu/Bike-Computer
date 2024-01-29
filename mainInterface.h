@@ -45,7 +45,7 @@ void fn_PAGE_3(void);*/
 
 void scrollPages();
 void drawGrid1();
-void graphicsInit();
+void graphicsInit(eUSCI_SPI_MasterConfig*);
 void showPage1();
 
 #endif /* MAININTERFACE_H_ */

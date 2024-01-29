@@ -56,19 +56,9 @@ void HAL_LCD_PortInit(void)
     GPIO_setAsOutputPin(LCD_CS_PORT, LCD_CS_PIN);
 }
 
-void HAL_LCD_SpiInit(void)
+void HAL_LCD_SpiInit(eUSCI_SPI_MasterConfig* config)
 {
-    eUSCI_SPI_MasterConfig config =
-        {
-            EUSCI_B_SPI_CLOCKSOURCE_SMCLK,
-            LCD_SYSTEM_CLOCK_SPEED,
-            LCD_SPI_CLOCK_SPEED,
-            EUSCI_B_SPI_MSB_FIRST,
-            EUSCI_B_SPI_PHASE_DATA_CAPTURED_ONFIRST_CHANGED_ON_NEXT,
-            EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_LOW,
-            EUSCI_B_SPI_3PIN
-        };
-    SPI_initMaster(LCD_EUSCI_BASE, &config);
+    SPI_initMaster(LCD_EUSCI_BASE, config);
     SPI_enableModule(LCD_EUSCI_BASE);
 
     GPIO_setOutputLowOnPin(LCD_CS_PORT, LCD_CS_PIN);

@@ -57,10 +57,10 @@ tRectangle tripTime = {0, 102, 128, 128};
 // }
 
 
-void graphicsInit()
+void graphicsInit(eUSCI_SPI_MasterConfig* config)
 {
     /* Initializes display */
-    Crystalfontz128x128_Init();
+    Crystalfontz128x128_Init(config);
     /* Set default screen orientation */
     Crystalfontz128x128_SetOrientation(LCD_ORIENTATION_UP);
     /* Initializes graphics context */

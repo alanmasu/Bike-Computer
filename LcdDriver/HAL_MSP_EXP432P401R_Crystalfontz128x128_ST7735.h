@@ -81,7 +81,7 @@
 extern void HAL_LCD_writeCommand(uint8_t command);
 extern void HAL_LCD_writeData(uint8_t data);
 extern void HAL_LCD_PortInit(void);
-extern void HAL_LCD_SpiInit(void);
+extern void HAL_LCD_SpiInit(eUSCI_SPI_MasterConfig*);
 
 // Custom __delay_cycles() for non CCS Compiler
 #if !defined( __TI_ARM__ )

@@ -101,7 +101,7 @@ extern Graphics_Display g_sCrystalfontz128x128;
 
 extern const Graphics_Display_Functions g_sCrystalfontz128x128_funcs;
 
-extern void Crystalfontz128x128_Init(void);
+extern void Crystalfontz128x128_Init(eUSCI_SPI_MasterConfig*);
 
 extern void Crystalfontz128x128_SetDrawFrame(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
 

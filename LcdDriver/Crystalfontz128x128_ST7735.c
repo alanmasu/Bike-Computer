@@ -57,10 +57,10 @@ uint16_t Lcd_TouchTrim;
 //! \return None.
 //
 //*****************************************************************************
-void Crystalfontz128x128_Init(void)
+void Crystalfontz128x128_Init(eUSCI_SPI_MasterConfig* config)
 {
     HAL_LCD_PortInit();
-    HAL_LCD_SpiInit();
+    HAL_LCD_SpiInit(config);
 
     GPIO_setOutputLowOnPin(LCD_RST_PORT, LCD_RST_PIN);
     HAL_LCD_delay(50);
