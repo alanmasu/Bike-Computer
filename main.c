@@ -1,3 +1,9 @@
+/*!
+    @file       main.c
+    @brief      Configure timer to measure wheel speed.
+    @date       29/01/2024
+    @author     Sofia Zandonà
+*/
 /* DriverLib Includes */
 #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
 
@@ -7,7 +13,7 @@
 #include <stdio.h>
 
 #define NUMBER_TIMER_CAPTURES       20
-#define WHEEL_CIRCUMFERENCE         2.3141      //metri
+float wheelCircumference  =       2.3141  ;    //metri
 
 /* Timer_A Up Mode Configuration Parameter */
 /*const Timer_A_UpModeConfig upModeConfig =
@@ -35,6 +41,14 @@ const Timer_A_CaptureModeConfig captureModeConfig =
         TIMER_A_CAPTURECOMPARE_INTERRUPT_ENABLE,  // Enable interrupt
         TIMER_A_OUTPUTMODE_OUTBITVALUE            // Output bit value
 };
+
+/*!
+    @brief    Sets wheel diameter for this module.
+    @param    UserDiameter: user's wheel diameter in inches.  
+*/
+void setWheelDiameter(float userDiameter){
+    wheelCircumference = userDiameter / 39.37;
+}
 
 /* Statics */
 //static volatile uint_fast16_t timerAcaptureValues[NUMBER_TIMER_CAPTURES];
