@@ -15,7 +15,8 @@ eUSCI_SPI_MasterConfig config =
         EUSCI_B_SPI_PHASE_DATA_CAPTURED_ONFIRST_CHANGED_ON_NEXT,
         EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_LOW,
         EUSCI_B_SPI_3PIN};
-volatile bool flagTemp = false;
+
+volatile bool flagTemp;
 volatile int16_t conRes;
 volatile uint32_t cal30;
 volatile uint32_t cal85;
@@ -25,7 +26,7 @@ volatile float tempF;
 
 int main(void)
 {
-
+    graphicsInit(&config);
     /* Setting reference voltage to 2.5 and enabling temperature sensor */
     REF_A_enableTempSensor();
     REF_A_setReferenceVoltage(REF_A_VREF2_5V);
@@ -58,12 +59,6 @@ int main(void)
     ADC14_enableConversion();
     ADC14_toggleConversionTrigger();
 
-    graphicsInit(&config);
-    // current_page=PAGE_1;
-    drawGrid1();
-    showPage1();
-    GrFlush(&g_sContext);
-
     while (1)
     {
         if (flagTemp)
@@ -71,16 +66,22 @@ int main(void)
             tempC = (conRes / calDifference) + 30.0f;
             tempF = tempC * 9.0f / 5.0f + 32.0f;
             flagTemp == false;
-            ADC14_enableInterrupt(ADC_INT0);
+            Interrupt_enableInterrupt(INT_ADC14);
         }
-
-        PCM_gotoLPM0();
+        // current_page=PAGE_1;
+        //Graphics_clearDisplay(&g_sContext);
+        drawGrid1();
+        showPage1(tempC);
+        GrFlush(&g_sContext);
+        Interrupt_enableSleepOnIsrExit();
+        //PCM_gotoLPM0();
     }
 }
 
 /* This interrupt happens every time a conversion has completed.*/
 void ADC14_IRQHandler(void)
 {
+    flagTemp=true;
     uint64_t status;
     status = ADC14_getEnabledInterruptStatus();
     ADC14_clearInterruptFlag(status); /*clear interrupt flag*/
@@ -89,5 +90,7 @@ void ADC14_IRQHandler(void)
     {
         conRes = ((ADC14_getResult(ADC_MEM0) - cal30) * 55);
     }
-    ADC14_disableInterrupt(ADC_INT0);
+    Interrupt_disableInterrupt(INT_ADC14);
+    Interrupt_disableSleepOnIsrExit();
+
 }

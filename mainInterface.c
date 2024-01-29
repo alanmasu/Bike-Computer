@@ -18,6 +18,7 @@ tRectangle multipleData = {0, 0, 64, 102};
 tRectangle instSpeed = {64, 0, 128, 102};
 tRectangle tripTime = {0, 102, 128, 128};
 
+
 // void _adcInit(){
 //     /* Configures Pin 6.0 and 4.4 as ADC input */
 //         GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P6, GPIO_PIN0, GPIO_TERTIARY_MODULE_FUNCTION);
@@ -77,42 +78,42 @@ void drawGrid1()
     GrRectDraw(&g_sContext, &tripTime);
 }
 
-void showPage1()
+void showPage1(float temp)
 {
     char tmpString[40] = "/0";
 
     // time-altitude-satellites-temperature
     snprintf(tmpString, 39, "Time:");
-    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 2, 0);
+    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 2, 1);
     snprintf(tmpString, 39, "%.2f", 13.15);
-    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 10, 0);
+    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 10, 1);
 
     snprintf(tmpString, 39, "Altitude:");
-    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 27, 0);
+    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 27, 1);
     snprintf(tmpString, 39, "%.2f m", 600.00);
-    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 35, 0);
+    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 35, 1);
 
     snprintf(tmpString, 39, "Sats:");
-    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 52, 0);
+    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 52, 1);
     snprintf(tmpString, 39, "%.2f", 4.00);
-    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 60, 0);
+    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 60, 1);
 
     snprintf(tmpString, 39, "Temp:");
-    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 77, 0);
-    snprintf(tmpString, 39, "%.2f C", 22.5);
-    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 85, 0);
+    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 77, 1);
+    snprintf(tmpString, 39, "%.2f C", temp);
+    GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, multipleData.xMin + 7, multipleData.yMin + 85, 1);
 
     // speed
     snprintf(tmpString, 39, "Speed:");
-    GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 96, 42, 0);
+    GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 96, 42, 1);
     snprintf(tmpString, 39, "%.2f km/h", 30.5);
-    GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 96, 55, 0);
+    GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 96, 55, 1);
 
     // trip time
     snprintf(tmpString, 39, "Trip Time (h:m:s):");
-    GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 64, 110, 0);
+    GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 64, 110, 1);
     snprintf(tmpString, 39, "%2d:%2d:%2d", 2, 45, 50);
-    GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 64, 118, 0);
+    GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 64, 118, 1);
 }
 // void fn_PAGE_1(void)
 // {
