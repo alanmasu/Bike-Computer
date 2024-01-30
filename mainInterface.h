@@ -15,33 +15,18 @@
 #include "LcdDriver/HAL_MSP_EXP432P401R_Crystalfontz128x128_ST7735.h"
 #include <stdio.h>
 #include <stdlib.h>
+
 extern Graphics_Context g_sContext;
 extern tRectangle mutipleData;
 extern tRectangle instSpeed;
 extern tRectangle tripTime;
-/*State machine to implement page scrolling
-
+/*State machine to implement page scrolling*/
 typedef enum{
     PAGE_1,
     PAGE_2,
     PAGE_3,
 }Page_t;
-
-typedef struct{
-    Page_t page;
-    void (*page_function)(void);
-} StateMachine_t;
-
-Page_t current_page = PAGE_1;
-
-StateMachine_t fsm[] = {
-                      {PAGE_1, fn_PAGE_1},
-                      {PAGE_2, fn_PAGE_2},
-                      {PAGE_3, fn_PAGE_3}
-};
-void fn_PAGE_1(void);
-void fn_PAGE_2(void);
-void fn_PAGE_3(void);*/
+extern volatile Page_t myPage;
 
 typedef struct toShowPage1{
     float temp;
@@ -51,7 +36,7 @@ typedef struct toShowPage1{
     float speed;
     char tripTime[10];
 }toShowPage1;
-
+extern toShowPage1 myParamStruct;
 
 void scrollPages();
 void drawGrid1();
