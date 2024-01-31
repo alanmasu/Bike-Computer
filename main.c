@@ -213,86 +213,92 @@ void main(void){
 //    f_unmount("");
     bool defaultFile = true;
     char newFileName[15];
+    bool status;
+    bool gpsAddPoint = false;
     while(1){
-        bool status;
-        switch (computerState){
-        case STOP:
-            //Leds
-            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN1);
-            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN2);
-            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
-
-            //Detecting Start button press
-            status = !MAP_GPIO_getInputPinValue(BTN_START_PORT, BTN_START_PIN);
-            if(status && !btnStartStateP){
-                btnStartStateP = true;
-                //Open the file
-                int fileIndex = 1;
-                r = f_stat(GPX_TEST_FILENAME, &FI);                     //Check if file already exists
-                if(r == FR_OK){                                         //If file already exists
-                    defaultFile = false;
-                    do{
-                        snprintf(newFileName, 14, "test%d.gpx", fileIndex);
-                        fileIndex++;
-                        r = f_stat(newFileName, &FI);
-                    }while(r != FR_NO_FILE && fileIndex <= 999);
-                    r = f_open(&GPX_TEST_FILE, newFileName, FA_WRITE | FA_CREATE_ALWAYS);
-                }else if(r == FR_NO_FILE){
-                    r = f_open(&GPX_TEST_FILE, GPX_TEST_FILENAME, FA_WRITE | FA_CREATE_ALWAYS);
-                }
-                // r = f_open(&GPX_TEST_FILE, GPX_TEST_FILENAME, FA_WRITE | FA_CREATE_ALWAYS);
-                /*Check for errors. Trap MSP432 if there is an error*/
-                if(r != FR_OK){
-                    PRINTF("Could not open file, returned: %d\r\n", (int)r);
-                    MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
-                    while(1);
-                }
-
-                if(defaultFile){
-                    GPXInitFile(&GPX_TEST_FILE, GPX_TEST_FILENAME);
-                }else{
-                    GPXInitFile(&GPX_TEST_FILE, newFileName);
-                }
-                GPXAddTrack(&GPX_TEST_FILE, "2024-01-10T00:00:00Z");
-                GPXAddTrackSegment(&GPX_TEST_FILE);
-                computerState = START;
-                MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN2);
-                PRINTF("START TRACKING!!\r\n");
-            }
-            btnStartStateP = status;
-
-            break;
-        case START:
-            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN0);
-            //Detecting Stop button press
-            status = !MAP_GPIO_getInputPinValue(BTN_STOP_PORT, BTN_STOP_PIN);
-//            if(status && !btnStopStateP){
-            if(stringEnd){
-                MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN0);
-                bool pointAdded = addPointToGPXFromGPS((char*)&uartData, &GPX_TEST_FILE);
-                if(!pointAdded){
-                    MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN0);
-                }
-                stringEnd = false;
-                gpsDMARestoreChannel();
-            }
-            if(status){
-                btnStopStateP = true;
-                GPXCloseTrackSegment(&GPX_TEST_FILE);
-                GPXCloseTrack(&GPX_TEST_FILE);
-                GPXCloseFile(&GPX_TEST_FILE);
-                computerState = STOP;
-                PRINTF("STOP TRACKING!!\r\n");
-
-                MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN0);
-            }
-            //Go to sleep
-            MAP_Interrupt_enableSleepOnIsrExit();
-            MAP_PCM_gotoLPM0InterruptSafe();
-            btnStopStateP = status;
-            break;
+        //if data is present, parse it
+        if(gpsStringEnd == true){
+            gpsParseData((char*)&gpsUartBuffer);
+            gpsStringEnd = false;
+            gpsAddPoint = true;
+            gpsDMARestoreChannel();
         }
+        switch (computerState){
+            case STOP:
+                //Leds
+                MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN1);
+                MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN2);
+                MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
 
+                //Detecting Start button press
+                status = !MAP_GPIO_getInputPinValue(BTN_START_PORT, BTN_START_PIN);
+                if(status && !btnStartStateP){
+                    btnStartStateP = true;
+                    //Open the file
+                    int fileIndex = 1;
+                    r = f_stat(GPX_TEST_FILENAME, &FI);                     //Check if file already exists
+                    if(r == FR_OK){                                         //If file already exists
+                        defaultFile = false;
+                        do{
+                            snprintf(newFileName, 14, "test%d.gpx", fileIndex);
+                            fileIndex++;
+                            r = f_stat(newFileName, &FI);
+                        }while(r != FR_NO_FILE && fileIndex <= 999);
+                        r = f_open(&GPX_TEST_FILE, newFileName, FA_WRITE | FA_CREATE_ALWAYS);
+                    }else if(r == FR_NO_FILE){
+                        r = f_open(&GPX_TEST_FILE, GPX_TEST_FILENAME, FA_WRITE | FA_CREATE_ALWAYS);
+                    }
+                    // r = f_open(&GPX_TEST_FILE, GPX_TEST_FILENAME, FA_WRITE | FA_CREATE_ALWAYS);
+                    /*Check for errors. Trap MSP432 if there is an error*/
+                    if(r != FR_OK){
+                        PRINTF("Could not open file, returned: %d\r\n", (int)r);
+                        MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+                        while(1);
+                    }
+
+                    if(defaultFile){
+                        GPXInitFile(&GPX_TEST_FILE, GPX_TEST_FILENAME);
+                    }else{
+                        GPXInitFile(&GPX_TEST_FILE, newFileName);
+                    }
+                    GPXAddTrack(&GPX_TEST_FILE, "2024-01-10T00:00:00Z");
+                    GPXAddTrackSegment(&GPX_TEST_FILE);
+                    computerState = START;
+                    MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN2);
+                    PRINTF("START TRACKING!!\r\n");
+                }
+                btnStartStateP = status;
+
+                break;
+            case START:
+                MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN0);
+                //Detecting Stop button press
+                status = !MAP_GPIO_getInputPinValue(BTN_STOP_PORT, BTN_STOP_PIN);
+    //            if(status && !btnStopStateP){
+                if(gpsAddPoint){
+                    MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN0);
+                    bool pointAdded = addPointToGPXFromGPS(&GPX_TEST_FILE);
+                    if(!pointAdded){
+                        MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN0);
+                    }
+                    gpsAddPoint = false;
+                }
+                if(status){
+                    btnStopStateP = true;
+                    GPXCloseTrackSegment(&GPX_TEST_FILE);
+                    GPXCloseTrack(&GPX_TEST_FILE);
+                    GPXCloseFile(&GPX_TEST_FILE);
+                    computerState = STOP;
+                    PRINTF("STOP TRACKING!!\r\n");
+
+                    MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN0);
+                }
+                //Go to sleep
+                MAP_Interrupt_enableSleepOnIsrExit();
+                MAP_PCM_gotoLPM0InterruptSafe();
+                btnStopStateP = status;
+                break;
+        }
     }
 }
 #else
@@ -337,7 +343,7 @@ int main(void){
         if(computerState == START){
             char gpsData[RX_BUFFER_SIZE];
             fread(gpsData, sizeof(char), RX_BUFFER_SIZE, NMEA);
-            stringEnd = true;
+            gpsStringEnd = true;
             addPointToGPXFromGPS(gpsData, &GPX);
         }
     }while(computerState != STOP);

@@ -121,8 +121,9 @@ typedef struct{
 } GpsVTGData_t;
 
 
-extern volatile uint8_t uartData[RX_BUFFER_SIZE];
-extern volatile bool stringEnd;
+//TODO: Remove this variables and create getter/setter functions
+extern volatile uint8_t gpsUartBuffer[RX_BUFFER_SIZE];
+extern volatile bool gpsStringEnd;
 
 #ifndef SIMULATE_HARDWARE
 void gpsUartConfig(void);
@@ -139,8 +140,16 @@ char* splitString(char* str, char delim, char** next);
 
 void gpsParseData(const char* packet);
 
+//Getter functions
+void getGpsData(int* sats, float* speed, float* altitude, float* hdop);
+// GpsGGAData_t* getGGAData(void);
+// GpsRMCData_t* getRMCData(void);
+// GpsGSAData_t* getGSAData(void);
+// GpsGSVData_t* getGSVData(void);
+// GpsVTGData_t* getVTGData(void);
+
 //Adding intrgration whit GPX module
-bool addPointToGPXFromGPS(char* gpsData, FILE_TYPE file);
+bool addPointToGPXFromGPS(FILE_TYPE file);
 
 /*! @} */ //End of GPS_Module
 
