@@ -12,31 +12,28 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#define NUMBER_TIMER_CAPTURES       20
-float wheelCircumference  =       2.3141  ;    //metri
+const float  clockFrequency =            46875.0;       //Hz
+      float wheelCircumference  =       2.3141  ;    //metri
 
-/* Timer_A Up Mode Configuration Parameter */
-/*const Timer_A_UpModeConfig upModeConfig =
-{
-        TIMER_A_CLOCKSOURCE_ACLK,               //frequency: 32.768 kHz
-        TIMER_A_CLOCKSOURCE_DIVIDER_64,         //new frequency: 512 Hz
-        512,                                    //timer counts 512 rising edges of the clock: 1s (qualsiasi sia questo valore, e' importante contare sempre fino a 1s)
-        TIMER_A_TAIE_INTERRUPT_ENABLE,
-        TIMER_A_CCIE_CCR0_INTERRUPT_ENABLE,
-        TIMER_A_SKIP_CLEAR
-};*/
+/* Statics */
+
+static volatile uint_fast16_t timerAcapturedValue;
+static volatile float speed;
+static volatile uint_fast16_t overflowCounter = 0;
+
 const Timer_A_ContinuousModeConfig continuousModeConfig =
 {
-         TIMER_A_CLOCKSOURCE_SMCLK,               //frequency: 3MHz
-         TIMER_A_CLOCKSOURCE_DIVIDER_64,         //new frequency: 512 Hz
-         TIMER_A_TAIE_INTERRUPT_ENABLE,          //timer counts 512 rising edges of the clock: 1s (qualsiasi sia questo valore, e' importante contare sempre fino a 1s)
+         TIMER_A_CLOCKSOURCE_SMCLK,              //frequency: 3MHz
+         TIMER_A_CLOCKSOURCE_DIVIDER_64,         //new frequency: 46875 Hz
+         TIMER_A_TAIE_INTERRUPT_ENABLE,
          TIMER_A_SKIP_CLEAR
 };
+
 const Timer_A_CaptureModeConfig captureModeConfig =
 {
         TIMER_A_CAPTURECOMPARE_REGISTER_2,        // CC Register 2
         TIMER_A_CAPTUREMODE_RISING_EDGE,          // Rising Edge
-        TIMER_A_CAPTURE_INPUTSELECT_CCIxA,        // CCIxB Input Select
+        TIMER_A_CAPTURE_INPUTSELECT_CCIxA,        // CCIxA Input Select
         TIMER_A_CAPTURE_SYNCHRONOUS,              // Synchronized Capture
         TIMER_A_CAPTURECOMPARE_INTERRUPT_ENABLE,  // Enable interrupt
         TIMER_A_OUTPUTMODE_OUTBITVALUE            // Output bit value
@@ -50,14 +47,30 @@ void setWheelDiameter(float userDiameter){
     wheelCircumference = userDiameter / 39.37;
 }
 
-/* Statics */
-//static volatile uint_fast16_t timerAcaptureValues[NUMBER_TIMER_CAPTURES];
-static volatile uint_fast16_t timerAcaptureValues;
-static volatile uint32_t timerAcapturePointer = 0;
-static volatile uint16_t capturedValue = 0;
+float speedCompute(uint_fast16_t capturedValue){
+
+    float secForxTurns = (capturedValue + clockFrequency * overflowCounter) / clockFrequency;
+    float speedMS;
+    float speedKmH;
+
+    if(overflowCounter == 0){
+        speedMS = wheelCircumference / secForxTurns;
+    } else {
+        speedMS = (wheelCircumference * overflowCounter) / secForxTurns;
+    }
+
+    speedKmH = speedMS * 3.6;
+
+    if(overflowCounter != 0)
+        overflowCounter = 0;
+
+    return speedKmH;
+}
+
 
 bool isrFlag = false;
 bool speedZero = false;
+
 int main(void)
 {
     /* Stop watchdog timer */
@@ -65,18 +78,11 @@ int main(void)
 
     /* Configuring P7.1 as peripheral input for capture (sensor) */
     MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P2, GPIO_PIN5, GPIO_PRIMARY_MODULE_FUNCTION);
-   // MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P4, GPIO_PIN2,
-     //       GPIO_SECONDARY_MODULE_FUNCTION);
-   // MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P6, GPIO_PIN6,
-     //       GPIO_PRIMARY_MODULE_FUNCTION);
 
-
-  /* Configuring Capture Mode */
+    /* Configuring Capture Mode */
     MAP_Timer_A_initCapture(TIMER_A0_BASE, &captureModeConfig);
 
-
     /* Configuring Up Mode */
-    //MAP_Timer_A_configureUpMode(TIMER_A0_BASE, &upModeConfig);
     MAP_Timer_A_configureContinuousMode(TIMER_A0_BASE, &continuousModeConfig);
 
     /* Enabling interrupts and going to sleep */
@@ -88,9 +94,24 @@ int main(void)
     MAP_Timer_A_startCounter(TIMER_A0_BASE, TIMER_A_CONTINUOUS_MODE);
    // MAP_Timer_A_startCounter(TIMER_A2_BASE, TIMER_A_CONTINUOUS_MODE);
 
+    //float secForxTurns;
+    //float speedMS;
+                //float speedKmH = speedMS;
+
     while(1){
         if(isrFlag){
-            printf("Register value: %d\n", timerAcaptureValues);
+
+            printf("Register value: %d\n", timerAcapturedValue);
+
+            /*secFor1Turn = timerAcapturedValue / clockFrequency;
+            printf("secFor1Turn: %f\n", secFor1Turn);
+
+            speedMS = wheelCircumference / secFor1Turn;
+            printf("speedMS: %f\n\n", speedMS);
+
+           //float speedKmH = speedMS;*/
+            speed = speedCompute(timerAcapturedValue);
+            printf("Speed: %f Km/h \n\n", speed);
             isrFlag = false;
         }
 
@@ -107,12 +128,13 @@ void TA0_N_IRQHandler(void)
     if(timer == 4){
 
         isrFlag = true;
-        timerAcaptureValues = MAP_Timer_A_getCaptureCompareCount(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_2);
+        timerAcapturedValue = MAP_Timer_A_getCaptureCompareCount(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_2);
         Timer_A_clearCaptureCompareInterrupt(TIMER_A0_BASE,TIMER_A_CAPTURECOMPARE_REGISTER_2);
 
     } else if (timer == 14){
 
         speedZero = true;
+        ++overflowCounter;
         Timer_A_clearInterruptFlag(TIMER_A0_BASE);
 
     }
