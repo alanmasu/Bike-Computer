@@ -23,7 +23,7 @@ static volatile uint_fast16_t overflowCounter = 0;
 
 const Timer_A_ContinuousModeConfig continuousModeConfig =
 {
-         TIMER_A_CLOCKSOURCE_SMCLK,              //frequency: 3MHz
+         TIMER_A_CLOCKSOURCE_HSMCLK,              //frequency: 3MHz
          TIMER_A_CLOCKSOURCE_DIVIDER_64,         //new frequency: 46875 Hz
          TIMER_A_TAIE_INTERRUPT_ENABLE,
          TIMER_A_SKIP_CLEAR
@@ -75,6 +75,9 @@ int main(void)
 {
     /* Stop watchdog timer */
     MAP_WDT_A_holdTimer();
+
+     /* Starting and enabling HSMCLK (3MHz/64) */
+    MAP_CS_initClockSignal(CS_HSMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_64);
 
     /* Configuring P7.1 as peripheral input for capture (sensor) */
     MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P2, GPIO_PIN5, GPIO_PRIMARY_MODULE_FUNCTION);
