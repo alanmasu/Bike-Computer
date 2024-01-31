@@ -19,17 +19,18 @@
                   |     P3.5/UCA2TXD|----> GPS RX at 9600 8N1
                   |     P3.6/UCA2RXD|----< GPS TX at 9600 8N1
                   |                 |
-                  |   P1.7/UCAB0MISO|----> SD SPI MISO
-                  |   P1.6/UCAB0MOSI|----< SD SPI MOSI
-                  |   P1.5/UCAB0SCLK|----< SD SPI CLK
-                  |             P5.2|----> SD SPI CS
+                  |   P1.7/UCAB0MISO|----> SD     SPI MISO
+                  |   P1.6/UCAB0MOSI|----< SD/LCD SPI MOSI
+                  |   P1.5/UCAB0SCLK|----< SD/LCD SPI CLK
+                  |             P5.0|----> LCD    SPI CD
+                  |             P5.2|----> SD     SPI CS
                   |                 |
                   |             P5.1|----< BTN Start
                   |             P3.5|----< BTN Stop
                   -------------------
              @endcode
- 	@date       10/01/2024
-    @author     Alan Masutti
+ 	@date       31/01/2024
+    @authors    Federica Lorenzini, Alan Masutti
  */
 
 #ifndef SIMULATE_HARDWARE
@@ -46,6 +47,8 @@
 	#include <fatfs/diskio.h>
 	#include <Devices/MSPIO.h>
     #include <DMAModule.h>
+    //LCD
+    #include "mainInterface.h"
 #else
 	#include <stdio.h>
 	#include <stdlib.h>
@@ -129,13 +132,30 @@ eUSCI_SPI_MasterConfig SPI0MasterConfig = {
      EUSCI_B_SPI_3PIN
 };
 
+eUSCI_SPI_MasterConfig config = {
+    EUSCI_B_SPI_CLOCKSOURCE_SMCLK,
+    LCD_SYSTEM_CLOCK_SPEED,
+    LCD_SPI_CLOCK_SPEED,
+    EUSCI_B_SPI_MSB_FIRST,
+    EUSCI_B_SPI_PHASE_DATA_CAPTURED_ONFIRST_CHANGED_ON_NEXT,
+    EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_LOW,
+    EUSCI_B_SPI_3PIN
+};
+
 FATFS FS;
 DIR DI;
 FILINFO FI;
 FIL file;
 
+//Buttons Global Variables
 bool btnStartStateP = true;
 bool btnStopStateP = true;
+
+//ADC Global Variables
+volatile bool flagTemp;
+volatile int16_t conRes;
+volatile uint32_t cal30;
+uint32_t cal85;
 
 /*!
     @brief      Main function
@@ -148,11 +168,24 @@ bool btnStopStateP = true;
                 so if the file test.gpx alredy exists then the "test1.gpx" will be created.
 */
 void main(void){
+    //Variables
+    //FILE
+    bool defaultFile = true;
+    char newFileName[15];
+    //Buttons
+    bool status;
+    //GPS
+    bool gpsAddPoint = false;
+    float gpsHdop;
+    //ADC
+    float calDifference;
+    //LCD
+    toShowPage1 myParamStruct  = {0.0, "", 0.0, 0, 0.0, ""};
+
     WDT_A_holdTimer();	// stop watchdog timer
 	CS_Init();
 
 	//Configuring GPIO for leds!
-    /* P1.0 as output (LED) */
     MAP_GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0);
     MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
     //Set RGB led pins as output
@@ -163,13 +196,13 @@ void main(void){
     MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN2);
     MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN2);
 
-    /*Initialize all hardware required for the SD Card*/
-    SPI_Init(EUSCI_B0_BASE, SPI0MasterConfig);
+    //PC UART config
     UART_Init(EUSCI_A0_BASE, UART0Config);
+
+    //Initialize all hardware required for the SD Card
+    SPI_Init(EUSCI_B0_BASE, SPI0MasterConfig);
     SD_Init();
 
-    /*Initialize all hardware required for the GPS*/
-    /* Configuring UART Modules */
 	//Enable GPS UART
 	gpsUartConfig();
     //Enable DMA module
@@ -177,10 +210,35 @@ void main(void){
 	//Enable DMA for EUSCI_A2 RX
 	gpsDMAConfiguration();
 
+	//ADC Configuration
+    REF_A_enableTempSensor();
+    REF_A_setReferenceVoltage(REF_A_VREF2_5V);
+    REF_A_enableReferenceVoltage();
+    cal30 = SysCtl_getTempCalibrationConstant(SYSCTL_2_5V_REF, SYSCTL_30_DEGREES_C);
+    cal85 = SysCtl_getTempCalibrationConstant(SYSCTL_2_5V_REF, SYSCTL_85_DEGREES_C);
+    calDifference = cal85 - cal30;
+    /* Initializing ADC (MCLK/1/1)*/
+    ADC14_enableModule();
+    ADC14_initModule(ADC_CLOCKSOURCE_MCLK, ADC_PREDIVIDER_1, ADC_DIVIDER_1, ADC_TEMPSENSEMAP);
+    /* Configuring ADC Memory ADC_MEM0 A22 (Temperature Sensor) in repeat mode.*/
+    ADC14_configureSingleSampleMode(ADC_MEM0, true);
+    ADC14_configureConversionMemory(ADC_MEM0, ADC_VREFPOS_INTBUF_VREFNEG_VSS, ADC_INPUT_A22, false);
+    /* Configuring the sample/hold time for 192 */
+    ADC14_setSampleHoldTime(ADC_PULSE_WIDTH_192, ADC_PULSE_WIDTH_192);
+    /* Enabling sample timer in auto iteration mode and interrupts*/
+    ADC14_enableSampleTimer(ADC_AUTOMATIC_ITERATION);
+    ADC14_enableInterrupt(ADC_INT0);
+    /* Enabling Interrupts */
+//    Interrupt_enableInterrupt(INT_ADC14);
+    /* Triggering the start of the sample */
+    ADC14_enableConversion();
+    ADC14_toggleConversionTrigger();
+
+    //Enabling NVIC
     Interrupt_enableMaster();
 
+    //Mounting SDCard
     FRESULT r;
-
     /*First we should mount the SD Card into the Fatfs file system*/
     r = f_mount(&FS, "0", 1);
     /*Check for errors. Trap MSP432 if there is an error*/
@@ -191,10 +249,8 @@ void main(void){
         PRINTF("Mounted SD Card!\r\n");
     }
 
-
-    /*Let's try to open the root directory on the SD Card*/
+    //Open the root directory on the SD Card
     r = f_opendir(&DI, "/");
-    /*Check for errors. Trap MSP432 if there is an error*/
     if(r != FR_OK){
         PRINTF("Could not open root directory, returned: %d\r\n", (int)r);
         MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
@@ -208,21 +264,26 @@ void main(void){
     MAP_GPIO_setAsInputPin(BTN_START_PORT, BTN_START_PIN);
     MAP_GPIO_setAsInputPin(BTN_STOP_PORT, BTN_STOP_PIN);
 
-    //testing SD and GPX features
+    //LCD configuration
+    graphicsInit(&SPI0MasterConfig);
 
-//    f_unmount("");
-    bool defaultFile = true;
-    char newFileName[15];
-    bool status;
-    bool gpsAddPoint = false;
     while(1){
         //if data is present, parse it
         if(gpsStringEnd == true){
             gpsParseData((char*)&gpsUartBuffer);
+            getGpsData(&myParamStruct.sats, &myParamStruct.speed, &myParamStruct.altitude, &gpsHdop);
             gpsStringEnd = false;
             gpsAddPoint = true;
             gpsDMARestoreChannel();
         }
+        //If temperature is read then convert it
+        if (flagTemp){
+            myParamStruct.temp = (conRes / calDifference) + 30.0f-19;
+            //tempF = tempC * 9.0f / 5.0f + 32.0f;
+            flagTemp == false;
+        }
+
+        //Computer FSM
         switch (computerState){
             case STOP:
                 //Leds
@@ -267,20 +328,36 @@ void main(void){
                     MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN2);
                     PRINTF("START TRACKING!!\r\n");
                 }
-                btnStartStateP = status;
+                //LCD Update
+                if(gpsAddPoint){
+                    drawGrid1();
+                    showPage1(&myParamStruct);
+                    GrFlush(&g_sContext);
+                    Interrupt_enableInterrupt(INT_ADC14);
+                    gpsAddPoint = false;
+                }
 
+                btnStartStateP = status;
                 break;
             case START:
                 MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN0);
                 //Detecting Stop button press
                 status = !MAP_GPIO_getInputPinValue(BTN_STOP_PORT, BTN_STOP_PIN);
-    //            if(status && !btnStopStateP){
+                //Add point to GPX file and update LCD
                 if(gpsAddPoint){
+                    //GPX
                     MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN0);
                     bool pointAdded = addPointToGPXFromGPS(&GPX_TEST_FILE);
                     if(!pointAdded){
                         MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN0);
                     }
+
+                    //LCD
+                    drawGrid1();
+                    showPage1(&myParamStruct);
+                    GrFlush(&g_sContext);
+                    Interrupt_enableInterrupt(INT_ADC14);
+                    
                     gpsAddPoint = false;
                 }
                 if(status){
@@ -301,6 +378,20 @@ void main(void){
         }
     }
 }
+
+/* This interrupt happens every time a conversion has completed.*/
+void ADC14_IRQHandler(void){
+    flagTemp=true;
+    uint64_t status;
+    status = ADC14_getEnabledInterruptStatus();
+    ADC14_clearInterruptFlag(status); /*clear interrupt flag*/
+    if (status & ADC_INT0){
+        conRes = ((ADC14_getResult(ADC_MEM0) - cal30) * 55);
+    }
+    Interrupt_disableInterrupt(INT_ADC14);
+    Interrupt_disableSleepOnIsrExit();
+}
+
 #else
 
 #define GPX_TEST_FILENAME   "Test/results/test.gpx"
