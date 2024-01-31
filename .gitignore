@@ -1,1 +1,8 @@
-/Debug/
+Debug/
+Debug StandAlone/
+build/
+.vscode/
+Test/results
+/Debug__opt_level__off/
+/Debug__opt_for_speed__2/
+/Debug__opt_for_speed__3/
