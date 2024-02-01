@@ -26,7 +26,7 @@ typedef enum{
     PAGE_2,
     PAGE_3,
 }Page_t;
-extern volatile Page_t myPage;
+extern Page_t myPage;
 
 typedef struct toShowPage1{
     float temp;
@@ -37,6 +37,14 @@ typedef struct toShowPage1{
     char tripTime[10];
 }toShowPage1;
 extern toShowPage1 myParamStruct;
+
+typedef struct toShowPage2{
+    float hdop;
+    float vdop;
+    float speed;
+    char fixType[6];
+}toShowPage2;
+extern toShowPage2 myParamStruct2;
 
 void scrollPages();
 void drawGrid1();

@@ -74,13 +74,13 @@ int main(void)
     {
         if (flagTemp)
         {
-            myParamStruct.temp = (conRes / calDifference) + 30.0f - 19;
+            myParamStruct.temp = (conRes / calDifference) + 30.0f-19;
             // tempF = tempC * 9.0f / 5.0f + 32.0f;
             flagTemp == false;
             Interrupt_enableInterrupt(INT_ADC14);
         }
-        // Graphics_clearDisplay(&g_sContext);
         scrollPages();
+        showPages();
         GrFlush(&g_sContext);
         Interrupt_enableSleepOnIsrExit();
         // PCM_gotoLPM0();
