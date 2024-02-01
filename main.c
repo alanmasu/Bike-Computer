@@ -1,9 +1,59 @@
-/*!
-    @file       main.c
-    @brief      Configure timer to measure wheel speed.
-    @date       29/01/2024
-    @author     Sofia Zandonà
-*/
+/* --COPYRIGHT--,BSD
+ * Copyright (c) 2017, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * --/COPYRIGHT--*/
+/*******************************************************************************
+ * MSP432 ADC14 - Single Channel Continuous Sample w/ Timer_A Trigger
+ *
+ * Description: In this ADC14 code example, a single input channel is sampled
+ * using the standard 3.3v reference. The source of the sample trigger for this
+ * example is Timer_A CCR1. The ADC is setup to continuously sample/convert
+ * from A0 when the trigger starts and store the results in resultsBuffer (it
+ * is setup to be a circular buffer where resPos overflows to 0). Timer_A is
+ * setup in Up mode and a Compare value of 16384  is set as the compare trigger
+ *  and reset trigger. Once the Timer_A is started, after 0.5s it will trigger
+ * the ADC14 to start conversions. Essentially this example will use
+ * the Timer_A module to trigger an ADC conversion every 0.5 seconds.
+ *
+ *                MSP432P401
+ *             ------------------
+ *         /|\|                  |
+ *          | |                  |
+ *          --|RST         P5.5  |<--- A0 (Analog Input)
+ *            |                  |
+ *            |                  |
+ *            |                  |
+ *            |                  |
+ *            |                  |
+ *
+ ******************************************************************************/
 /* DriverLib Includes */
 #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
 
@@ -12,140 +62,106 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-const float  clockFrequency =            46875.0;       //Hz
-      float wheelCircumference  =       2.3141  ;    //metri
+/* Timer_A Continuous Mode Configuration Parameter */
+const Timer_A_UpModeConfig upModeConfig =
+{
+        TIMER_A_CLOCKSOURCE_ACLK,            // ACLK Clock Source
+        TIMER_A_CLOCKSOURCE_DIVIDER_1,       // ACLK/1 = 32Khz
+        16384,
+        TIMER_A_TAIE_INTERRUPT_DISABLE,      // Disable Timer ISR
+        TIMER_A_CCIE_CCR0_INTERRUPT_DISABLE, // Disable CCR0
+        TIMER_A_DO_CLEAR                     // Clear Counter
+};
+
+/* Timer_A Compare Configuration Parameter */
+const Timer_A_CompareModeConfig compareConfig =
+{
+        TIMER_A_CAPTURECOMPARE_REGISTER_1,          // Use CCR1
+        TIMER_A_CAPTURECOMPARE_INTERRUPT_DISABLE,   // Disable CCR interrupt
+        TIMER_A_OUTPUTMODE_SET_RESET,               // Toggle output but
+        16384                                       // 16000 Period
+};
 
 /* Statics */
-
-static volatile uint_fast16_t timerAcapturedValue;
-static volatile float speed;
-static volatile uint_fast16_t overflowCounter = 0;
-
-const Timer_A_ContinuousModeConfig continuousModeConfig =
-{
-         TIMER_A_CLOCKSOURCE_HSMCLK,              //frequency: 3MHz
-         TIMER_A_CLOCKSOURCE_DIVIDER_64,         //new frequency: 46875 Hz
-         TIMER_A_TAIE_INTERRUPT_ENABLE,
-         TIMER_A_SKIP_CLEAR
-};
-
-const Timer_A_CaptureModeConfig captureModeConfig =
-{
-        TIMER_A_CAPTURECOMPARE_REGISTER_2,        // CC Register 2
-        TIMER_A_CAPTUREMODE_RISING_EDGE,          // Rising Edge
-        TIMER_A_CAPTURE_INPUTSELECT_CCIxA,        // CCIxA Input Select
-        TIMER_A_CAPTURE_SYNCHRONOUS,              // Synchronized Capture
-        TIMER_A_CAPTURECOMPARE_INTERRUPT_ENABLE,  // Enable interrupt
-        TIMER_A_OUTPUTMODE_OUTBITVALUE            // Output bit value
-};
-
-/*!
-    @brief    Sets wheel diameter for this module.
-    @param    UserDiameter: user's wheel diameter in inches.  
-*/
-void setWheelDiameter(float userDiameter){
-    wheelCircumference = userDiameter / 39.37;
-}
-
-float speedCompute(uint_fast16_t capturedValue){
-
-    float secForxTurns = (capturedValue + clockFrequency * overflowCounter) / clockFrequency;
-    float speedMS;
-    float speedKmH;
-
-    if(overflowCounter == 0){
-        speedMS = wheelCircumference / secForxTurns;
-    } else {
-        speedMS = (wheelCircumference * overflowCounter) / secForxTurns;
-    }
-
-    speedKmH = speedMS * 3.6;
-
-    if(overflowCounter != 0)
-        overflowCounter = 0;
-
-    return speedKmH;
-}
-
-
-bool isrFlag = false;
-bool speedZero = false;
+static volatile uint_fast16_t resultsBuffer[4];
+static volatile uint8_t resPos;
 
 int main(void)
 {
-    /* Stop watchdog timer */
+    /* Halting WDT  */
     MAP_WDT_A_holdTimer();
+    MAP_Interrupt_enableSleepOnIsrExit();
+    resPos = 0;
 
-     /* Starting and enabling HSMCLK (3MHz/64) */
-    MAP_CS_initClockSignal(CS_HSMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_64);
+    /* Setting up clocks
+     * MCLK = MCLK = 3MHz
+     * ACLK = REFO = 32Khz */
+    MAP_CS_initClockSignal(CS_ACLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 
-    /* Configuring P7.1 as peripheral input for capture (sensor) */
-    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P2, GPIO_PIN5, GPIO_PRIMARY_MODULE_FUNCTION);
+    /* Initializing ADC (MCLK/1/1) */
+    MAP_ADC14_enableModule();
+    MAP_ADC14_initModule(ADC_CLOCKSOURCE_MCLK, ADC_PREDIVIDER_1, ADC_DIVIDER_1,
+            0);
 
-    /* Configuring Capture Mode */
-    MAP_Timer_A_initCapture(TIMER_A0_BASE, &captureModeConfig);
+    /* Configuring GPIOs (5.5 A0) */
+    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P5, GPIO_PIN4,
+    GPIO_TERTIARY_MODULE_FUNCTION);
 
-    /* Configuring Up Mode */
-    MAP_Timer_A_configureContinuousMode(TIMER_A0_BASE, &continuousModeConfig);
+    /* Configuring ADC Memory */
+    MAP_ADC14_configureSingleSampleMode(ADC_MEM0, true);
+    MAP_ADC14_configureConversionMemory(ADC_MEM0, ADC_VREFPOS_AVCC_VREFNEG_VSS,
+    ADC_INPUT_A1, false);
 
-    /* Enabling interrupts and going to sleep */
-    //MAP_Interrupt_enableSleepOnIsrExit();
-    MAP_Interrupt_enableInterrupt(INT_TA0_N);
+    /* Configuring Timer_A in continuous mode and sourced from ACLK */
+    MAP_Timer_A_configureUpMode(TIMER_A0_BASE, &upModeConfig);
+
+    /* Configuring Timer_A0 in CCR1 to trigger at 16000 (0.5s) */
+    MAP_Timer_A_initCompare(TIMER_A0_BASE, &compareConfig);
+
+    /* Configuring the sample trigger to be sourced from Timer_A0  and setting it
+     * to automatic iteration after it is triggered*/
+    MAP_ADC14_setSampleHoldTrigger(ADC_TRIGGER_SOURCE1, false);
+
+    /* Enabling the interrupt when a conversion on channel 1 is complete and
+     * enabling conversions */
+    MAP_ADC14_enableInterrupt(ADC_INT0);
+    MAP_ADC14_enableConversion();
+
+    /* Enabling Interrupts */
+    MAP_Interrupt_enableInterrupt(INT_ADC14);
     MAP_Interrupt_enableMaster();
 
-    /* Starting the Timer_A1 in up mode */
-    MAP_Timer_A_startCounter(TIMER_A0_BASE, TIMER_A_CONTINUOUS_MODE);
-   // MAP_Timer_A_startCounter(TIMER_A2_BASE, TIMER_A_CONTINUOUS_MODE);
+    /* Starting the Timer */
+    MAP_Timer_A_startCounter(TIMER_A0_BASE, TIMER_A_UP_MODE);
 
-    //float secForxTurns;
-    //float speedMS;
-                //float speedKmH = speedMS;
-
-    while(1){
-        if(isrFlag){
-
-            printf("Register value: %d\n", timerAcapturedValue);
-
-            /*secFor1Turn = timerAcapturedValue / clockFrequency;
-            printf("secFor1Turn: %f\n", secFor1Turn);
-
-            speedMS = wheelCircumference / secFor1Turn;
-            printf("speedMS: %f\n\n", speedMS);
-
-           //float speedKmH = speedMS;*/
-            speed = speedCompute(timerAcapturedValue);
-            printf("Speed: %f Km/h \n\n", speed);
-            isrFlag = false;
-        }
-
+    /* Going to sleep */
+    while (1)
+    {
+        printf("Value: %d\n",resultsBuffer[0]);
         MAP_Interrupt_enableSleepOnIsrExit();
-
+        MAP_PCM_gotoLPM0();
     }
-
 }
 
-void TA0_N_IRQHandler(void)
+/* This interrupt is fired whenever a conversion is completed and placed in
+ * ADC_MEM0 */
+void ADC14_IRQHandler(void)
 {
-    uint32_t timer = TIMER_A0->IV;
+    uint64_t status;
 
-    if(timer == 4){
+    status = MAP_ADC14_getEnabledInterruptStatus();
+    MAP_ADC14_clearInterruptFlag(status);
 
-        isrFlag = true;
-        timerAcapturedValue = MAP_Timer_A_getCaptureCompareCount(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_2);
-        Timer_A_clearCaptureCompareInterrupt(TIMER_A0_BASE,TIMER_A_CAPTURECOMPARE_REGISTER_2);
 
-    } else if (timer == 14){
-
-        speedZero = true;
-        ++overflowCounter;
-        Timer_A_clearInterruptFlag(TIMER_A0_BASE);
-
+    if (status & ADC_INT0)
+    {
+        if(resPos == 4)
+        {
+           resPos = 0; 
+        }
+        
+        resultsBuffer[resPos++] = MAP_ADC14_getResult(ADC_MEM0);
+        MAP_Interrupt_disableSleepOnIsrExit();
     }
 
-     Timer_A_clearTimer(TIMER_A0_BASE);
-
-
-
-     MAP_Interrupt_disableSleepOnIsrExit();
 }
-
