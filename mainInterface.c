@@ -1,9 +1,9 @@
-/*
- * mainInterface.c
- *
- *  Created on: 26 nov 2023
- *      Author: Federica_Lorenzini
- */
+/*!
+    @file   mainInterface.c
+    @brief  Initializing main functions for LCD screen and drawing grid
+    @date   26/11/2024
+    @author Federica Lorenzini
+*/
 #include "mainInterface.h"
 #include <ti/devices/msp432p4xx/inc/msp.h>
 #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
