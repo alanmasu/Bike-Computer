@@ -319,6 +319,8 @@ void compute(model_t* model){
 void classify(model_t* model){                          // establish model class
     switch(model->class){
         case CLASS_IDLE:
+            count_flash = 0;
+            stopTimer();
             if(model->temp > T_MAX){
                 model->class = CLASS_ERROR;
             }
@@ -332,6 +334,7 @@ void classify(model_t* model){                          // establish model class
             }
             break;
         case CLASS_ERROR:
+            startTimer();
             if(count_flash < NUM_FLASH){
                 model->class = CLASS_ERROR;
             }else{
@@ -343,6 +346,7 @@ void classify(model_t* model){                          // establish model class
             }
             break;
         case CLASS_BRAKING:
+            startTimer();
             if(count_flash < NUM_FLASH){
                 model->class = CLASS_BRAKING;
             }else{
@@ -350,9 +354,15 @@ void classify(model_t* model){                          // establish model class
             }
             break;
         case CLASS_MOVING:
+            stopTimer();
+            frontLightDown();
+            rearLightDown();
             model->class = CLASS_IDLE;
             break;
         case CLASS_LOW_AMBIENT_LIGHT:
+            stopTimer();
+            rearLightUp();
+            frontLightUp();
             model->class = CLASS_IDLE;
             break;
     }
@@ -474,7 +484,7 @@ int main(){
             acquire_window(&model);
             compute(&model);
             classify(&model);
-            execute(&model);
+            //execute(&model);
 
             id = MPU6050_readDeviceId();
 
