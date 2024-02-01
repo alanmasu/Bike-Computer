@@ -52,6 +52,7 @@ extern toShowPage2 myParamStruct2;
 void scrollPages();
 void drawGrid1();
 void graphicsInit(eUSCI_SPI_MasterConfig *);
+void _graphicsInitSelected(eUSCI_SPI_MasterConfig *);
 void showPage1(toShowPage1 *paramToShow1);
 
 #endif /* MAININTERFACE_H_ */

@@ -5,6 +5,11 @@
   @author   Federica Lorenzini
  */
 #include "temperature.h"
+volatile uint32_t cal30;
+volatile uint32_t cal85;
+volatile float calDifference;
+volatile float tempC;
+volatile float tempF;
 
 void temperatureInit()
 {

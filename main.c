@@ -6,14 +6,10 @@
 */
 #include "mainInterface.h"
 #include "temperature.h"
+#include "adc.h"
 
 volatile bool flagTemp;
 volatile int16_t conRes;
-volatile uint32_t cal30;
-volatile uint32_t cal85;
-volatile float calDifference;
-volatile float tempC;
-volatile float tempF;
 
 eUSCI_SPI_MasterConfig config = {
     EUSCI_B_SPI_CLOCKSOURCE_SMCLK,
@@ -26,6 +22,7 @@ eUSCI_SPI_MasterConfig config = {
 
 int main(void)
 {
+    _graphicsInitSelected(&config);
     graphicsInit(&config);
     temperatureInit();
     adcInit();

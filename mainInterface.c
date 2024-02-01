@@ -14,6 +14,7 @@
 #include <stdlib.h>
 
 Graphics_Context g_sContext;
+Graphics_Context g_sContextSelected;
 tRectangle multipleData = {0, 0, 64, 102};
 tRectangle instSpeed = {64, 0, 128, 102};
 tRectangle tripTime = {0, 102, 128, 128};
@@ -25,6 +26,7 @@ toShowPage2 myParamStruct2;
 int XaxisPrev = 0;
 int YaxisPrev = 0;
 
+/*Initialize the values for the background context */
 void graphicsInit(eUSCI_SPI_MasterConfig *config)
 {
     /* Initializes display */
@@ -37,6 +39,21 @@ void graphicsInit(eUSCI_SPI_MasterConfig *config)
     Graphics_setBackgroundColor(&g_sContext, GRAPHICS_COLOR_WHITE);
     GrContextFontSet(&g_sContext, &g_sFontFixed6x8);
     Graphics_clearDisplay(&g_sContext);
+}
+
+/*Initialize the values for the selected context */
+void _graphicsInitSelected(eUSCI_SPI_MasterConfig *config)
+{
+    /* Initializes display */
+    Crystalfontz128x128_Init(config);
+    /* Set default screen orientation */
+    Crystalfontz128x128_SetOrientation(LCD_ORIENTATION_UP);
+    /* Initializes graphics context */
+    Graphics_initContext(&g_sContextSelected, &g_sCrystalfontz128x128, &g_sCrystalfontz128x128_funcs);
+    Graphics_setForegroundColor(&g_sContextSelected, GRAPHICS_COLOR_BLUE);
+    Graphics_setBackgroundColor(&g_sContextSelected, GRAPHICS_COLOR_FUCHSIA);
+    GrContextFontSet(&g_sContextSelected, &g_sFontFixed6x8);
+    Graphics_clearDisplay(&g_sContextSelected);
 }
 void drawGrid1()
 {
@@ -104,7 +121,7 @@ void showPage3()
 {
     GrStringDrawCentered(&g_sContext, (int8_t *)"MENU", -1, 64, 10, 1);
 
-    GrStringDraw(&g_sContext, (int8_t *)"SPACE", -1, 3, 20, 1);
+    GrStringDraw(&g_sContextSelected, (int8_t *)"SPACE", -1, 3, 20, 1);
     GrStringDraw(&g_sContext, (int8_t *)"m", -1, 45, 20, 1);
     GrStringDraw(&g_sContext, (int8_t *)"km", -1, 75, 20, 1);
     GrStringDraw(&g_sContext, (int8_t *)"mi", -1, 100, 20, 1);
@@ -121,16 +138,65 @@ void showPage3()
     GrStringDraw(&g_sContext, (int8_t *)"Wheel", -1, 3, 80, 1);
     GrStringDraw(&g_sContext, (int8_t *)"Dimension", -1, 3, 88, 1);
     GrRectDraw(&g_sContext, &wheelDim);
-    // GrRectDraw(&g_sContext, &dimChoice);
-    // GrLineDrawH(&g_sContext, 70, 110, 84);
-    // GrLineDrawH(&g_sContext, 70, 110, 93);
-    // GrLineDrawH(&g_sContext, 70, 110, 102);
-    // GrLineDrawH(&g_sContext, 70, 110, 111);
-    // GrLineDrawH(&g_sContext, 70, 110, 120);
-    int diff = abs(MAP_ADC14_getResult(ADC_MEM2) - YaxisPrev);
 
-    if (MAP_ADC14_getResult(ADC_MEM2) > 1400 && diff > 3000)
+    // int diff = abs(MAP_ADC14_getResult(ADC_MEM2) - YaxisPrev);
+
+    /*Using joystick's vertical axis (y) to choice which field should be converted*/
+    int Ycounter = 1;
+    int Yaxis = MAP_ADC14_getResult(ADC_MEM2);
+    switch (Ycounter)
     {
+    case 1:
+        GrStringDraw(&g_sContextSelected, (int8_t *)"SPACE", -1, 3, 20, 1);
+        GrStringDraw(&g_sContext, (int8_t *)"SPEED", -1, 3, 40, 1);
+        GrStringDraw(&g_sContext, (int8_t *)"TEMP", -1, 3, 60, 1);
+        GrStringDraw(&g_sContext, (int8_t *)"Wheel", -1, 3, 80, 1);
+        GrStringDraw(&g_sContext, (int8_t *)"Dimension", -1, 3, 88, 1);
+        if (Yaxis < 300)
+        {
+            Ycounter = 2;
+        }
+        break;
+    case 2:
+        GrStringDraw(&g_sContext, (int8_t *)"SPACE", -1, 3, 20, 1);
+        GrStringDraw(&g_sContextSelected, (int8_t *)"SPEED", -1, 3, 40, 1);
+        GrStringDraw(&g_sContext, (int8_t *)"TEMP", -1, 3, 60, 1);
+        GrStringDraw(&g_sContext, (int8_t *)"Wheel", -1, 3, 80, 1);
+        GrStringDraw(&g_sContext, (int8_t *)"Dimension", -1, 3, 88, 1);
+        if (Yaxis < 300)
+        {
+            Ycounter = 3;
+        }
+        break;
+    case 3:
+        GrStringDraw(&g_sContext, (int8_t *)"SPACE", -1, 3, 20, 1);
+        GrStringDraw(&g_sContext, (int8_t *)"SPEED", -1, 3, 40, 1);
+        GrStringDraw(&g_sContextSelected, (int8_t *)"TEMP", -1, 3, 60, 1);
+        GrStringDraw(&g_sContext, (int8_t *)"Wheel", -1, 3, 80, 1);
+        GrStringDraw(&g_sContext, (int8_t *)"Dimension", -1, 3, 88, 1);
+
+        if (Yaxis < 300)
+        {
+            Ycounter = 4;
+        }
+        break;
+    case 4:
+        GrStringDraw(&g_sContext, (int8_t *)"SPACE", -1, 3, 20, 1);
+        GrStringDraw(&g_sContext, (int8_t *)"SPEED", -1, 3, 40, 1);
+        GrStringDraw(&g_sContext, (int8_t *)"TEMP", -1, 3, 60, 1);
+        GrStringDraw(&g_sContextSelected, (int8_t *)"Wheel", -1, 3, 80, 1);
+        GrStringDraw(&g_sContextSelected, (int8_t *)"Dimension", -1, 3, 88, 1);
+        GrRectDraw(&g_sContext, &dimChoice);
+        // GrLineDrawH(&g_sContext, 70, 110, 84);
+        // GrLineDrawH(&g_sContext, 70, 110, 93);
+        // GrLineDrawH(&g_sContext, 70, 110, 102);
+        // GrLineDrawH(&g_sContext, 70, 110, 111);
+        // GrLineDrawH(&g_sContext, 70, 110, 120);
+        if (Yaxis < 300)
+        {
+            Ycounter = 1;
+        }
+        break;
     }
 }
 void scrollPages()
