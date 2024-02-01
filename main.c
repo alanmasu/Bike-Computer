@@ -12,7 +12,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-const float  clockFrequency =            46875.0;       //Hz
+const float clockFrequency      =       46875.0;       //Hz
       float wheelCircumference  =       2.3141  ;    //metri
 
 /* Statics */
@@ -23,7 +23,7 @@ static volatile uint_fast16_t overflowCounter = 0;
 
 const Timer_A_ContinuousModeConfig continuousModeConfig =
 {
-         TIMER_A_CLOCKSOURCE_HSMCLK,              //frequency: 3MHz
+         TIMER_A_CLOCKSOURCE_SMCLK,              //frequency: 3MHz
          TIMER_A_CLOCKSOURCE_DIVIDER_64,         //new frequency: 46875 Hz
          TIMER_A_TAIE_INTERRUPT_ENABLE,
          TIMER_A_SKIP_CLEAR
@@ -56,7 +56,7 @@ float speedCompute(uint_fast16_t capturedValue){
     if(overflowCounter == 0){
         speedMS = wheelCircumference / secForxTurns;
     } else {
-        speedMS = (wheelCircumference * overflowCounter) / secForxTurns;
+        speedMS = wheelCircumference / secForxTurns;
     }
 
     speedKmH = speedMS * 3.6;
@@ -77,7 +77,7 @@ int main(void)
     MAP_WDT_A_holdTimer();
 
      /* Starting and enabling HSMCLK (3MHz/64) */
-    MAP_CS_initClockSignal(CS_HSMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_64);
+    //MAP_CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 
     /* Configuring P7.1 as peripheral input for capture (sensor) */
     MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P2, GPIO_PIN5, GPIO_PRIMARY_MODULE_FUNCTION);
@@ -114,7 +114,10 @@ int main(void)
 
            //float speedKmH = speedMS;*/
             speed = speedCompute(timerAcapturedValue);
-            printf("Speed: %f Km/h \n\n", speed);
+            printf("Speed: %f Km/h \n", speed);
+            printf("Overflow: %d\n\n", overflowCounter);
+
+
             isrFlag = false;
         }
 
