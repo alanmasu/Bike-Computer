@@ -1,34 +1,3 @@
-/* --COPYRIGHT--,BSD
- * Copyright (c) 2017, Texas Instruments Incorporated
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * *  Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * *  Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * *  Neither the name of Texas Instruments Incorporated nor the names of
- *    its contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * --/COPYRIGHT--*/
 /*******************************************************************************
  * MSP432 ADC14 - Single Channel Continuous Sample w/ Timer_A Trigger
  *
@@ -66,8 +35,8 @@
 const Timer_A_UpModeConfig upModeConfig =
 {
         TIMER_A_CLOCKSOURCE_ACLK,            // ACLK Clock Source
-        TIMER_A_CLOCKSOURCE_DIVIDER_1,       // ACLK/1 = 32Khz
-        16384,
+        TIMER_A_CLOCKSOURCE_DIVIDER_32,       // ACLK/1 = 32Khz
+        150,
         TIMER_A_TAIE_INTERRUPT_DISABLE,      // Disable Timer ISR
         TIMER_A_CCIE_CCR0_INTERRUPT_DISABLE, // Disable CCR0
         TIMER_A_DO_CLEAR                     // Clear Counter
@@ -79,11 +48,23 @@ const Timer_A_CompareModeConfig compareConfig =
         TIMER_A_CAPTURECOMPARE_REGISTER_1,          // Use CCR1
         TIMER_A_CAPTURECOMPARE_INTERRUPT_DISABLE,   // Disable CCR interrupt
         TIMER_A_OUTPUTMODE_SET_RESET,               // Toggle output but
-        16384                                       // 16000 Period
+        150                                       // 16000 Period
 };
 
+float photoresistorConverter(uint_fast16_t sampledValue){
+    //min val = 0
+    //max val = 16384
+    //returns value from 0 to 1
+
+    float maxValue = 16384;
+    float scaledValue = sampledValue / maxValue;
+
+    return scaledValue;
+
+}
+
 /* Statics */
-static volatile uint_fast16_t resultsBuffer[4];
+static volatile uint_fast16_t resultsBuffer[20];
 static volatile uint8_t resPos;
 
 int main(void)
@@ -134,10 +115,28 @@ int main(void)
     /* Starting the Timer */
     MAP_Timer_A_startCounter(TIMER_A0_BASE, TIMER_A_UP_MODE);
 
-    /* Going to sleep */
+
     while (1)
     {
-        printf("Value: %d\n",resultsBuffer[0]);
+        uint8_t i;
+        uint_fast16_t average = 0;
+        float convertedAverage = 0;
+
+        for(i=0; i<20; i++){
+            average = average + resultsBuffer[i];
+            printf("Value [%d]: %d\n",i,resultsBuffer[i]);
+        }
+        printf("\n");
+
+        average /= 20;
+
+        convertedAverage = photoresistorConverter(average);
+        //ADC14_disableInterrupt(ADC_INT0);
+        resPos = 0;
+
+        printf("Average: %d\n",average);
+        printf("Converted average: %f \n\n",convertedAverage);
+
         MAP_Interrupt_enableSleepOnIsrExit();
         MAP_PCM_gotoLPM0();
     }
@@ -155,13 +154,18 @@ void ADC14_IRQHandler(void)
 
     if (status & ADC_INT0)
     {
-        if(resPos == 4)
-        {
-           resPos = 0; 
-        }
+        if(resPos < 20) {
+            resultsBuffer[resPos++] = MAP_ADC14_getResult(ADC_MEM0);
+        } else {
         
-        resultsBuffer[resPos++] = MAP_ADC14_getResult(ADC_MEM0);
-        MAP_Interrupt_disableSleepOnIsrExit();
+            MAP_Interrupt_disableSleepOnIsrExit();
+        }
     }
 
+}
+
+
+void TA0_0_IRQHandler(void)
+{
+    Timer_A_clearCaptureCompareInterrupt(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_0);
 }
