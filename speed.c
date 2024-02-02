@@ -1,3 +1,10 @@
+/*!
+    @file       speed.c
+    @brief      Speed functions implementation.
+    @date       29/01/2024
+    @author     Sofia Zandona'
+*/
+
 #include "speed.h"
 
 /* DriverLib Includes */
@@ -8,6 +15,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+/*!
+    @addtogroup speed_Module
+    @{
+*/
 const float clockFrequency      =       46875.0;       //Hz
       float wheelCircumference  =       2.3141;        //metri
 const float maxTickVal          =       65535.0;
@@ -71,7 +82,8 @@ float speedCompute(uint_fast16_t capturedValue){
 }
 
 /*!
-    @brief    Initializes timer in continuous mode and capture mode and starts counter. Enables capture interrupt. Sets peripheral input pin.
+    @brief    Initializes timer in continuous mode and capture mode and starts counter.
+    @details  Enables capture interrupt. Sets peripheral input pin.
 */
 void timerInit(){
     /* Configuring Capture Mode */
@@ -108,3 +120,5 @@ void TA0_N_IRQHandler(void)
 
     }
 }
+
+///}
