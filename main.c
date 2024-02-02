@@ -13,7 +13,8 @@
 #include <stdio.h>
 
 const float clockFrequency      =       46875.0;       //Hz
-      float wheelCircumference  =       2.3141  ;    //metri
+      float wheelCircumference  =       2.3141;        //metri
+const float maxTickVal          =       65535.0;
 
 /* Statics */
 
@@ -49,20 +50,22 @@ void setWheelDiameter(float userDiameter){
 
 float speedCompute(uint_fast16_t capturedValue){
 
-    float secForxTurns = (capturedValue + clockFrequency * overflowCounter) / clockFrequency;
+    float secForxTurns = (capturedValue + maxTickVal * overflowCounter) / clockFrequency;
     float speedMS;
     float speedKmH;
 
-    if(overflowCounter == 0){
+
         speedMS = wheelCircumference / secForxTurns;
-    } else {
-        speedMS = wheelCircumference / secForxTurns;
-    }
+        printf("Overflow: %d\n", overflowCounter);
+        printf("secForxTurns: %f\n\n", secForxTurns);
+
+        overflowCounter = 0;
+
 
     speedKmH = speedMS * 3.6;
 
     if(overflowCounter != 0)
-        overflowCounter = 0;
+
 
     return speedKmH;
 }
@@ -115,7 +118,7 @@ int main(void)
            //float speedKmH = speedMS;*/
             speed = speedCompute(timerAcapturedValue);
             printf("Speed: %f Km/h \n", speed);
-            printf("Overflow: %d\n\n", overflowCounter);
+           // printf("Overflow: %d\n\n", overflowCounter);
 
 
             isrFlag = false;
@@ -136,6 +139,8 @@ void TA0_N_IRQHandler(void)
         isrFlag = true;
         timerAcapturedValue = MAP_Timer_A_getCaptureCompareCount(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_2);
         Timer_A_clearCaptureCompareInterrupt(TIMER_A0_BASE,TIMER_A_CAPTURECOMPARE_REGISTER_2);
+         MAP_Interrupt_disableSleepOnIsrExit();
+         Timer_A_clearTimer(TIMER_A0_BASE);
 
     } else if (timer == 14){
 
@@ -145,10 +150,9 @@ void TA0_N_IRQHandler(void)
 
     }
 
-     Timer_A_clearTimer(TIMER_A0_BASE);
 
 
 
-     MAP_Interrupt_disableSleepOnIsrExit();
+
 }
 
