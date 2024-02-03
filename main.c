@@ -22,7 +22,10 @@ eUSCI_SPI_MasterConfig config = {
 
 int main(void)
 {
-    _graphicsInitSelected(&config);
+    myParamStruct.distance=20.0;
+    myParamStruct.speed=30.6;
+    graphicsInitSelected(&config);
+    graphicsInitBigFont(&config);
     graphicsInit(&config);
     temperatureInit();
     adcInit();

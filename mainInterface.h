@@ -31,6 +31,7 @@ extern Page_t myPage;
 
 typedef struct toShowPage1
 {
+    float distance;
     float temp;
     char time[10];
     float altitude;
@@ -49,10 +50,16 @@ typedef struct toShowPage2
 } toShowPage2;
 extern toShowPage2 myParamStruct2;
 
-void scrollPages();
-void drawGrid1();
 void graphicsInit(eUSCI_SPI_MasterConfig *);
-void _graphicsInitSelected(eUSCI_SPI_MasterConfig *);
+void graphicsInitSelected(eUSCI_SPI_MasterConfig *);
+void graphicsInitBigFont(eUSCI_SPI_MasterConfig *);
+void drawGrid1();
+void drawGrid2();
 void showPage1(toShowPage1 *paramToShow1);
-
+void showPage2(toShowPage2 *paramToShow2);
+void showPage3();
+void scrollPages();
+void showPages();
+float getWheel();
+void setWheel(float wheelDim);
 #endif /* MAININTERFACE_H_ */
