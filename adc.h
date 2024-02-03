@@ -16,6 +16,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*!
+    @defgroup ADC_module ADC
+    @{ 
+*/
+
+/*!
+   @brief Inizialitation of ADC module.
+*/
 void adcInit();
 
 #endif /* ADC_H_ */

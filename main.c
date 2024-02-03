@@ -1,15 +1,15 @@
 /*!
     @file   main.c
     @brief  Initializing main functions for LCD screen and drawing grid
-    @date   29/01/2024
+    @date   18/01/2024
     @author Federica Lorenzini
 */
 #include "mainInterface.h"
 #include "temperature.h"
 #include "adc.h"
 
-volatile bool flagTemp;
-volatile int16_t conRes;
+volatile bool flagTemp;     //!< Flag to arise if a new temperature value is sampled
+volatile int16_t conRes;    //!< Intermediate temperature value sampled from ADC unit
 
 eUSCI_SPI_MasterConfig config = {
     EUSCI_B_SPI_CLOCKSOURCE_SMCLK,
@@ -47,7 +47,9 @@ int main(void)
     }
 }
 
-/* This interrupt happens every time a temperature conversion has completed.*/
+/*! 
+    @brief This interrupt happens every time a conversion has completed.
+*/
 void ADC14_IRQHandler(void)
 {
     flagTemp = true;

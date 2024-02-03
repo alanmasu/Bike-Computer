@@ -72,27 +72,69 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">main.c File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Main function for the program.  
+<p>Initializing main functions for LCD screen and drawing grid.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;ti/devices/msp432p4xx/inc/msp.h&gt;</code><br />
-<code>#include &lt;ti/devices/msp432p4xx/driverlib/driverlib.h&gt;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="main_interface_8h_source.html">mainInterface.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="temperature_8h_source.html">temperature.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="adc_8h_source.html">adc.h</a>&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a6288eba0f8e8ad3ab1544ad731eb7667" id="r_a6288eba0f8e8ad3ab1544ad731eb7667"><td class="memItemLeft" align="right" valign="top"><a id="a6288eba0f8e8ad3ab1544ad731eb7667" name="a6288eba0f8e8ad3ab1544ad731eb7667"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> (void)</td></tr>
-<tr class="separator:a6288eba0f8e8ad3ab1544ad731eb7667"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a840291bc02cba5474a4cb46a9b9566fe" id="r_a840291bc02cba5474a4cb46a9b9566fe"><td class="memItemLeft" align="right" valign="top"><a id="a840291bc02cba5474a4cb46a9b9566fe" name="a840291bc02cba5474a4cb46a9b9566fe"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> (void)</td></tr>
+<tr class="separator:a840291bc02cba5474a4cb46a9b9566fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fa2875556d48df2ba3c9c148667b8f5" id="r_a9fa2875556d48df2ba3c9c148667b8f5"><td class="memItemLeft" align="right" valign="top"><a id="a9fa2875556d48df2ba3c9c148667b8f5" name="a9fa2875556d48df2ba3c9c148667b8f5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ADC14_IRQHandler</b> (void)</td></tr>
+<tr class="memdesc:a9fa2875556d48df2ba3c9c148667b8f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This interrupt happens every time a conversion has completed. <br /></td></tr>
+<tr class="separator:a9fa2875556d48df2ba3c9c148667b8f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:afab9c2b72fb74b7cc658f1ccd1d0ecf0" id="r_afab9c2b72fb74b7cc658f1ccd1d0ecf0"><td class="memItemLeft" align="right" valign="top"><a id="afab9c2b72fb74b7cc658f1ccd1d0ecf0" name="afab9c2b72fb74b7cc658f1ccd1d0ecf0"></a>
+volatile bool&#160;</td><td class="memItemRight" valign="bottom"><b>flagTemp</b></td></tr>
+<tr class="memdesc:afab9c2b72fb74b7cc658f1ccd1d0ecf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to arise if a new temperature value is sampled. <br /></td></tr>
+<tr class="separator:afab9c2b72fb74b7cc658f1ccd1d0ecf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5f4e51cd909ce10579e10403ebe32e4" id="r_af5f4e51cd909ce10579e10403ebe32e4"><td class="memItemLeft" align="right" valign="top"><a id="af5f4e51cd909ce10579e10403ebe32e4" name="af5f4e51cd909ce10579e10403ebe32e4"></a>
+volatile int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>conRes</b></td></tr>
+<tr class="memdesc:af5f4e51cd909ce10579e10403ebe32e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intermediate temperature value sampled from ADC unit. <br /></td></tr>
+<tr class="separator:af5f4e51cd909ce10579e10403ebe32e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2aac79559da584fb68ff6dfccd0bf6de" id="r_a2aac79559da584fb68ff6dfccd0bf6de"><td class="memItemLeft" align="right" valign="top">eUSCI_SPI_MasterConfig&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2aac79559da584fb68ff6dfccd0bf6de">config</a></td></tr>
+<tr class="separator:a2aac79559da584fb68ff6dfccd0bf6de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Main function for the program. </p>
-<p>This file contains the main function for the program </p><dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>03/01/2024 </dd></dl>
-</div></div><!-- contents -->
+<div class="textblock"><p>Initializing main functions for LCD screen and drawing grid. </p>
+<dl class="section date"><dt>Date</dt><dd>18/01/2024 </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Federica Lorenzini </dd></dl>
+</div><h2 class="groupheader">Variable Documentation</h2>
+<a id="a2aac79559da584fb68ff6dfccd0bf6de" name="a2aac79559da584fb68ff6dfccd0bf6de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2aac79559da584fb68ff6dfccd0bf6de">&#9670;&#160;</a></span>config</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">eUSCI_SPI_MasterConfig config</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">    EUSCI_B_SPI_CLOCKSOURCE_SMCLK,</div>
+<div class="line">    LCD_SYSTEM_CLOCK_SPEED,</div>
+<div class="line">    LCD_SPI_CLOCK_SPEED,</div>
+<div class="line">    EUSCI_B_SPI_MSB_FIRST,</div>
+<div class="line">    EUSCI_B_SPI_PHASE_DATA_CAPTURED_ONFIRST_CHANGED_ON_NEXT,</div>
+<div class="line">    EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_LOW,</div>
+<div class="line">    EUSCI_B_SPI_3PIN}</div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0

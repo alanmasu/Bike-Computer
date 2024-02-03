@@ -5,6 +5,12 @@
   @author   Federica Lorenzini
  */
 #include "temperature.h"
+
+/*!
+    @addtogroup Temp_module Temperature
+    @{
+*/
+
 volatile uint32_t cal30;
 volatile uint32_t cal85;
 volatile float calDifference;

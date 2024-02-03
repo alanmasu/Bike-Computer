@@ -1,7 +1,7 @@
 /*!
     @file   mainInterface.c
     @brief  Initializing main functions for LCD screen and drawing grid
-    @date   26/11/2024
+    @date   26/11/2023
     @author Federica Lorenzini
 */
 #include "mainInterface.h"
@@ -13,15 +13,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*!
+    @addtogroup LCD_module
+    @{
+*/
+
 Graphics_Context g_sContext;
 Graphics_Context g_sContextSelected;
 Graphics_Context g_sContextBig;
-tRectangle multipleData = {0, 0, 64, 102};
-tRectangle instSpeed = {64, 0, 128, 102};
-tRectangle tripTime = {0, 102, 128, 128};
-Page_t myPage = PAGE_1;
-toShowPage1 myParamStruct;
-toShowPage2 myParamStruct2;
+tRectangle multipleData = {0, 0, 64, 102}; //!< Part of the main interface grid
+tRectangle instSpeed = {64, 0, 128, 102};  //!< Part of the main interface grid
+tRectangle tripTime = {0, 102, 128, 128};  //!< Part of the main interface grid
+Page_t myPage = PAGE_1;                    //!< Main page
+toShowPage1 myParamStruct;                 //!< Struct with the parameters to be shown in the first page
+toShowPage2 myParamStruct2;                //!< Struct with the parameters to be shown in the second page
 int XaxisPrev = 0;
 int YaxisPrev = 0;
 int Ycounter = 1;
@@ -30,48 +35,38 @@ int selectDist = 0;
 int selectWheel = 0;
 int selectTemp = 0;
 static float wheelDim = 29.0;
-float metres = 0;
-float miles = 0;
-float fahrenheit = 0;
-float ms = 0;
-float mih = 0;
+float metres = 0;     //!< To store distance in metres
+float miles = 0;      //!< To store distance in miles
+float fahrenheit = 0; //!< To store temperature in fahrenheit
+float ms = 0;         //!< To store speed in metres/second
+float mih = 0;        //!< To store speeed in miles/hour
 
-/*Initialize the values for the background context */
 void graphicsInit(eUSCI_SPI_MasterConfig *config)
 {
-    /* Initializes display */
     Crystalfontz128x128_Init(config);
-    /* Set default screen orientation */
     Crystalfontz128x128_SetOrientation(LCD_ORIENTATION_UP);
-    /* Initializes graphics context */
     Graphics_initContext(&g_sContext, &g_sCrystalfontz128x128, &g_sCrystalfontz128x128_funcs);
     Graphics_setForegroundColor(&g_sContext, GRAPHICS_COLOR_BLUE);
     Graphics_setBackgroundColor(&g_sContext, GRAPHICS_COLOR_WHITE);
     GrContextFontSet(&g_sContext, &g_sFontFixed6x8);
     Graphics_clearDisplay(&g_sContext);
 }
-/*Initialize the values for the background context with bigger font set */
+
 void graphicsInitBigFont(eUSCI_SPI_MasterConfig *config)
 {
-    /* Initializes display */
     Crystalfontz128x128_Init(config);
-    /* Set default screen orientation */
     Crystalfontz128x128_SetOrientation(LCD_ORIENTATION_UP);
-    /* Initializes graphics context */
     Graphics_initContext(&g_sContextBig, &g_sCrystalfontz128x128, &g_sCrystalfontz128x128_funcs);
     Graphics_setForegroundColor(&g_sContextBig, GRAPHICS_COLOR_BLUE);
     Graphics_setBackgroundColor(&g_sContextBig, GRAPHICS_COLOR_WHITE);
     Graphics_setFont(&g_sContextBig, &g_sFontCmtt24);
     Graphics_clearDisplay(&g_sContextBig);
 }
-/*Initialize the values for the selected context */
+
 void graphicsInitSelected(eUSCI_SPI_MasterConfig *config)
 {
-    /* Initializes display */
     Crystalfontz128x128_Init(config);
-    /* Set default screen orientation */
     Crystalfontz128x128_SetOrientation(LCD_ORIENTATION_UP);
-    /* Initializes graphics context */
     Graphics_initContext(&g_sContextSelected, &g_sCrystalfontz128x128, &g_sCrystalfontz128x128_funcs);
     Graphics_setForegroundColor(&g_sContextSelected, GRAPHICS_COLOR_BLUE);
     Graphics_setBackgroundColor(&g_sContextSelected, GRAPHICS_COLOR_PINK);
@@ -276,7 +271,7 @@ void showPage3()
             }
             break;
         case 1:
-            ms=myParamStruct.speed/3.6;
+            ms = myParamStruct.speed / 3.6;
             GrStringDraw(&g_sContext, (int8_t *)"km/h", -1, 45, 40, 1);
             GrStringDraw(&g_sContextSelected, (int8_t *)"m/s", -1, 75, 40, 1);
             GrStringDraw(&g_sContext, (int8_t *)"mi/h", -1, 100, 40, 1);
@@ -286,7 +281,7 @@ void showPage3()
             }
             break;
         case 2:
-        mih=myParamStruct.speed*0.62;
+            mih = myParamStruct.speed * 0.62;
             GrStringDraw(&g_sContext, (int8_t *)"km/h", -1, 45, 40, 1);
             GrStringDraw(&g_sContext, (int8_t *)"m/s", -1, 75, 40, 1);
             GrStringDraw(&g_sContextSelected, (int8_t *)"mi/h", -1, 100, 40, 1);
@@ -438,6 +433,7 @@ void scrollPages()
     }
     XaxisPrev = Xaxis;
 }
+
 void showPages()
 {
     switch (myPage)
@@ -453,3 +449,5 @@ void showPages()
         break;
     }
 }
+
+///@}

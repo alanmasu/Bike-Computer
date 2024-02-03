@@ -16,6 +16,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*!
+    @defgroup Temp_module Temperature
+    @{ 
+*/
+
 extern volatile uint32_t cal30;
 extern volatile uint32_t cal85;
 extern volatile float calDifference;
@@ -27,6 +32,9 @@ extern volatile float tempF;
 #include <stdio.h>
 #include <stdlib.h>
 
+/*!
+   @brief Inizialitation of temperature sensor and global variables related to it.
+*/
 void temperatureInit();
 
 #endif /* TEMPERATURE_H_ */

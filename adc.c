@@ -6,6 +6,11 @@
  */
 #include "adc.h"
 
+/*!
+    @addtogroup ADC_module ADC
+    @{
+*/
+
 void adcInit()
 {
   /* Configures Pin 6.0 (horX), 4.4(verY) and 4.0(select) as ADC input */
