@@ -1,0 +1,36 @@
+/* /*!
+    @file       speed.h
+    @brief      Speed functions definition.
+    @date       29/01/2024
+    @author     Sofia Zandona'
+*/
+
+/* #ifndef __SPEED_H__
+#define __SPEED_H__ */
+
+/* DriverLib Includes */
+/* #include <ti/devices/msp432p4xx/driverlib/driverlib.h> */
+
+/* Standard Includes */
+/* #include <stdint.h>
+#include <stdbool.h>
+#include <stdio.h>
+ */
+/*!
+    @defgroup   speed_Module Speed
+    @name       Speed Module
+    @{
+*/
+/*float photoresistorConverter(uint_fast16_t sampledValue);
+
+extern volatile bool isrFlag;
+
+void setWheelDiameter(float userDiameter);
+float speedCompute(uint_fast16_t capturedValue);
+void timerInit();
+uint_fast16_t getTimerAcapturedValue();
+
+
+
+#endif
+ */
