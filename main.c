@@ -188,7 +188,6 @@ const char* get_class_name(class_t class_enum) {
         Timer_A_configureUpMode(TIMER_A1_BASE, &upConfig);
 
         /* Enabling interrupts and starting the timer */
-        //Interrupt_enableSleepOnIsrExit();
         Interrupt_enableInterrupt(INT_TA1_0);
 
         /* Enabling MASTER interrupts */
@@ -255,23 +254,6 @@ const char* get_class_name(class_t class_enum) {
         GPIO_toggleOutputOnPin(GPIO_PORT_REAR_LIGHT,GPIO_PIN_REAR_LIGHT);               // toggle rear light
     }
 
-    /*
-    __attribute__ ((always_inline)) inline void stopTimer()
-    {
-        if(timerStarted){
-            timerStarted = false;
-            Timer_A_stopTimer(TIMER_A1_BASE);
-        }
-    }
-
-    __attribute__ ((always_inline)) inline void startTimer()
-    {
-        if(!timerStarted){
-            timerStarted = true;
-            Timer_A_startCounter(TIMER_A1_BASE, TIMER_A_UP_MODE);
-        }
-    }
-    */
 #endif
 
 
@@ -288,7 +270,6 @@ void accel_sample(accelReading* result){            // This function read accele
         result->y = readAccelY();                       // read random - HID y acceleration       |--->  TEST SCAFFOLD
         result->z = readAccelZ();                       // read random - HID z acceleration  -----
     #else
-        //result-> x = -2.000;
         result->x = MPU6050_readXvalue();               // read x acceleration from MPU6050 sensor
         result->y = MPU6050_readYvalue();               // read y acceleration from MPU6050 sensor
         result->z = MPU6050_readZvalue();               // read z acceleration from MPU6050 sensor
@@ -316,7 +297,7 @@ void compute(model_t* model){
         model->temp = rand_temp();
         model->light = rand_light();
     #else 
-        model->temp = MPU6050_readTemp_chip();  
+        model->temp = MPU6050_readTemp_chip();
         model->light = read_light_value();
     #endif  
 }
@@ -346,12 +327,10 @@ void classify(model_t* model){                          // establish model class
             if(count_flash < NUM_FLASH){
                 state = 0;
                 model->class = CLASS_ERROR;
-                //count_flash ++;
             }else{
                 if(model->temp > T_MAX){
                     state = 0;
                     model->class = CLASS_ERROR;
-                    //count_flash ++;
                 }else{
                     state = 2;
                     model->class = CLASS_IDLE;
@@ -363,7 +342,6 @@ void classify(model_t* model){                          // establish model class
             if(count_flash < NUM_FLASH){
                 state = 1;
                 model->class = CLASS_BRAKING;
-                //count_flash ++;
             }else{
                 state = 2;
                 model->class = CLASS_IDLE;
@@ -387,9 +365,10 @@ void classify(model_t* model){                          // establish model class
     }
 }
     
-/*
-void execute(model_t* model){
-    #ifdef SIMULATE_HARDWARE
+
+#ifdef SIMULATE_HARDWARE
+
+    void execute(model_t* model){
         fflush(stdout);
         switch(model->class){
             case CLASS_ERROR:
@@ -412,35 +391,7 @@ void execute(model_t* model){
                 break;
         }
         fflush(stdout);
-
-    #else 
-
-        switch(model->class){
-            case CLASS_IDLE:
-                count_flash = 0;
-                stopTimer();
-                break;
-            case CLASS_ERROR:
-                break;
-            case CLASS_BRAKING:
-                break;
-            case CLASS_LOW_AMBIENT_LIGHT:
-                rearLightUp();
-                frontLightUp();
-                break;
-            case CLASS_MOVING:
-                frontLightDown();
-                rearLightDown();
-                break;
-            default:
-                break;
-        }
-    #endif
-}
-
-*/
-
-#ifdef SIMULATE_HARDWARE
+    }
 
     void print_model(const model_t* model){
         printf("\n\n\n\n---------------------------------------------------------------------------------------------------------------");
@@ -501,8 +452,6 @@ int main(){
             acquire_window(&model);
             compute(&model);
             classify(&model);
-            //execute(&model);
-
 
             id = MPU6050_readDeviceId();
 
@@ -547,12 +496,11 @@ int main(){
                                             OPAQUE_TEXT);
 
             counter = counter + 1;
-
-
         }
 
     #endif
 }
+
 
 #ifndef SIMULATE_HARDWARE
 
@@ -567,7 +515,6 @@ int main(){
             ++count_flash;
             toggleRearLight();
         }
-        //toggleRearLight();
         Timer_A_clearCaptureCompareInterrupt(TIMER_A1_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_0);
     }
 
