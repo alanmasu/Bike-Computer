@@ -29,7 +29,7 @@
                   |             P3.5|----< BTN Stop
                   -------------------
              @endcode
- 	@date       31/01/2024
+ 	@date       03/02/2024
     @authors    Federica Lorenzini, Alan Masutti
  */
 
@@ -49,6 +49,8 @@
     #include <DMAModule.h>
     //LCD
     #include "mainInterface.h"
+    #include "temperature.h"
+    #include "adc.h"
 #else
 	#include <stdio.h>
 	#include <stdlib.h>
@@ -81,6 +83,9 @@
     #include <stdio.h>
     #define PRINTF(...) printf(__VA_ARGS__)
 #endif
+
+volatile bool flagTemp;     //!< Flag to arise if a new temperature value is sampled
+volatile int16_t conRes;    //!< Intermediate temperature value sampled from ADC unit
 
 typedef enum{STOP = 0, START = 1} ComputerState_t;
 
@@ -151,11 +156,6 @@ FIL file;
 bool btnStartStateP = true;
 bool btnStopStateP = true;
 
-//ADC Global Variables
-volatile bool flagTemp;
-volatile int16_t conRes;
-volatile uint32_t cal30;
-uint32_t cal85;
 
 /*!
     @brief      Main function
@@ -177,10 +177,7 @@ void main(void){
     //GPS
     bool gpsAddPoint = false;
     float gpsHdop;
-    //ADC
-    float calDifference;
-    //LCD
-    toShowPage1 myParamStruct  = {0.0, "", 0.0, 0, 0.0, ""};
+
 
     WDT_A_holdTimer();	// stop watchdog timer
 	CS_Init();
@@ -210,29 +207,10 @@ void main(void){
 	//Enable DMA for EUSCI_A2 RX
 	gpsDMAConfiguration();
 
-	//ADC Configuration
-    REF_A_enableTempSensor();
-    REF_A_setReferenceVoltage(REF_A_VREF2_5V);
-    REF_A_enableReferenceVoltage();
-    cal30 = SysCtl_getTempCalibrationConstant(SYSCTL_2_5V_REF, SYSCTL_30_DEGREES_C);
-    cal85 = SysCtl_getTempCalibrationConstant(SYSCTL_2_5V_REF, SYSCTL_85_DEGREES_C);
-    calDifference = cal85 - cal30;
-    /* Initializing ADC (MCLK/1/1)*/
-    ADC14_enableModule();
-    ADC14_initModule(ADC_CLOCKSOURCE_MCLK, ADC_PREDIVIDER_1, ADC_DIVIDER_1, ADC_TEMPSENSEMAP);
-    /* Configuring ADC Memory ADC_MEM0 A22 (Temperature Sensor) in repeat mode.*/
-    ADC14_configureSingleSampleMode(ADC_MEM0, true);
-    ADC14_configureConversionMemory(ADC_MEM0, ADC_VREFPOS_INTBUF_VREFNEG_VSS, ADC_INPUT_A22, false);
-    /* Configuring the sample/hold time for 192 */
-    ADC14_setSampleHoldTime(ADC_PULSE_WIDTH_192, ADC_PULSE_WIDTH_192);
-    /* Enabling sample timer in auto iteration mode and interrupts*/
-    ADC14_enableSampleTimer(ADC_AUTOMATIC_ITERATION);
-    ADC14_enableInterrupt(ADC_INT0);
-    /* Enabling Interrupts */
-//    Interrupt_enableInterrupt(INT_ADC14);
-    /* Triggering the start of the sample */
-    ADC14_enableConversion();
-    ADC14_toggleConversionTrigger();
+    myParamStruct.distance=20.0;
+    myParamStruct.speed=30.6;
+
+    Page_t myPage = PAGE_1;
 
     //Enabling NVIC
     Interrupt_enableMaster();
@@ -265,20 +243,24 @@ void main(void){
     MAP_GPIO_setAsInputPin(BTN_STOP_PORT, BTN_STOP_PIN);
 
     //LCD configuration
+    graphicsInitSelected(&SPI0MasterConfig);
+    graphicsInitBigFont(&SPI0MasterConfig);
     graphicsInit(&SPI0MasterConfig);
+    adcInit();
+    temperatureInit();
 
     while(1){
         //if data is present, parse it
         if(gpsStringEnd == true){
             gpsParseData((char*)&gpsUartBuffer);
-            getGpsData(&myParamStruct.sats, &myParamStruct.speed, &myParamStruct.altitude, &gpsHdop);
+            getGpsData(&myParamStruct.sats, &myParamStruct.speed, &myParamStruct.altitude, &myParamStruct2.hdop);
             gpsStringEnd = false;
             gpsAddPoint = true;
             gpsDMARestoreChannel();
         }
         //If temperature is read then convert it
         if (flagTemp){
-            myParamStruct.temp = (conRes / calDifference) + 30.0f-19;
+            myParamStruct.temp = (conRes / calDifference) + 30.0f;
             //tempF = tempC * 9.0f / 5.0f + 32.0f;
             flagTemp == false;
         }
@@ -330,8 +312,8 @@ void main(void){
                 }
                 //LCD Update
                 if(gpsAddPoint){
-                    drawGrid1();
-                    showPage1(&myParamStruct);
+                    scrollPages();
+                    showPages();
                     GrFlush(&g_sContext);
                     Interrupt_enableInterrupt(INT_ADC14);
                     gpsAddPoint = false;
@@ -353,8 +335,8 @@ void main(void){
                     }
 
                     //LCD
-                    drawGrid1();
-                    showPage1(&myParamStruct);
+                    scrollPages();
+                    showPages();
                     GrFlush(&g_sContext);
                     Interrupt_enableInterrupt(INT_ADC14);
                     
@@ -379,9 +361,12 @@ void main(void){
     }
 }
 
-/* This interrupt happens every time a conversion has completed.*/
-void ADC14_IRQHandler(void){
-    flagTemp=true;
+/*! 
+    @brief This interrupt happens every time a conversion has completed.
+*/
+void ADC14_IRQHandler(void)
+{
+    flagTemp = true;
     uint64_t status;
     status = ADC14_getEnabledInterruptStatus();
     ADC14_clearInterruptFlag(status); /*clear interrupt flag*/
