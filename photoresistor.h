@@ -1,36 +1,44 @@
-/* /*!
-    @file       speed.h
-    @brief      Speed functions definition.
+/*!
+    @file       photoresistor.h
+    @brief      Photoresistor functions definition.
     @date       29/01/2024
     @author     Sofia Zandona'
 */
 
-/* #ifndef __SPEED_H__
-#define __SPEED_H__ */
+#ifndef __PHOTORESISTOR_H__
+#define __PHOTORESISTOR_H__ 
 
-/* DriverLib Includes */
-/* #include <ti/devices/msp432p4xx/driverlib/driverlib.h> */
+/*DriverLib Includes */
+#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
 
 /* Standard Includes */
-/* #include <stdint.h>
+#include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
- */
+
+#define LIGHT_BUFFER_LENGTH 4
+ 
 /*!
-    @defgroup   speed_Module Speed
-    @name       Speed Module
+    @defgroup   Photoresistor_Module Photoresistor
+    @name       Photoresistor Module
     @{
 */
-/*float photoresistorConverter(uint_fast16_t sampledValue);
 
-extern volatile bool isrFlag;
+extern volatile uint8_t resultPos;
 
-void setWheelDiameter(float userDiameter);
-float speedCompute(uint_fast16_t capturedValue);
-void timerInit();
-uint_fast16_t getTimerAcapturedValue();
+uint_fast16_t* getResultBuffer();
 
+float photoresistorConverter(uint_fast16_t sampledValue);
+
+void ADC14Init(const Timer_A_UpModeConfig* upModeConfig, 
+                    const Timer_A_CompareModeConfig* compareConfig);
+
+
+
+/*
+    @}
+*/
 
 
 #endif
- */
+ 
