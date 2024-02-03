@@ -19,9 +19,9 @@
     @addtogroup speed_Module
     @{
 */
-const float clockFrequency      =       46875.0;       //Hz
-      float wheelCircumference  =       2.3141;        //metri
-const float maxTickVal          =       65535.0;
+const  float clockFrequency      =       46875.0;       //Hz
+static float wheelCircumference  =       2.3141;        //metri
+const  float maxTickVal          =       65535.0;
 
 /* Statics */
 
