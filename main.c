@@ -63,6 +63,7 @@
 
     bool timerStarted = false;
     volatile int count_flash = 0;
+    volatile int state = 2;
 
 #endif
 
@@ -187,11 +188,14 @@ const char* get_class_name(class_t class_enum) {
         Timer_A_configureUpMode(TIMER_A1_BASE, &upConfig);
 
         /* Enabling interrupts and starting the timer */
-        Interrupt_enableSleepOnIsrExit();
+        //Interrupt_enableSleepOnIsrExit();
         Interrupt_enableInterrupt(INT_TA1_0);
 
         /* Enabling MASTER interrupts */
         Interrupt_enableMaster();
+
+        Timer_A_startCounter(TIMER_A1_BASE, TIMER_A_UP_MODE);
+
     }
 
     void _hwInit()
@@ -251,6 +255,7 @@ const char* get_class_name(class_t class_enum) {
         GPIO_toggleOutputOnPin(GPIO_PORT_REAR_LIGHT,GPIO_PIN_REAR_LIGHT);               // toggle rear light
     }
 
+    /*
     __attribute__ ((always_inline)) inline void stopTimer()
     {
         if(timerStarted){
@@ -266,7 +271,7 @@ const char* get_class_name(class_t class_enum) {
             Timer_A_startCounter(TIMER_A1_BASE, TIMER_A_UP_MODE);
         }
     }
-
+    */
 #endif
 
 
@@ -283,6 +288,7 @@ void accel_sample(accelReading* result){            // This function read accele
         result->y = readAccelY();                       // read random - HID y acceleration       |--->  TEST SCAFFOLD
         result->z = readAccelZ();                       // read random - HID z acceleration  -----
     #else
+        //result-> x = -2.000;
         result->x = MPU6050_readXvalue();               // read x acceleration from MPU6050 sensor
         result->y = MPU6050_readYvalue();               // read y acceleration from MPU6050 sensor
         result->z = MPU6050_readZvalue();               // read z acceleration from MPU6050 sensor
@@ -320,55 +326,68 @@ void classify(model_t* model){                          // establish model class
     switch(model->class){
         case CLASS_IDLE:
             count_flash = 0;
-            stopTimer();
             if(model->temp > T_MAX){
+                state = 0;
                 model->class = CLASS_ERROR;
             }
             else if(model->averageAcc < ACC_THREASHOLD){
+                state = 1;
                 model->class = CLASS_BRAKING;
             }
             else if(model->light < LIGHT_THREASHOLD){
+                state = 2;
                 model->class = CLASS_LOW_AMBIENT_LIGHT;
             }else{
+                state = 2;
                 model->class = CLASS_MOVING;
             }
             break;
         case CLASS_ERROR:
-            startTimer();
             if(count_flash < NUM_FLASH){
+                state = 0;
                 model->class = CLASS_ERROR;
+                //count_flash ++;
             }else{
                 if(model->temp > T_MAX){
+                    state = 0;
                     model->class = CLASS_ERROR;
+                    //count_flash ++;
                 }else{
+                    state = 2;
                     model->class = CLASS_IDLE;
+                    count_flash = 0;
                 }
             }
             break;
         case CLASS_BRAKING:
-            startTimer();
             if(count_flash < NUM_FLASH){
+                state = 1;
                 model->class = CLASS_BRAKING;
+                //count_flash ++;
             }else{
+                state = 2;
                 model->class = CLASS_IDLE;
+                count_flash = 0;
             }
             break;
         case CLASS_MOVING:
-            stopTimer();
+            state = 2;
             frontLightDown();
             rearLightDown();
+            count_flash = 0;
             model->class = CLASS_IDLE;
             break;
         case CLASS_LOW_AMBIENT_LIGHT:
-            stopTimer();
+            state = 2;
             rearLightUp();
             frontLightUp();
+            count_flash = 0;
             model->class = CLASS_IDLE;
             break;
     }
 }
     
-
+/*
 void execute(model_t* model){
     #ifdef SIMULATE_HARDWARE
         fflush(stdout);
@@ -402,18 +421,14 @@ void execute(model_t* model){
                 stopTimer();
                 break;
             case CLASS_ERROR:
-                startTimer();
                 break;
             case CLASS_BRAKING:
-                startTimer();
                 break;
             case CLASS_LOW_AMBIENT_LIGHT:
-                stopTimer();
                 rearLightUp();
                 frontLightUp();
                 break;
             case CLASS_MOVING:
-                stopTimer();
                 frontLightDown();
                 rearLightDown();
                 break;
@@ -422,6 +437,8 @@ void execute(model_t* model){
         }
     #endif
 }
+
+*/
 
 #ifdef SIMULATE_HARDWARE
 
@@ -486,6 +503,7 @@ int main(){
             classify(&model);
             //execute(&model);
 
+
             id = MPU6050_readDeviceId();
 
             len = sprintf(string, " MPU6050 I2C ");
@@ -529,6 +547,8 @@ int main(){
                                             OPAQUE_TEXT);
 
             counter = counter + 1;
+
+
         }
 
     #endif
@@ -538,11 +558,16 @@ int main(){
 
     void TA1_0_IRQHandler(void)
     {
-        toggleRearLight();
-        if(model_BSS->class == CLASS_ERROR){
+        if(state == 0){         //error
+            ++count_flash;
+            toggleRearLight();
             toggleFrontLight();
         }
-        count_flash++;
+        if(state == 1){         //brak
+            ++count_flash;
+            toggleRearLight();
+        }
+        //toggleRearLight();
         Timer_A_clearCaptureCompareInterrupt(TIMER_A1_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_0);
     }
 
