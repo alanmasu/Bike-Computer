@@ -41,7 +41,7 @@ int main(void)
     /* Stop watchdog timer */
     MAP_WDT_A_holdTimer();
 
-    timerInit(continuousModeConfig, captureModeConfig);
+    timerInit(&continuousModeConfig, &captureModeConfig);
 
     MAP_Interrupt_enableMaster();
 
