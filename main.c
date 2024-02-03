@@ -1,3 +1,10 @@
+/*!
+    @file       main.c
+    @brief      Photoresistance value captured and scaled.
+    @date       29/01/2024
+    @author     Sofia Zandona'
+*/
+
 /* DriverLib Includes */
 #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
 
