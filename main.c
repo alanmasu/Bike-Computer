@@ -61,9 +61,7 @@
         TIMER_A_DO_CLEAR                        // Clear value
     };
 
-    bool timerStarted = false;
     volatile int count_flash = 0;
-    volatile int state = 2;
 
 #endif
 
@@ -308,31 +306,24 @@ void classify(model_t* model){                          // establish model class
         case CLASS_IDLE:
             count_flash = 0;
             if(model->temp > T_MAX){
-                state = 0;
                 model->class = CLASS_ERROR;
             }
             else if(model->averageAcc < ACC_THREASHOLD){
-                state = 1;
                 model->class = CLASS_BRAKING;
             }
             else if(model->light < LIGHT_THREASHOLD){
-                state = 2;
                 model->class = CLASS_LOW_AMBIENT_LIGHT;
             }else{
-                state = 2;
                 model->class = CLASS_MOVING;
             }
             break;
         case CLASS_ERROR:
             if(count_flash < NUM_FLASH){
-                state = 0;
                 model->class = CLASS_ERROR;
             }else{
                 if(model->temp > T_MAX){
-                    state = 0;
                     model->class = CLASS_ERROR;
                 }else{
-                    state = 2;
                     model->class = CLASS_IDLE;
                     count_flash = 0;
                 }
@@ -340,23 +331,19 @@ void classify(model_t* model){                          // establish model class
             break;
         case CLASS_BRAKING:
             if(count_flash < NUM_FLASH){
-                state = 1;
                 model->class = CLASS_BRAKING;
             }else{
-                state = 2;
                 model->class = CLASS_IDLE;
                 count_flash = 0;
             }
             break;
         case CLASS_MOVING:
-            state = 2;
             frontLightDown();
             rearLightDown();
             count_flash = 0;
             model->class = CLASS_IDLE;
             break;
         case CLASS_LOW_AMBIENT_LIGHT:
-            state = 2;
             rearLightUp();
             frontLightUp();
             count_flash = 0;
@@ -506,12 +493,11 @@ int main(){
 
     void TA1_0_IRQHandler(void)
     {
-        if(state == 0){         //error
+        if(model_BSS->class == CLASS_ERROR){
             ++count_flash;
             toggleRearLight();
             toggleFrontLight();
-        }
-        if(state == 1){         //brak
+        }else if (model_BSS->class == CLASS_BRAKING){
             ++count_flash;
             toggleRearLight();
         }
@@ -519,13 +505,3 @@ int main(){
     }
 
 #endif
-
-
-// TODO: scrivere funzione per gestire BENE il buzzer: 
-//          - buzzer_high();
-//          - buzzer_flash();
-//          - buzzer_low();
-
-
-// TODO: makefile to compile
-
