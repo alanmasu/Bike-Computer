@@ -29,7 +29,10 @@ static volatile uint_fast16_t timerAcapturedValue;
 static volatile uint_fast16_t overflowCounter = 0;
 volatile bool isrFlag = false;
 
-
+/*!
+    @brief    Getter for timerAcapturedValue.
+    @return   timerAcapturedValue: value in capture register.
+*/
 uint_fast16_t getTimerAcapturedValue(){
     return timerAcapturedValue;
 }
