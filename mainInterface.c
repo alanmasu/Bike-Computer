@@ -145,7 +145,7 @@ void showPage1(toShowPage1 *paramToShow1)
         snprintf(tmpString, 39, "%2.1f", paramToShow1->speed);
         GrStringDrawCentered(&g_sContextBig, (int8_t *)tmpString, -1, 96, 55, 1);
         snprintf(tmpString, 39, "km/h");
-        GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 96, 7, 1);
+        GrStringDrawCentered(&g_sContext, (int8_t *)tmpString, -1, 96, 70, 1);
         break;
     case 1:
         snprintf(tmpString, 39, "%2.1f", ms);
