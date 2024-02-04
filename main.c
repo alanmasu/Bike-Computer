@@ -8,6 +8,7 @@
 #include "temperature.h"
 #include "adc.h"
 
+//.
 volatile bool flagTemp;     //!< Flag to arise if a new temperature value is sampled
 volatile int16_t conRes;    //!< Intermediate temperature value sampled from ADC unit
 
