@@ -1,0 +1,52 @@
+\chapter{Bike Computer}
+\hypertarget{md__r_e_a_d_m_e}{}\label{md__r_e_a_d_m_e}\index{Bike Computer@{Bike Computer}}
+\label{md__r_e_a_d_m_e_autotoc_md0}%
+\Hypertarget{md__r_e_a_d_m_e_autotoc_md0}%
+ Embedded Software for the IoT project
+
+Authors\+:
+\begin{DoxyItemize}
+\item \href{https://github.com/AlbertoDB20}{\texttt{ @\+Alberto\+DB20}}
+\item \href{https://github.com/alanmasu}{\texttt{ @alanmasu}}
+\item \href{https://github.com/Sofiaz17}{\texttt{ @sofiaz17}}
+\item \href{https://github.com/kikalore}{\texttt{ @kikalore}}
+\item \href{https://github.com/pietrocipriani}{\texttt{ @pietrocipriani}} (as external collaborator)
+\end{DoxyItemize}
+
+The goal of the project is the realization of a bike computer equipped with many functions common to many odometers on market today, such as reporting instantaneous speed, average speed, clock, distance travelled but also more advanced statistics such as altitude, gps coordinates, automatic management of lights based on external ambient light and a safe system which, in the event of sudden braking, flashes the rear lights to warn other cyclists or cars of the emergency.
+
+The computer will therefore be equipped with the following components/sensors\+:
+\begin{DoxyItemize}
+\item lcd monitor
+\item Arduino or esp32 or other
+\item KY-\/024 Linear magnetic Hall Sensor
+\item Light Dependent Resistor
+\item front and rear lights
+\item gps Sensor
+\item DHT 11 or other temperature sensor
+\item MPU 6050 accellerometer sensor
+\item functional botton
+\item battery
+\item ??? other sensors???
+\end{DoxyItemize}
+
+The functionality of this bike computer is identical to the commercial ones, there is a main interface where it’s possible to read trip statistics and a menù interface where the user can set technical data of bicycle (for example the size of the wheel), the unit of measurement, …
+
+Ideas for Project\+: 1) Rather then using a lcd monitor, we can use the screen of a mobile phone connected to the bike computer via Bluetooth
+\begin{DoxyItemize}
+\item more “\+Io\+T” project
+\item more effective
+\item everybody has his phone with him
+\item more complex 2) being able to download GPX tracks (possibly via bluetooth on your phone) to create a map with an online tool; 3) have the possibility to personalize the main interface of odometer 4) create a PLA body to contain all the component of the bike computer
+\end{DoxyItemize}
+
+Google Drive link\+: \href{https://drive.google.com/drive/folders/1Llw7UDmaANK1lYZJ6caN6bu0Kb6bvCJu?usp=sharing}{\texttt{ https\+://drive.\+google.\+com/drive/folders/1\+Llw7\+UDma\+ANK1l\+YZJ6ca\+N6bu0\+Kb6bv\+CJu?usp=sharing}}\hypertarget{md__r_e_a_d_m_e_autotoc_md1}{}\doxysection{\texorpdfstring{Project Documentation}{Project Documentation}}\label{md__r_e_a_d_m_e_autotoc_md1}
+
+\begin{DoxyItemize}
+\item \doxylink{main_8c}{main.c}
+\item Speed module
+\begin{DoxyItemize}
+\item \doxylink{speed_8c}{speed.c}
+\item \doxylink{speed_8h}{speed.h} 
+\end{DoxyItemize}
+\end{DoxyItemize}

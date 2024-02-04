@@ -1,0 +1,43 @@
+\doxysection{photoresistor.\+c File Reference}
+\hypertarget{photoresistor_8c}{}\label{photoresistor_8c}\index{photoresistor.c@{photoresistor.c}}
+
+
+Photoresistor functions implementation.  
+
+
+{\ttfamily \#include "{}photoresistor.\+h"{}}\newline
+{\ttfamily \#include $<$ti/devices/msp432p4xx/driverlib/driverlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint\+\_\+fast16\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{group___photoresistor___module_ga102b8a8ef35876f6c375c472be475765}{get\+Result\+Buffer}} ()
+\begin{DoxyCompactList}\small\item\em Getter for results\+Buffer. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{group___photoresistor___module_ga5f51d965bd21c67c5e338bb0ecf5c3d2}{photoresistor\+Converter}} (uint\+\_\+fast16\+\_\+t sampled\+Value)
+\begin{DoxyCompactList}\small\item\em Scales photoresistor value in a 0-\/100 scale. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___photoresistor___module_ga434fa178dcefee1f9b16a0d62e821280}{ADC14\+Init}} (const Timer\+\_\+\+A\+\_\+\+Up\+Mode\+Config \texorpdfstring{$\ast$}{*}up\+Mode\+Config, const Timer\+\_\+\+A\+\_\+\+Compare\+Mode\+Config \texorpdfstring{$\ast$}{*}compare\+Config)
+\begin{DoxyCompactList}\small\item\em Initializes ADC14 with timer trigger and in multisequence mode. \end{DoxyCompactList}\item 
+void {\bfseries ADC14\+\_\+\+IRQHandler} (void)
+\item 
+void {\bfseries TA0\+\_\+0\+\_\+\+IRQHandler} (void)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+volatile uint\+\_\+fast16\+\_\+t {\bfseries results\+Buffer} \mbox{[}LIGHT\+\_\+\+BUFFER\+\_\+\+LENGTH\mbox{]}
+\item 
+volatile uint8\+\_\+t {\bfseries result\+Pos}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Photoresistor functions implementation. 
+
+\begin{DoxyDate}{Date}
+29/01/2024 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Sofia Zandona\textquotesingle{} 
+\end{DoxyAuthor}
