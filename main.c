@@ -58,6 +58,7 @@ const Timer_A_CaptureModeConfig speedCaptureModeConfig =
 int main(void)
 {
     float speed;
+    float distance;
 
     /* Stop watchdog timer */
     MAP_WDT_A_holdTimer();
@@ -82,7 +83,9 @@ int main(void)
 
             printf("Register value: %d\n", getTimerAcapturedValue());
             speed = speedCompute(getTimerAcapturedValue());
+            distance = distanceCovered();
             printf("Speed: %f Km/h \n", speed);
+            printf("Distance: %f m \n", distance);
 
             isrFlag = false;
         }

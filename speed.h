@@ -28,6 +28,7 @@ float speedCompute(uint_fast16_t capturedValue);
 void timerInit(const Timer_A_ContinuousModeConfig* continuousModeConfig, 
                        const Timer_A_CaptureModeConfig* captureModeConfig);
 uint_fast16_t getTimerAcapturedValue();
+float distanceCovered();
 
 /*
     @}

@@ -27,6 +27,7 @@ const  float maxTickVal          =       65535.0;
 
 static volatile uint_fast16_t timerAcapturedValue;
 static volatile uint_fast16_t overflowCounter = 0;
+static volatile uint_fast16_t roundsCounter = 0;
 volatile bool isrFlag = false;
 
 /*!
@@ -43,6 +44,15 @@ uint_fast16_t getTimerAcapturedValue(){
 */
 void setWheelDiameter(float userDiameter){
     wheelCircumference = userDiameter / 39.37;
+}
+
+/*!
+    @brief    Computes distance covered since wheel starts moving.
+    @return   distance: distance covered in meter.
+*/
+float distanceCovered(){
+    float distance = wheelCircumference * roundsCounter;        //metri
+    return distance;
 }
 
 /*!
@@ -97,6 +107,7 @@ void TA0_N_IRQHandler(void)
     if(timer == 4){
 
         isrFlag = true;
+        ++roundsCounter;
         timerAcapturedValue = MAP_Timer_A_getCaptureCompareCount(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_2);
         Timer_A_clearCaptureCompareInterrupt(TIMER_A0_BASE,TIMER_A_CAPTURECOMPARE_REGISTER_2);
         MAP_Interrupt_disableSleepOnIsrExit();
