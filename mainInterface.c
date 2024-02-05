@@ -17,7 +17,7 @@
     @addtogroup LCD_module
     @{
 */
-
+bool lcdNeedReflash;
 Graphics_Context g_sContext;
 Graphics_Context g_sContextSelected;
 Graphics_Context g_sContextBig;
@@ -393,41 +393,49 @@ void scrollPages()
     switch (myPage)
     {
     case PAGE_1:
-        drawGrid1();
         if (Xaxis > 14000 && diff > 3000)
         {
+            lcdNeedReflash=true;
             myPage = PAGE_2;
             Graphics_clearDisplay(&g_sContext);
+            drawGrid2();
         }
         if (Xaxis < 600 && diff > 3000)
         {
+            lcdNeedReflash=true;
             myPage = PAGE_3;
             Graphics_clearDisplay(&g_sContext);
         }
         break;
     case PAGE_2:
-        drawGrid2();
         if (Xaxis > 14000 && diff > 3000)
         {
+            lcdNeedReflash=true;
             myPage = PAGE_3;
             Graphics_clearDisplay(&g_sContext);
         }
         if (Xaxis < 600 && diff > 3000)
         {
+            lcdNeedReflash=true;
             myPage = PAGE_1;
             Graphics_clearDisplay(&g_sContext);
+            drawGrid1();
         }
         break;
     case PAGE_3:
         if (Xaxis > 14000 && diff > 3000)
         {
+            lcdNeedReflash=true;
             myPage = PAGE_1;
             Graphics_clearDisplay(&g_sContext);
+            drawGrid1();
         }
         if (Xaxis < 600 && diff > 3000)
         {
+            lcdNeedReflash=true;
             myPage = PAGE_2;
             Graphics_clearDisplay(&g_sContext);
+            drawGrid2();
         }
         break;
     }
