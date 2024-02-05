@@ -26,6 +26,7 @@ var menudata={children:[
 {text:"Main Page",url:"index.html"},
 {text:"Topics",url:"topics.html"},
 <<<<<<< HEAD
+<<<<<<< HEAD
 {text:"Data Structures",url:"annotated.html",children:[
 {text:"Data Structures",url:"annotated.html"},
 {text:"Data Structure Index",url:"classes.html"},
@@ -72,3 +73,10 @@ var menudata={children:[
 {text:"Typedefs",url:"globals_type.html"},
 {text:"Enumerations",url:"globals_enum.html"}]}]}]}
 >>>>>>> LCD-Temperature
+=======
+{text:"Files",url:"files.html",children:[
+{text:"File List",url:"files.html"},
+{text:"File Members",url:"globals.html",children:[
+{text:"All",url:"globals.html"},
+{text:"Functions",url:"globals_func.html"}]}]}]}
+>>>>>>> speed-hallSensor

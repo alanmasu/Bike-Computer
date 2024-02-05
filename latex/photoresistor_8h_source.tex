@@ -1,0 +1,37 @@
+\doxysection{photoresistor.\+h}
+\hypertarget{photoresistor_8h_source}{}\label{photoresistor_8h_source}\mbox{\hyperlink{photoresistor_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ \_\_PHOTORESISTOR\_H\_\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ \_\_PHOTORESISTOR\_H\_\_\ }}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/*DriverLib\ Includes\ */}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <ti/devices/msp432p4xx/driverlib/driverlib.h>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{/*\ Standard\ Includes\ */}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ LIGHT\_BUFFER\_LENGTH\ 4}}
+\DoxyCodeLine{00020\ \ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{extern}\ \textcolor{keyword}{volatile}\ uint8\_t\ resultPos;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ uint\_fast16\_t*\ \mbox{\hyperlink{group___photoresistor___module_ga102b8a8ef35876f6c375c472be475765}{getResultBuffer}}();}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{group___photoresistor___module_ga5f51d965bd21c67c5e338bb0ecf5c3d2}{photoresistorConverter}}(uint\_fast16\_t\ sampledValue);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___photoresistor___module_ga434fa178dcefee1f9b16a0d62e821280}{ADC14Init}}(\textcolor{keyword}{const}\ Timer\_A\_UpModeConfig*\ upModeConfig,\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ Timer\_A\_CompareModeConfig*\ compareConfig);}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ @\}}}
+\DoxyCodeLine{00040\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00044\ \ }
+
+\end{DoxyCode}

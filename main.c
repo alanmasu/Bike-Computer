@@ -30,7 +30,7 @@
                   -------------------
              @endcode
  	@date       03/02/2024
-    @authors    Federica Lorenzini, Alan Masutti
+    @authors    Federica Lorenzini, Alan Masutti, Sofia Zandonà
  */
 
 #ifndef SIMULATE_HARDWARE
@@ -51,8 +51,11 @@
     #include "mainInterface.h"
     #include "temperature.h"
     #include "adc.h"
+    //speed-photoresistor
+    #include "photoresistor.h"
+    #include "speed.h"
+
 #else
-	#include <stdio.h>
 	#include <stdlib.h>
 #endif
 
@@ -61,6 +64,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdio.h>
 
 //Testing includes
 #include "Test/GPX_Points.h"
@@ -84,15 +88,53 @@
     #define PRINTF(...) printf(__VA_ARGS__)
 #endif
 
-//.
-volatile bool flagTemp;     //!< Flag to arise if a new temperature value is sampled
-volatile int16_t conRes;    //!< Intermediate temperature value sampled from ADC unit
+    //.
+// volatile bool flagTemp;     //!< Flag to arise if a new temperature value is sampled
+// volatile int16_t conRes;    //!< Intermediate temperature value sampled from ADC unit
 
 typedef enum{STOP = 0, START = 1} ComputerState_t;
 
 ComputerState_t computerState = STOP;
 
 #ifndef SIMULATE_HARDWARE
+
+const Timer_A_ContinuousModeConfig speedContinuousModeConfig =
+    {
+        TIMER_A_CLOCKSOURCE_ACLK,              //frequency: 32,768kHz
+        TIMER_A_CLOCKSOURCE_DIVIDER_1,         //new frequency: 32,768 kHz
+        TIMER_A_TAIE_INTERRUPT_ENABLE,
+        TIMER_A_SKIP_CLEAR
+    };
+
+    /* Timer_A Continuous Mode Configuration Parameter */
+    const Timer_A_UpModeConfig photoresistorUpModeConfig =
+    {
+        TIMER_A_CLOCKSOURCE_ACLK,            // ACLK Clock Source
+        TIMER_A_CLOCKSOURCE_DIVIDER_32,
+        150,
+        TIMER_A_TAIE_INTERRUPT_ENABLE,       // Disable Timer ISR
+        TIMER_A_CCIE_CCR0_INTERRUPT_DISABLE, // Disable CCR0
+        TIMER_A_DO_CLEAR                     // Clear Counter
+    };
+
+    /* Timer_A Compare Configuration Parameter */
+    const Timer_A_CompareModeConfig photoresistorCompareConfig =
+    {
+        TIMER_A_CAPTURECOMPARE_REGISTER_1,          // Use CCR1
+        TIMER_A_CAPTURECOMPARE_INTERRUPT_DISABLE,   // Disable CCR interrupt
+        TIMER_A_OUTPUTMODE_SET_RESET,               // Toggle output but
+        150                                         
+    };
+
+    const Timer_A_CaptureModeConfig speedCaptureModeConfig =
+    {
+        TIMER_A_CAPTURECOMPARE_REGISTER_2,        // CC Register 2
+        TIMER_A_CAPTUREMODE_RISING_EDGE,          // Rising Edge
+        TIMER_A_CAPTURE_INPUTSELECT_CCIxA,        // CCIxA Input Select
+        TIMER_A_CAPTURE_SYNCHRONOUS,              // Synchronized Capture
+        TIMER_A_CAPTURECOMPARE_INTERRUPT_ENABLE,  // Enable interrupt
+        TIMER_A_OUTPUTMODE_OUTBITVALUE            // Output bit value
+    };
 
 //Buttons defines
 #define BTN_START_PORT      GPIO_PORT_P5
@@ -177,7 +219,6 @@ void main(void){
     bool status;
     //GPS
     bool gpsAddPoint = false;
-    float gpsHdop;
 
 
     WDT_A_holdTimer();	// stop watchdog timer
@@ -208,10 +249,13 @@ void main(void){
 	//Enable DMA for EUSCI_A2 RX
 	gpsDMAConfiguration();
 
-    myParamStruct.distance=20.0;
-    myParamStruct.speed=30.6;
+    resultPos = 0;
 
-    Page_t myPage = PAGE_1;
+    timerInit(&speedContinuousModeConfig, &speedCaptureModeConfig);
+
+    //myParamStruct.distance=20.0;
+    //myParamStruct.speed=30.6;
+
 
     //Enabling NVIC
     Interrupt_enableMaster();
@@ -233,7 +277,7 @@ void main(void){
     if(r != FR_OK){
         PRINTF("Could not open root directory, returned: %d\r\n", (int)r);
         MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
-        while(1);
+//        while(1);
     }else{
         PRINTF("Opened DIR!\r\n");
         MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN1);
@@ -247,14 +291,55 @@ void main(void){
     graphicsInitSelected(&SPI0MasterConfig);
     graphicsInitBigFont(&SPI0MasterConfig);
     graphicsInit(&SPI0MasterConfig);
-    adcInit();
+    drawGrid1();
+
+    //adcInit();
     temperatureInit();
+    ADC14Init(&photoresistorUpModeConfig, &photoresistorCompareConfig);
 
     while(1){
+
+        uint8_t i;
+        uint_fast16_t average = 0;
+        float convertedAverage = 0;
+
+        //if wheel has completed one round, compute speed and distance travelled
+        if(speedFlag){
+
+//            printf("Register value: %d\n", getTimerAcapturedValue());
+            myParamStruct.speed = speedCompute(getTimerAcapturedValue());
+            myParamStruct.distance = distanceCovered();
+//            printf("Speed: %f Km/h \n", myParamStruct.speed);
+//            printf("Distance: %f m \n", myParamStruct.distance);
+            speedFlag = false;
+        }
+            
+
+        //if 4 light values have been captured, calculate average value and scale it (0 to 1)
+        if(photoresFlag){
+            for(i=0; i<LIGHT_BUFFER_LENGTH; i++){
+                average = average + getResultBuffer()[i];
+//                printf("Value [%d]: %d\n",i,getResultBuffer()[i]);
+            }
+//            printf("\n");
+
+            average /= LIGHT_BUFFER_LENGTH;
+
+            convertedAverage = photoresistorConverter(average);
+            //ADC14_disableInterrupt(ADC_INT0);
+            resultPos = 0;
+
+//            printf("Average: %d\n",average);
+//            printf("Converted average: %f \n\n",convertedAverage);
+
+            photoresFlag = false;
+
+        }
+
         //if data is present, parse it
         if(gpsStringEnd == true){
             gpsParseData((char*)&gpsUartBuffer);
-            getGpsData(&myParamStruct.sats, &myParamStruct.speed, &myParamStruct.altitude, &myParamStruct2.hdop);
+            getGpsData(&myParamStruct.sats, &myParamStruct2.speed, &myParamStruct.altitude, &myParamStruct2.hdop);
             gpsStringEnd = false;
             gpsAddPoint = true;
             gpsDMARestoreChannel();
@@ -263,7 +348,7 @@ void main(void){
         if (flagTemp){
             myParamStruct.temp = (conRes / calDifference) + 30.0f;
             //tempF = tempC * 9.0f / 5.0f + 32.0f;
-            flagTemp == false;
+            flagTemp = false;
         }
 
         //Computer FSM
@@ -359,25 +444,51 @@ void main(void){
                 btnStopStateP = status;
                 break;
         }
+
+        //MAP_Interrupt_enableSleepOnIsrExit();
     }
 }
 
 /*! 
     @brief This interrupt happens every time a conversion has completed.
 */
-void ADC14_IRQHandler(void)
+
+/*void ADC14_IRQHandler(void)
 {
     flagTemp = true;
     uint64_t status;
     status = ADC14_getEnabledInterruptStatus();
-    ADC14_clearInterruptFlag(status); /*clear interrupt flag*/
+    ADC14_clearInterruptFlag(status); 
     if (status & ADC_INT0){
         conRes = ((ADC14_getResult(ADC_MEM0) - cal30) * 55);
     }
     Interrupt_disableInterrupt(INT_ADC14);
     Interrupt_disableSleepOnIsrExit();
-}
+}*/
 
+/*void ADC14_IRQHandler(void)
+{
+    uint64_t status;
+
+    status = MAP_ADC14_getEnabledInterruptStatus();
+    MAP_ADC14_clearInterruptFlag(status);
+
+    flagTemp = true;
+
+    if (status & ADC_INT0){
+        conRes = ((ADC14_getResult(ADC_MEM0) - cal30) * 55);
+        Interrupt_disableSleepOnIsrExit();
+    } else if (status & ADC_INT3) {
+        if(resultPos < 5) {
+            resultsBuffer[resultPos++] = MAP_ADC14_getResult(ADC_MEM3);
+        } else {
+            photoresFlag = true;
+            MAP_Interrupt_disableSleepOnIsrExit();
+        }
+    }
+    
+
+}*/
 #else
 
 #define GPX_TEST_FILENAME   "Test/results/test.gpx"

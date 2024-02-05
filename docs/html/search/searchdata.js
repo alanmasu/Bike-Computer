@@ -1,6 +1,7 @@
 var indexSectionsWithContent =
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
   0: "abcdefghlmnopstuv",
   1: "gs",
   2: "dgm",
@@ -19,11 +20,19 @@ var indexSectionsWithContent =
   7: "alt",
   8: "bc"
 >>>>>>> LCD-Temperature
+=======
+  0: "bcdmpst",
+  1: "ms",
+  2: "st",
+  3: "s",
+  4: "bc"
+>>>>>>> speed-hallSensor
 };
 
 var indexSectionNames =
 {
   0: "all",
+<<<<<<< HEAD
   1: "classes",
   2: "files",
   3: "functions",
@@ -37,11 +46,18 @@ var indexSectionNames =
   7: "groups",
   8: "pages"
 >>>>>>> LCD-Temperature
+=======
+  1: "files",
+  2: "functions",
+  3: "groups",
+  4: "pages"
+>>>>>>> speed-hallSensor
 };
 
 var indexSectionLabels =
 {
   0: "All",
+<<<<<<< HEAD
 <<<<<<< HEAD
   1: "Data Structures",
   2: "Files",
@@ -59,5 +75,11 @@ var indexSectionLabels =
   7: "Modules",
   8: "Pages"
 >>>>>>> LCD-Temperature
+=======
+  1: "Files",
+  2: "Functions",
+  3: "Modules",
+  4: "Pages"
+>>>>>>> speed-hallSensor
 };
 

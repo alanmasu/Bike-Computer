@@ -44,6 +44,9 @@ https://drive.google.com/drive/folders/1Llw7UDmaANK1lYZJ6caN6bu0Kb6bvCJu?usp=sha
 ## Project Documentation
 
 - [main.c](#main.c)
+- Speed module
+	- [speed.c](#speed.c)
+	- [speed.h](#speed.h)
 - GPX Library
   - [gpx.c](#gpx.c)
   - [gpx.h](#gpx.h)

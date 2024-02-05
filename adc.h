@@ -8,6 +8,8 @@
 #ifndef ADC_H_
 #define ADC_H_
 #include "mainInterface.h"
+#include "temperature.h"
+
 #include <ti/devices/msp432p4xx/inc/msp.h>
 #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
 #include <ti/grlib/grlib.h>
@@ -24,6 +26,10 @@
 /*!
    @brief Inizialitation of ADC module.
 */
-void adcInit();
+
+extern volatile bool flagTemp;     
+extern volatile int16_t conRes;    
+
+//void adcInit();
 
 #endif /* ADC_H_ */

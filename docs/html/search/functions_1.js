@@ -1,6 +1,7 @@
 var searchData=
 [
 <<<<<<< HEAD
+<<<<<<< HEAD
   ['getdatefromstring_0',['getDateFromString',['../group___g_p_s___module.html#ga5bb4c00987ab49117489206ecc74d538',1,'getDateFromString(const char *time, const char *date):&#160;GPS.c'],['../group___g_p_s___module.html#ga5bb4c00987ab49117489206ecc74d538',1,'getDateFromString(const char *time, const char *date):&#160;GPS.c']]],
   ['getlatitudefromstring_1',['getLatitudeFromString',['../group___g_p_s___module.html#ga07b763e689b8994afd0a5cc705c3d5af',1,'getLatitudeFromString(char *str):&#160;GPS.c'],['../group___g_p_s___module.html#ga07b763e689b8994afd0a5cc705c3d5af',1,'getLatitudeFromString(char *str):&#160;GPS.c']]],
   ['getlongitudefromstring_2',['getLongitudeFromString',['../group___g_p_s___module.html#ga433207ca74eacde33dc944a4b810a826',1,'getLongitudeFromString(char *str):&#160;GPS.c'],['../group___g_p_s___module.html#ga433207ca74eacde33dc944a4b810a826',1,'getLongitudeFromString(char *str):&#160;GPS.c']]],
@@ -23,4 +24,7 @@ var searchData=
   ['drawgrid1_0',['drawGrid1',['../group___l_c_d__module.html#gaf4e89960258b6df032691612941d1c80',1,'mainInterface.c']]],
   ['drawgrid2_1',['drawGrid2',['../group___l_c_d__module.html#gac203cbd46a5a6e3812d51060c0da6291',1,'mainInterface.c']]]
 >>>>>>> LCD-Temperature
+=======
+  ['timerinit_0',['timerInit',['../group__speed___module.html#gaf927959e78504fd1afe1be1e10791ae0',1,'timerInit():&#160;speed.c'],['../group__speed___module.html#gaf927959e78504fd1afe1be1e10791ae0',1,'timerInit():&#160;speed.c']]]
+>>>>>>> speed-hallSensor
 ];

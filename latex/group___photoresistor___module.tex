@@ -1,0 +1,80 @@
+\doxysection{Photoresistor}
+\hypertarget{group___photoresistor___module}{}\label{group___photoresistor___module}\index{Photoresistor@{Photoresistor}}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint\+\_\+fast16\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{group___photoresistor___module_ga102b8a8ef35876f6c375c472be475765}{get\+Result\+Buffer}} ()
+\begin{DoxyCompactList}\small\item\em Getter for results\+Buffer. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{group___photoresistor___module_ga5f51d965bd21c67c5e338bb0ecf5c3d2}{photoresistor\+Converter}} (uint\+\_\+fast16\+\_\+t sampled\+Value)
+\begin{DoxyCompactList}\small\item\em Scales photoresistor value in a 0-\/100 scale. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___photoresistor___module_ga434fa178dcefee1f9b16a0d62e821280}{ADC14\+Init}} (const Timer\+\_\+\+A\+\_\+\+Up\+Mode\+Config \texorpdfstring{$\ast$}{*}up\+Mode\+Config, const Timer\+\_\+\+A\+\_\+\+Compare\+Mode\+Config \texorpdfstring{$\ast$}{*}compare\+Config)
+\begin{DoxyCompactList}\small\item\em Initializes ADC14 with timer trigger and in multisequence mode. \end{DoxyCompactList}\item 
+\Hypertarget{group___photoresistor___module_ga9fa2875556d48df2ba3c9c148667b8f5}\label{group___photoresistor___module_ga9fa2875556d48df2ba3c9c148667b8f5} 
+void {\bfseries ADC14\+\_\+\+IRQHandler} (void)
+\item 
+\Hypertarget{group___photoresistor___module_ga67358ada1498a26b49ad4c0cbdfce21c}\label{group___photoresistor___module_ga67358ada1498a26b49ad4c0cbdfce21c} 
+void {\bfseries TA0\+\_\+0\+\_\+\+IRQHandler} (void)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{group___photoresistor___module_ga36562a70b103b1304cdd7bd75ccdff86}\label{group___photoresistor___module_ga36562a70b103b1304cdd7bd75ccdff86} 
+volatile uint\+\_\+fast16\+\_\+t {\bfseries results\+Buffer} \mbox{[}LIGHT\+\_\+\+BUFFER\+\_\+\+LENGTH\mbox{]}
+\item 
+\Hypertarget{group___photoresistor___module_ga9e5b8b2272c3090e7c5d40f5a5acb061}\label{group___photoresistor___module_ga9e5b8b2272c3090e7c5d40f5a5acb061} 
+volatile uint8\+\_\+t {\bfseries result\+Pos}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{group___photoresistor___module_ga434fa178dcefee1f9b16a0d62e821280}\label{group___photoresistor___module_ga434fa178dcefee1f9b16a0d62e821280} 
+\index{Photoresistor@{Photoresistor}!ADC14Init@{ADC14Init}}
+\index{ADC14Init@{ADC14Init}!Photoresistor@{Photoresistor}}
+\doxysubsubsection{\texorpdfstring{ADC14Init()}{ADC14Init()}}
+{\footnotesize\ttfamily void ADC14\+Init (\begin{DoxyParamCaption}\item[{const Timer\+\_\+\+A\+\_\+\+Up\+Mode\+Config \texorpdfstring{$\ast$}{*}}]{up\+Mode\+Config,  }\item[{const Timer\+\_\+\+A\+\_\+\+Compare\+Mode\+Config \texorpdfstring{$\ast$}{*}}]{compare\+Config }\end{DoxyParamCaption})}
+
+
+
+Initializes ADC14 with timer trigger and in multisequence mode. 
+
+Configures input pins and ADC memory. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em up\+Mode\+Config} & timer configuration in up mode. \\
+\hline
+\mbox{\texttt{ in}}  & {\em compare\+Config} & timer configuration in compare mode with interrupt disabled. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{group___photoresistor___module_ga102b8a8ef35876f6c375c472be475765}\label{group___photoresistor___module_ga102b8a8ef35876f6c375c472be475765} 
+\index{Photoresistor@{Photoresistor}!getResultBuffer@{getResultBuffer}}
+\index{getResultBuffer@{getResultBuffer}!Photoresistor@{Photoresistor}}
+\doxysubsubsection{\texorpdfstring{getResultBuffer()}{getResultBuffer()}}
+{\footnotesize\ttfamily uint\+\_\+fast16\+\_\+t \texorpdfstring{$\ast$}{*} get\+Result\+Buffer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Getter for results\+Buffer. 
+
+\begin{DoxyReturn}{Returns}
+results\+Buffer\+: pointer to result\+Buffer array. 
+\end{DoxyReturn}
+\Hypertarget{group___photoresistor___module_ga5f51d965bd21c67c5e338bb0ecf5c3d2}\label{group___photoresistor___module_ga5f51d965bd21c67c5e338bb0ecf5c3d2} 
+\index{Photoresistor@{Photoresistor}!photoresistorConverter@{photoresistorConverter}}
+\index{photoresistorConverter@{photoresistorConverter}!Photoresistor@{Photoresistor}}
+\doxysubsubsection{\texorpdfstring{photoresistorConverter()}{photoresistorConverter()}}
+{\footnotesize\ttfamily float photoresistor\+Converter (\begin{DoxyParamCaption}\item[{uint\+\_\+fast16\+\_\+t}]{sampled\+Value }\end{DoxyParamCaption})}
+
+
+
+Scales photoresistor value in a 0-\/100 scale. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sampled\+Value} & measured value of photoresistor resistance. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+scaled\+Value\+: photoresistor scaled value. 
+\end{DoxyReturn}

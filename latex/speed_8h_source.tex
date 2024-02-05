@@ -1,0 +1,30 @@
+\doxysection{speed.\+h}
+\hypertarget{speed_8h_source}{}\label{speed_8h_source}\mbox{\hyperlink{speed_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ \_\_SPEED\_H\_\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ \_\_SPEED\_H\_\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/*\ DriverLib\ Includes\ */}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <ti/devices/msp432p4xx/driverlib/driverlib.h>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{/*\ Standard\ Includes\ */}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{extern}\ \textcolor{keyword}{volatile}\ \textcolor{keywordtype}{bool}\ isrFlag;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group__speed___module_ga81cac9d54f7e26ae6ff3e9e8633f85dc}{setWheelDiameter}}(\textcolor{keywordtype}{float}\ userDiameter);}
+\DoxyCodeLine{00027\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{group__speed___module_ga36bdc446e9ae4502ab871d98815006db}{speedCompute}}(uint\_fast16\_t\ capturedValue);}
+\DoxyCodeLine{00028\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group__speed___module_ga84829048ccd77637b4be7583d3bcfd92}{timerInit}}(\textcolor{keyword}{const}\ Timer\_A\_ContinuousModeConfig*\ continuousModeConfig,\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ Timer\_A\_CaptureModeConfig*\ captureModeConfig);}
+\DoxyCodeLine{00030\ uint\_fast16\_t\ \mbox{\hyperlink{group__speed___module_gab8891b7a3741e00ce2a34fecda9c99b9}{getTimerAcapturedValue}}();}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ @\}}}
+\DoxyCodeLine{00034\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

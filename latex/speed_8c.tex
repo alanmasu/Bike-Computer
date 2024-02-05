@@ -1,0 +1,45 @@
+\doxysection{speed.\+c File Reference}
+\hypertarget{speed_8c}{}\label{speed_8c}\index{speed.c@{speed.c}}
+
+
+Speed functions implementation.  
+
+
+{\ttfamily \#include "{}speed.\+h"{}}\newline
+{\ttfamily \#include $<$ti/devices/msp432p4xx/driverlib/driverlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint\+\_\+fast16\+\_\+t \mbox{\hyperlink{group__speed___module_gab8891b7a3741e00ce2a34fecda9c99b9}{get\+Timer\+Acaptured\+Value}} ()
+\begin{DoxyCompactList}\small\item\em Getter for timer\+Acaptured\+Value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__speed___module_ga81cac9d54f7e26ae6ff3e9e8633f85dc}{set\+Wheel\+Diameter}} (float user\+Diameter)
+\begin{DoxyCompactList}\small\item\em Sets wheel diameter for this module. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{group__speed___module_ga36bdc446e9ae4502ab871d98815006db}{speed\+Compute}} (uint\+\_\+fast16\+\_\+t captured\+Value)
+\begin{DoxyCompactList}\small\item\em Computes speed using captured value from sensor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__speed___module_ga84829048ccd77637b4be7583d3bcfd92}{timer\+Init}} (const Timer\+\_\+\+A\+\_\+\+Continuous\+Mode\+Config \texorpdfstring{$\ast$}{*}continuous\+Mode\+Config, const Timer\+\_\+\+A\+\_\+\+Capture\+Mode\+Config \texorpdfstring{$\ast$}{*}capture\+Mode\+Config)
+\begin{DoxyCompactList}\small\item\em Initializes timer in continuous mode and capture mode and starts counter. \end{DoxyCompactList}\item 
+void {\bfseries TA0\+\_\+\+N\+\_\+\+IRQHandler} (void)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const float {\bfseries clock\+Frequency} = 46875.\+0
+\item 
+const float {\bfseries max\+Tick\+Val} = 65535.\+0
+\item 
+volatile bool {\bfseries isr\+Flag} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Speed functions implementation. 
+
+\begin{DoxyDate}{Date}
+29/01/2024 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Sofia Zandona\textquotesingle{} 
+\end{DoxyAuthor}
