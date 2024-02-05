@@ -25,7 +25,7 @@ extern Graphics_Context g_sContext;
 extern tRectangle mutipleData;
 extern tRectangle instSpeed;
 extern tRectangle tripTime;
-
+extern bool lcdNeedReflash;
 /*!
     @brief Enum used to implement page scrolling.
 */
