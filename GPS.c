@@ -59,6 +59,10 @@ GpsGSAData_t gpsGSAData;                    //!< GSA data
 GpsGSVData_t gpsGSVData;                    //!< GSV data
 GpsVTGData_t gpsVTGData;                    //!< VTG data
 
+//GPX Configuration
+static bool useTemp = true;                 //!< Use temperature flag
+static bool useCad = false;                 //!< Use cadence flag
+
 #ifndef SIMULATE_HARDWARE
 
 /**
@@ -532,13 +536,23 @@ GpsVTGData_t* getVTGData(void){
     return &gpsVTGData;
 }
 
+//Setter functions
+
+void useTemperature(bool use){
+    useTemp = use;
+}
+
+void useCadence(bool use){
+    useCad = use;
+}
+
 /*!
     @brief    Add point to GPX file from GPS data
     @details  This function adds a point to a GPX file from GPS data
     @param    file: GPX file
     @return   true if the point was added, false otherwise
 */
-bool addPointToGPXFromGPS(FILE_TYPE file){
+bool addPointToGPXFromGPS(FILE_TYPE file, float temp, float cadence){
     static bool fixOk = false;
     float hdop = atof(gpsGGAData.hdop);
     int fix = atoi(gpsGSAData.fix);
@@ -552,6 +566,24 @@ bool addPointToGPXFromGPS(FILE_TYPE file){
                                                                 gpsRMCData.timeInfo.tm_hour,
                                                                 gpsRMCData.timeInfo.tm_min,
                                                                 gpsRMCData.timeInfo.tm_sec);
+        if(useTemp && useCad){
+            GPXAddCompleteTrackPoint(file, gpsGGAData.latitude, gpsGGAData.longitude, gpsGGAData.altitude, timeString, temp, cadence);
+            return true;
+        }else if(useTemp){
+            GPXOpenTrackPoint(file, gpsGGAData.latitude, gpsGGAData.longitude, gpsGGAData.altitude, timeString);
+            GPXAddExtensionToPoint(file);
+            GPXAddTempToPoint(file, temp);
+            GPXCloseExtension(file);
+            GPXCloseTrackPoint(file);
+            return true;
+        }else if(useCad){
+            GPXOpenTrackPoint(file, gpsGGAData.latitude, gpsGGAData.longitude, gpsGGAData.altitude, timeString);
+            GPXAddExtensionToPoint(file);
+            GPXAddCadenceToPoint(file, cadence);
+            GPXCloseExtension(file);
+            GPXCloseTrackPoint(file);
+            return true;
+        }
         GPXAddTrackPoint(file, gpsGGAData.latitude, gpsGGAData.longitude, gpsGGAData.altitude, timeString);
         return true;
     }else{

@@ -120,7 +120,6 @@ typedef struct{
     char speed[8];                          //! Speed in km/h
 } GpsVTGData_t;
 
-
 //TODO: Remove this variables and create getter/setter functions
 extern volatile uint8_t gpsUartBuffer[RX_BUFFER_SIZE];
 extern volatile bool gpsStringEnd;
@@ -148,8 +147,13 @@ void getGpsData(int* sats, float* speed, float* altitude, float* hdop);
 // GpsGSVData_t* getGSVData(void);
 // GpsVTGData_t* getVTGData(void);
 
+//Setter functions
+void useCadence(bool use);
+void useTemperature(bool use);
+
 //Adding intrgration whit GPX module
-bool addPointToGPXFromGPS(FILE_TYPE file);
+bool addPointToGPXFromGPS(FILE_TYPE file, float temp, float cadence);
+
 
 /*! @} */ //End of GPS_Module
 

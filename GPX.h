@@ -40,7 +40,16 @@ void GPXAddTrack(FILE_TYPE file, const char* time);
 void GPXAddTrackSegment(FILE_TYPE file);
 void GPXAddNewTrackSegment(FILE_TYPE file);
 
+//Point manipulation
 void GPXAddTrackPoint(FILE_TYPE file, const char* lat, const char* lon, const char* ele, const char* time);
+void GPXOpenTrackPoint(FILE_TYPE file, const char* lat, const char* lon, const char* ele, const char* time);
+void GPXAddTempToPoint(FILE_TYPE file, float temp);
+void GPXAddCadenceToPoint(FILE_TYPE file, float cadence);
+void GPXAddExtensionToPoint(FILE_TYPE file);
+void GPXCloseExtension(FILE_TYPE file);
+void GPXCloseTrackPoint(FILE_TYPE file);
+void GPXAddCompleteTrackPoint(FILE_TYPE file, const char* lat, const char* lon, const char* ele, const char* time, float temp, float cadence);
+
 void GPXCloseTrackSegment(FILE_TYPE file);
 void GPXCloseTrack(FILE_TYPE file);
 void GPXCloseFile(FILE_TYPE file);

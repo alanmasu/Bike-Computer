@@ -277,7 +277,7 @@ void main(void){
     //            if(status && !btnStopStateP){
                 if(gpsAddPoint){
                     MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN0);
-                    bool pointAdded = addPointToGPXFromGPS(&GPX_TEST_FILE);
+                    bool pointAdded = addPointToGPXFromGPS(&GPX_TEST_FILE, 25, 0);
                     if(!pointAdded){
                         MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN0);
                     }
@@ -323,7 +323,7 @@ int main(void){
             case 'p':
                 PRINTF("Start!\r\n");
                 GPXInitFile(GPX, GPX_TEST_FILENAME);
-                GPXAddTrack(GPX, "Test Track", "Test Description", "2024-01-10T00:00:00Z");
+                GPXAddTrack(GPX, "Test Track", "2024-01-10T00:00:00Z");
                 GPXAddTrackSegment(GPX);
                 computerState = START;
                 break;
@@ -344,7 +344,7 @@ int main(void){
             char gpsData[RX_BUFFER_SIZE];
             fread(gpsData, sizeof(char), RX_BUFFER_SIZE, NMEA);
             gpsStringEnd = true;
-            addPointToGPXFromGPS(gpsData, &GPX);
+            addPointToGPXFromGPS(&GPX, rand()%30, rand()%30);
         }
     }while(computerState != STOP);
 	return 0;
