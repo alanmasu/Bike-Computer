@@ -63,10 +63,11 @@ void ADC14_IRQHandler(void)
         conRes = ((ADC14_getResult(ADC_MEM0) - cal30) * 55);
         Interrupt_disableSleepOnIsrExit();
     } else if (status & ADC_INT3) {
-        if(resultPos < 5) {
+        if(resultPos < LIGHT_BUFFER_LENGTH) {
             resultsBuffer[resultPos++] = MAP_ADC14_getResult(ADC_MEM3);
         } else {
             photoresFlag = true;
+            ++sendPos;
             MAP_Interrupt_disableSleepOnIsrExit();
         }
     }

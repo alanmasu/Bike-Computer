@@ -110,8 +110,8 @@ const Timer_A_ContinuousModeConfig speedContinuousModeConfig =
     const Timer_A_UpModeConfig photoresistorUpModeConfig =
     {
         TIMER_A_CLOCKSOURCE_ACLK,            // ACLK Clock Source
-        TIMER_A_CLOCKSOURCE_DIVIDER_32,
-        150,
+        TIMER_A_CLOCKSOURCE_DIVIDER_1,
+        100,
         TIMER_A_TAIE_INTERRUPT_ENABLE,       // Disable Timer ISR
         TIMER_A_CCIE_CCR0_INTERRUPT_DISABLE, // Disable CCR0
         TIMER_A_DO_CLEAR                     // Clear Counter
@@ -123,7 +123,7 @@ const Timer_A_ContinuousModeConfig speedContinuousModeConfig =
         TIMER_A_CAPTURECOMPARE_REGISTER_1,          // Use CCR1
         TIMER_A_CAPTURECOMPARE_INTERRUPT_DISABLE,   // Disable CCR interrupt
         TIMER_A_OUTPUTMODE_SET_RESET,               // Toggle output but
-        150                                         
+        100
     };
 
     const Timer_A_CaptureModeConfig speedCaptureModeConfig =
@@ -250,6 +250,7 @@ void main(void){
 	gpsDMAConfiguration();
 
     resultPos = 0;
+    sendPos = 0;
 
     timerInit(&speedContinuousModeConfig, &speedCaptureModeConfig);
 
@@ -300,7 +301,8 @@ void main(void){
     while(1){
 
         uint8_t i;
-        uint_fast16_t average = 0;
+        uint_fast16_t samplingAverage = 0;
+        uint_fast16_t lightToSendAverage = 0;
         float convertedAverage = 0;
 
         //if wheel has completed one round, compute speed and distance travelled
@@ -318,19 +320,32 @@ void main(void){
         //if 4 light values have been captured, calculate average value and scale it (0 to 1)
         if(photoresFlag){
             for(i=0; i<LIGHT_BUFFER_LENGTH; i++){
-                average = average + getResultBuffer()[i];
-//                printf("Value [%d]: %d\n",i,getResultBuffer()[i]);
+                samplingAverage = samplingAverage + getResultBuffer()[i];
+                // printf("resultBuffer[%d]: %d\n",i,getResultBuffer()[i]);
             }
-//            printf("\n");
+            //printf("\n");
+            // printf("samplingAverage: %d\n",samplingAverage);
+            samplingAverage /= LIGHT_BUFFER_LENGTH;
+            // printf("samplingAverage averaged: %d\n",samplingAverage);
 
-            average /= LIGHT_BUFFER_LENGTH;
-
-            convertedAverage = photoresistorConverter(average);
+            if(sendPos < 60){
+                lightToSend[sendPos] = samplingAverage;
+                //  printf("lightToSend[%d]: %d\n",sendPos, lightToSend[sendPos]);
+            } else {
+                printf("in else\n");
+                MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1,GPIO_PIN0);
+                for(i=0; i<MAX_LIGHT_SAMPLES; i++){
+                    lightToSendAverage += lightToSend[i];
+                }
+                lightToSendAverage /= MAX_LIGHT_SAMPLES;
+                // printf("lightToSendAverage averaged: %d\n",lightToSendAverage);
+                convertedAverage = photoresistorConverter(lightToSendAverage);
+                // printf("Converted average: %f \n\n",convertedAverage);
+                sendPos = 0;
+            }
             //ADC14_disableInterrupt(ADC_INT0);
             resultPos = 0;
-
-//            printf("Average: %d\n",average);
-//            printf("Converted average: %f \n\n",convertedAverage);
+//           printf("Average: %d\n",average);
 
             photoresFlag = false;
 

@@ -17,6 +17,7 @@
 #include <stdio.h>
 
 #define LIGHT_BUFFER_LENGTH 4
+#define MAX_LIGHT_SAMPLES   60
  
 /*!
     @defgroup   Photoresistor_Module Photoresistor
@@ -27,7 +28,9 @@
 extern volatile uint8_t resultPos;
 extern volatile bool photoresFlag;
 extern volatile uint_fast16_t resultsBuffer[LIGHT_BUFFER_LENGTH];
+extern volatile uint_fast16_t lightToSend[MAX_LIGHT_SAMPLES];
 extern volatile uint8_t resultPos;
+extern volatile uint8_t sendPos;
 
 uint_fast16_t* getResultBuffer();
 

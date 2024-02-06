@@ -22,7 +22,9 @@
 
 
 volatile uint_fast16_t resultsBuffer[LIGHT_BUFFER_LENGTH];  //!< Buffer to save sampled light values.
-volatile uint8_t resultPos;                                 //!< Keeps track of the occupied position in the buffer.
+volatile uint_fast16_t lightToSend[MAX_LIGHT_SAMPLES];
+volatile uint8_t resultPos; 
+volatile uint8_t sendPos;                                  //!< Keeps track of the occupied position in the buffer.
 volatile bool photoresFlag = false;                         //!< Flag to arise when 4 light values are sampled.
 
 /*!
@@ -70,18 +72,18 @@ void ADC14Init(const Timer_A_UpModeConfig* upModeConfig,
 
     /* Configuring GPIOs (5.4 A0) */
     MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P5, GPIO_PIN4, GPIO_TERTIARY_MODULE_FUNCTION);
-MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P6, GPIO_PIN0, GPIO_TERTIARY_MODULE_FUNCTION);
-MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P4, GPIO_PIN4, GPIO_TERTIARY_MODULE_FUNCTION);
+    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P6, GPIO_PIN0, GPIO_TERTIARY_MODULE_FUNCTION);
+    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P4, GPIO_PIN4, GPIO_TERTIARY_MODULE_FUNCTION);
 
     /* Configuring ADC Memory */
     //MAP_ADC14_configureSingleSampleMode(ADC_MEM3, true);
+    //MAP_ADC14_configureConversionMemory(ADC_MEM3, ADC_VREFPOS_AVCC_VREFNEG_VSS, ADC_INPUT_A1, false);
+    //MAP_ADC14_configureMultiSequenceMode(ADC_MEM0, ADC_MEM2, true);
+    MAP_ADC14_configureMultiSequenceMode(ADC_MEM0, ADC_MEM3, true);
+    MAP_ADC14_configureConversionMemory(ADC_MEM0, ADC_VREFPOS_INTBUF_VREFNEG_VSS, ADC_INPUT_A22, false);
+    MAP_ADC14_configureConversionMemory(ADC_MEM1, ADC_VREFPOS_AVCC_VREFNEG_VSS, ADC_INPUT_A15, false);
+    MAP_ADC14_configureConversionMemory(ADC_MEM2, ADC_VREFPOS_AVCC_VREFNEG_VSS, ADC_INPUT_A9, false);
     MAP_ADC14_configureConversionMemory(ADC_MEM3, ADC_VREFPOS_AVCC_VREFNEG_VSS, ADC_INPUT_A1, false);
-//MAP_ADC14_configureMultiSequenceMode(ADC_MEM0, ADC_MEM2, true);
-MAP_ADC14_configureMultiSequenceMode(ADC_MEM0, ADC_MEM3, true);
-MAP_ADC14_configureConversionMemory(ADC_MEM0, ADC_VREFPOS_INTBUF_VREFNEG_VSS, ADC_INPUT_A22, false);
-MAP_ADC14_configureConversionMemory(ADC_MEM1, ADC_VREFPOS_AVCC_VREFNEG_VSS, ADC_INPUT_A15, false);
-MAP_ADC14_configureConversionMemory(ADC_MEM2, ADC_VREFPOS_AVCC_VREFNEG_VSS, ADC_INPUT_A9, false);
-MAP_ADC14_configureConversionMemory(ADC_MEM3, ADC_VREFPOS_AVCC_VREFNEG_VSS, ADC_INPUT_A1, false);
 
     /* Configuring Timer_A in continuous mode and sourced from ACLK */
     MAP_Timer_A_configureUpMode(TIMER_A2_BASE, upModeConfig);
@@ -96,8 +98,8 @@ MAP_ADC14_configureConversionMemory(ADC_MEM3, ADC_VREFPOS_AVCC_VREFNEG_VSS, ADC_
     /* Enabling the interrupt when a conversion on channel 1 is complete and
      * enabling conversions */
     MAP_ADC14_enableInterrupt(ADC_INT3);
-MAP_ADC14_enableInterrupt(ADC_INT0);
-MAP_ADC14_enableInterrupt(ADC_INT1);
+    MAP_ADC14_enableInterrupt(ADC_INT0);
+    //MAP_ADC14_enableInterrupt(ADC_INT1);
 
     MAP_ADC14_enableConversion();
     MAP_Interrupt_enableInterrupt(INT_ADC14);
