@@ -30,7 +30,7 @@
                   -------------------
              @endcode
  	@date       03/02/2024
-    @authors    Federica Lorenzini, Alan Masutti, Sofia Zandonà
+    @authors    Federica Lorenzini, Alan Masutti, Sofia Zandonà, Alberto Dal Bosco
  */
 
 #ifndef SIMULATE_HARDWARE
@@ -54,9 +54,20 @@
     //speed-photoresistor
     #include "photoresistor.h"
     #include "speed.h"
+    //BSS
+    #include "HAL_I2C.h"
+    #include "MPU6050.h"
+    #include "BSS.h"
 
 #else
 	#include <stdlib.h>
+    #include <unistd.h>
+    // seconds between readings in test scaffold mode. 10 is the lower value to be able to read all info.
+    #define INTERVAL_BETWEEN_READING_TEST   10              
+    #include <stdio.h>
+    #include <stdint.h>
+    #include <time.h>
+    #include "BSS.h"
 #endif
 
 //Standard includes
@@ -136,6 +147,17 @@ const Timer_A_ContinuousModeConfig speedContinuousModeConfig =
         TIMER_A_OUTPUTMODE_OUTBITVALUE            // Output bit value
     };
 
+    // THIS TIMER IS FOR LED FLASHING   --> Timer_A Up Configuration Parameter
+    const Timer_A_UpModeConfig bssUpConfig =
+    {
+        TIMER_A_CLOCKSOURCE_ACLK,               // ACLK = 32,768 KhZ
+        TIMER_A_CLOCKSOURCE_DIVIDER_32,         // ACLK/32 = 1 KhZ --> 1 tick = 1 millisecond
+        150,                                    // generate interrupt every 150 millisecond == 150 tick
+        TIMER_A_TAIE_INTERRUPT_DISABLE,         // Disable Timer interrupt
+        TIMER_A_CCIE_CCR0_INTERRUPT_ENABLE,     // Enable CCR0 interrupt
+        TIMER_A_DO_CLEAR                        // Clear value
+    };
+
 //Buttons defines
 #define BTN_START_PORT      GPIO_PORT_P5
 #define BTN_START_PIN       GPIO_PIN1
@@ -211,6 +233,8 @@ bool btnStopStateP = true;
                 so if the file test.gpx alredy exists then the "test1.gpx" will be created.
 */
 void main(void){
+    model_t* model = get_model();
+    model->class = CLASS_IDLE;
     //Variables
     //FILE
     bool defaultFile = true;
@@ -219,6 +243,7 @@ void main(void){
     bool status;
     //GPS
     bool gpsAddPoint = false;
+
 
 
     WDT_A_holdTimer();	// stop watchdog timer
@@ -298,12 +323,22 @@ void main(void){
     temperatureInit();
     ADC14Init(&photoresistorUpModeConfig, &photoresistorCompareConfig);
 
-    while(1){
+    //BSS Init();
+    _BSSInit(&bssUpConfig);
+    Interrupt_enableMaster();   // Enabling MASTER interrupts
 
-        uint8_t i;
-        uint_fast16_t samplingAverage = 0;
-        uint_fast16_t lightToSendAverage = 0;
-        float convertedAverage = 0;
+    uint8_t i;
+    uint_fast16_t samplingAverage = 0;
+    uint_fast16_t lightToSendAverage = 0;
+
+    while(1){ 
+
+        // BSS functions
+        acquire_window(model);
+        compute(model);
+        classify(model);
+
+        id = MPU6050_readDeviceId();
 
         //if wheel has completed one round, compute speed and distance travelled
         if(speedFlag){
@@ -339,7 +374,7 @@ void main(void){
                 }
                 lightToSendAverage /= MAX_LIGHT_SAMPLES;
                 // printf("lightToSendAverage averaged: %d\n",lightToSendAverage);
-                convertedAverage = photoresistorConverter(lightToSendAverage);
+                set_light(photoresistorConverter(lightToSendAverage));
                 // printf("Converted average: %f \n\n",convertedAverage);
                 sendPos = 0;
             }
@@ -518,6 +553,18 @@ int main(void){
     }
     GPX = fopen(GPX_TEST_FILENAME, "w");
     do{
+        fflush(stdout);
+        srand(time(NULL));
+        
+        while(1){
+            acquire_window(&model);
+            compute(&model);
+            classify(&model);
+            print_model(&model);
+            execute(model.class);
+            sleep(10);
+        }
+        return 0;
         PRINTF("Get command: P/s [Play/Stop]\r\n");
         fflush(stdin);
         char cmd = getchar();

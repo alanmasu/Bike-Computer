@@ -43,10 +43,10 @@ uint_fast16_t* getResultBuffer(){
 float photoresistorConverter(uint_fast16_t sampledValue){
     //min val = 0
     //max val = 16384
-    //returns value from 0 to 1
+    //returns value from 0 to 100
 
     float maxValue = 16384;
-    float scaledValue = sampledValue / maxValue;
+    float scaledValue = (sampledValue*100) / maxValue;
 
     return scaledValue;
 
