@@ -177,7 +177,7 @@ const char* get_class_name(class_t class_enum) {
 
 double read_light_value(){
     // TODO: this function is implemented by Sofia (NOT FOR TEST SCAFFOLD)
-    return 20.0;
+    return 50.0;
     //randomNum(0, 100);
 }
 
