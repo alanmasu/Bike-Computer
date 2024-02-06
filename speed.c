@@ -55,6 +55,13 @@ float distanceCovered(){
 }
 
 /*!
+    @brief    Resets rounds counter to reset distance.
+*/
+void resetRoundsCounter(){
+    roundsCounter = 0;
+}
+
+/*!
     @brief    Computes speed using captured value from sensor.
     @param    capturedValue: number of timer ticks saved in capture register when interrupt is triggered.
     @return   speedKmH: bike speed measured in km/h.

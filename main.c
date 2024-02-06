@@ -332,7 +332,7 @@ void main(void){
                 lightToSend[sendPos] = samplingAverage;
                 //  printf("lightToSend[%d]: %d\n",sendPos, lightToSend[sendPos]);
             } else {
-                printf("in else\n");
+                // printf("in else\n");
                 MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1,GPIO_PIN0);
                 for(i=0; i<MAX_LIGHT_SAMPLES; i++){
                     lightToSendAverage += lightToSend[i];
