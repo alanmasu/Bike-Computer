@@ -46,7 +46,7 @@ float photoresistorConverter(uint_fast16_t sampledValue){
     //returns value from 0 to 100
 
     float maxValue = 16384;
-    float scaledValue = (sampledValue*100) / maxValue;
+    float scaledValue = (sampledValue*100.0) / maxValue;
 
     return scaledValue;
 
@@ -86,14 +86,14 @@ void ADC14Init(const Timer_A_UpModeConfig* upModeConfig,
     MAP_ADC14_configureConversionMemory(ADC_MEM3, ADC_VREFPOS_AVCC_VREFNEG_VSS, ADC_INPUT_A1, false);
 
     /* Configuring Timer_A in continuous mode and sourced from ACLK */
-    MAP_Timer_A_configureUpMode(TIMER_A2_BASE, upModeConfig);
+    MAP_Timer_A_configureUpMode(TIMER_A3_BASE, upModeConfig);
 
     /* Configuring Timer_A0 in CCR1 to trigger at 16000 (0.5s) */
-    MAP_Timer_A_initCompare(TIMER_A2_BASE, compareConfig);
+    MAP_Timer_A_initCompare(TIMER_A3_BASE, compareConfig);
 
     /* Configuring the sample trigger to be sourced from Timer_A2  and setting it
      * to automatic iteration after it is triggered*/
-    MAP_ADC14_setSampleHoldTrigger(ADC_TRIGGER_SOURCE5, false);
+    MAP_ADC14_setSampleHoldTrigger(ADC_TRIGGER_SOURCE7, false);
 
     /* Enabling the interrupt when a conversion on channel 1 is complete and
      * enabling conversions */
@@ -103,7 +103,7 @@ void ADC14Init(const Timer_A_UpModeConfig* upModeConfig,
 
     MAP_ADC14_enableConversion();
     MAP_Interrupt_enableInterrupt(INT_ADC14);
-    MAP_Timer_A_startCounter(TIMER_A2_BASE, TIMER_A_UP_MODE);
+    MAP_Timer_A_startCounter(TIMER_A3_BASE, TIMER_A_UP_MODE);
 }
 
 
