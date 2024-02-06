@@ -47,10 +47,10 @@ void setWheelDiameter(float userDiameter){
 
 /*!
     @brief    Computes distance covered since wheel starts moving.
-    @return   distance: distance covered in meter.
+    @return   distance: distance covered in km.
 */
 float distanceCovered(){
-    float distance = wheelCircumference * roundsCounter;        //metri
+    float distance = (wheelCircumference/1000.0) * roundsCounter;        //km
     return distance;
 }
 
