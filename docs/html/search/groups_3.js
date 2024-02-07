@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['photoresistor_0',['Photoresistor',['../group___photoresistor___module.html',1,'']]]
+  ['i2c_0',['I2C',['../group___i2_c__module.html',1,'']]]
 ];

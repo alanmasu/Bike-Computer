@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['page_5ft_0',['Page_t',['../group___l_c_d__module.html#ga2b814679f4741865872a271f8c6e104c',1,'mainInterface.h']]]
+  ['class_5ft_0',['class_t',['../group___b_s_s__module.html#ga17c986b35a3279592149e28dd4be4b67',1,'BSS.h']]]
 ];

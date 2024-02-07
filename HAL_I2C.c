@@ -1,5 +1,17 @@
+/*!
+    @file   HAL_I2C.c
+    @brief  Defining main functions for I2C communication between accelerometer and odometer
+    @date   11/11/2023
+    @author Alberto Dal Bosco
+*/
+
 #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
 #include "HAL_I2C.h"
+
+/*!
+    @addtogroup I2C_module
+    @{
+*/
 
 // I2C Master Configuration Parameter
 const eUSCI_I2C_MasterConfig i2cConfig = {
@@ -192,3 +204,7 @@ void I2C_setslave(unsigned int slaveAdr)
     /* Enable and clear the interrupt flag */
     I2C_clearInterruptFlag(EUSCI_B1_BASE, EUSCI_B_I2C_TRANSMIT_INTERRUPT0 + EUSCI_B_I2C_RECEIVE_INTERRUPT0);
 }
+
+/*
+    @}
+*/

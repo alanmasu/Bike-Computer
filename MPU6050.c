@@ -1,8 +1,19 @@
+/*!
+    @file   MPU6050.c
+    @brief  Implementing main functions for MPU5060 module and functions for reading ID and accelerations from sensor 
+    @date   12/12/2023
+    @author Alberto Dal Bosco
+*/
+
 #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
 #include "MPU6050.h"
 #include "HAL_I2C.h"
 #include "math.h"
 
+/*!
+    @addtogroup MPU6050_module
+    @{
+*/
 
 void MPU6050_init(void)
 {
@@ -76,3 +87,7 @@ double MPU6050_readTemp_chip(void)
     temp_value_7_0 = I2C_read8(TEMP_OUT_LS_REG);
     return (double) (signed)((temp_value_15_8 << 8) | temp_value_7_0 ) / 340.0 + 36.53;
 }
+
+/*
+    @}
+*/
