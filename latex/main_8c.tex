@@ -1,0 +1,116 @@
+\doxysection{main.\+c File Reference}
+\hypertarget{main_8c}{}\label{main_8c}\index{main.c@{main.c}}
+
+
+Photoresistance value captured and scaled, measuring of wheel speed.  
+
+
+{\ttfamily \#include $<$ti/devices/msp432p4xx/driverlib/driverlib.\+h$>$}\newline
+{\ttfamily \#include "{}photoresistor.\+h"{}}\newline
+{\ttfamily \#include "{}speed.\+h"{}}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{main_8c_a840291bc02cba5474a4cb46a9b9566fe}\label{main_8c_a840291bc02cba5474a4cb46a9b9566fe} 
+int {\bfseries main} (void)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const Timer\+\_\+\+A\+\_\+\+Continuous\+Mode\+Config \mbox{\hyperlink{main_8c_ab9df0b4cbb7f65bed60ec7b8bd4bc7f5}{speed\+Continuous\+Mode\+Config}}
+\item 
+const Timer\+\_\+\+A\+\_\+\+Up\+Mode\+Config \mbox{\hyperlink{main_8c_a3747698c8fa60008f1fc71be7b161198}{photoresistor\+Up\+Mode\+Config}}
+\item 
+const Timer\+\_\+\+A\+\_\+\+Compare\+Mode\+Config \mbox{\hyperlink{main_8c_abfc23f45efe05df0ab89dcfdb0e650b9}{photoresistor\+Compare\+Config}}
+\item 
+const Timer\+\_\+\+A\+\_\+\+Capture\+Mode\+Config \mbox{\hyperlink{main_8c_aa295b16893d419de9dc5d25bab4b9d94}{speed\+Capture\+Mode\+Config}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Photoresistance value captured and scaled, measuring of wheel speed. 
+
+\begin{DoxyDate}{Date}
+29/01/2024 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Sofia Zandona\textquotesingle{} 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{main_8c_abfc23f45efe05df0ab89dcfdb0e650b9}\label{main_8c_abfc23f45efe05df0ab89dcfdb0e650b9} 
+\index{main.c@{main.c}!photoresistorCompareConfig@{photoresistorCompareConfig}}
+\index{photoresistorCompareConfig@{photoresistorCompareConfig}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{photoresistorCompareConfig}{photoresistorCompareConfig}}
+{\footnotesize\ttfamily const Timer\+\_\+\+A\+\_\+\+Compare\+Mode\+Config photoresistor\+Compare\+Config}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_CAPTURECOMPARE\_REGISTER\_1,\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_CAPTURECOMPARE\_INTERRUPT\_DISABLE,\ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_OUTPUTMODE\_SET\_RESET,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\Hypertarget{main_8c_a3747698c8fa60008f1fc71be7b161198}\label{main_8c_a3747698c8fa60008f1fc71be7b161198} 
+\index{main.c@{main.c}!photoresistorUpModeConfig@{photoresistorUpModeConfig}}
+\index{photoresistorUpModeConfig@{photoresistorUpModeConfig}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{photoresistorUpModeConfig}{photoresistorUpModeConfig}}
+{\footnotesize\ttfamily const Timer\+\_\+\+A\+\_\+\+Up\+Mode\+Config photoresistor\+Up\+Mode\+Config}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_CLOCKSOURCE\_ACLK,\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_CLOCKSOURCE\_DIVIDER\_32,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 150,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_TAIE\_INTERRUPT\_ENABLE,\ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_CCIE\_CCR0\_INTERRUPT\_DISABLE,\ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_DO\_CLEAR\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\Hypertarget{main_8c_aa295b16893d419de9dc5d25bab4b9d94}\label{main_8c_aa295b16893d419de9dc5d25bab4b9d94} 
+\index{main.c@{main.c}!speedCaptureModeConfig@{speedCaptureModeConfig}}
+\index{speedCaptureModeConfig@{speedCaptureModeConfig}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{speedCaptureModeConfig}{speedCaptureModeConfig}}
+{\footnotesize\ttfamily const Timer\+\_\+\+A\+\_\+\+Capture\+Mode\+Config speed\+Capture\+Mode\+Config}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_CAPTURECOMPARE\_REGISTER\_2,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_CAPTUREMODE\_RISING\_EDGE,\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_CAPTURE\_INPUTSELECT\_CCIxA,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_CAPTURE\_SYNCHRONOUS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_CAPTURECOMPARE\_INTERRUPT\_ENABLE,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_OUTPUTMODE\_OUTBITVALUE\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\Hypertarget{main_8c_ab9df0b4cbb7f65bed60ec7b8bd4bc7f5}\label{main_8c_ab9df0b4cbb7f65bed60ec7b8bd4bc7f5} 
+\index{main.c@{main.c}!speedContinuousModeConfig@{speedContinuousModeConfig}}
+\index{speedContinuousModeConfig@{speedContinuousModeConfig}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{speedContinuousModeConfig}{speedContinuousModeConfig}}
+{\footnotesize\ttfamily const Timer\+\_\+\+A\+\_\+\+Continuous\+Mode\+Config speed\+Continuous\+Mode\+Config}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TIMER\_A\_CLOCKSOURCE\_SMCLK,\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ TIMER\_A\_CLOCKSOURCE\_DIVIDER\_64,\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ TIMER\_A\_TAIE\_INTERRUPT\_ENABLE,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ TIMER\_A\_SKIP\_CLEAR}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}

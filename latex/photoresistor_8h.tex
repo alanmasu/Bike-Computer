@@ -1,0 +1,39 @@
+\doxysection{photoresistor.\+h File Reference}
+\hypertarget{photoresistor_8h}{}\label{photoresistor_8h}\index{photoresistor.h@{photoresistor.h}}
+
+
+Photoresistor functions definition.  
+
+
+{\ttfamily \#include $<$ti/devices/msp432p4xx/driverlib/driverlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{photoresistor_8h_a2ff1c306034ff93da89b6f586493fbbe}\label{photoresistor_8h_a2ff1c306034ff93da89b6f586493fbbe} 
+\#define {\bfseries LIGHT\+\_\+\+BUFFER\+\_\+\+LENGTH}~4
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Photoresistor Module}
+\begin{DoxyCompactItemize}
+\item 
+volatile uint8\+\_\+t {\bfseries result\+Pos}
+\item 
+uint\+\_\+fast16\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{group___photoresistor___module_ga102b8a8ef35876f6c375c472be475765}{get\+Result\+Buffer}} ()
+\begin{DoxyCompactList}\small\item\em Getter for results\+Buffer. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{group___photoresistor___module_ga5f51d965bd21c67c5e338bb0ecf5c3d2}{photoresistor\+Converter}} (uint\+\_\+fast16\+\_\+t sampled\+Value)
+\begin{DoxyCompactList}\small\item\em Scales photoresistor value in a 0-\/100 scale. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___photoresistor___module_ga434fa178dcefee1f9b16a0d62e821280}{ADC14\+Init}} (const Timer\+\_\+\+A\+\_\+\+Up\+Mode\+Config \texorpdfstring{$\ast$}{*}up\+Mode\+Config, const Timer\+\_\+\+A\+\_\+\+Compare\+Mode\+Config \texorpdfstring{$\ast$}{*}compare\+Config)
+\begin{DoxyCompactList}\small\item\em Initializes ADC14 with timer trigger and in multisequence mode. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Photoresistor functions definition. 
+
+\begin{DoxyDate}{Date}
+29/01/2024 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Sofia Zandona\textquotesingle{} 
+\end{DoxyAuthor}
