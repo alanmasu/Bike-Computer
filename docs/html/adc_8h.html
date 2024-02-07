@@ -72,7 +72,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a>  </div>
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">adc.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -80,6 +80,7 @@ $(function() {
 <p>Header file for ADC initialization.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="main_interface_8h_source.html">mainInterface.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="temperature_8h_source.html">temperature.h</a>&quot;</code><br />
 <code>#include &lt;ti/devices/msp432p4xx/inc/msp.h&gt;</code><br />
 <code>#include &lt;ti/devices/msp432p4xx/driverlib/driverlib.h&gt;</code><br />
 <code>#include &lt;ti/grlib/grlib.h&gt;</code><br />
@@ -90,12 +91,15 @@ $(function() {
 </div>
 <p><a href="adc_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:ga27c5e947cca4b8e98323253543557b23" id="r_ga27c5e947cca4b8e98323253543557b23"><td class="memItemLeft" align="right" valign="top">
-void&#160;</td><td class="memItemRight" valign="bottom"><b>adcInit</b> ()</td></tr>
-<tr class="memdesc:ga27c5e947cca4b8e98323253543557b23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inizialitation of ADC module. <br /></td></tr>
-<tr class="separator:ga27c5e947cca4b8e98323253543557b23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:gafab9c2b72fb74b7cc658f1ccd1d0ecf0" id="r_gafab9c2b72fb74b7cc658f1ccd1d0ecf0"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_d_c__module.html#gafab9c2b72fb74b7cc658f1ccd1d0ecf0">flagTemp</a></td></tr>
+<tr class="memdesc:gafab9c2b72fb74b7cc658f1ccd1d0ecf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inizialitation of ADC module.  <br /></td></tr>
+<tr class="separator:gafab9c2b72fb74b7cc658f1ccd1d0ecf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf5f4e51cd909ce10579e10403ebe32e4" id="r_gaf5f4e51cd909ce10579e10403ebe32e4"><td class="memItemLeft" align="right" valign="top">
+volatile int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>conRes</b></td></tr>
+<tr class="memdesc:gaf5f4e51cd909ce10579e10403ebe32e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intermediate temperature value sampled from ADC unit. <br /></td></tr>
+<tr class="separator:gaf5f4e51cd909ce10579e10403ebe32e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Header file for ADC initialization. </p>

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['timeinfo_0',['timeInfo',['../struct_gps_r_m_c_data__t.html#a90e1a665725065c5b4c67c5c842fb338',1,'GpsRMCData_t']]]
+  ['pdop_0',['pdop',['../struct_gps_g_s_a_data__t.html#a4e73dd2f23abeb96b779e9ace5d13af8',1,'GpsGSAData_t']]],
+  ['photoresflag_1',['photoresFlag',['../group___photoresistor___module.html#ga2780f9ceb5e1f34bc663e183c2ae8438',1,'photoresFlag:&#160;photoresistor.c'],['../group___photoresistor___module.html#ga2780f9ceb5e1f34bc663e183c2ae8438',1,'photoresFlag:&#160;photoresistor.c']]]
 ];

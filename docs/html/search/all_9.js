@@ -1,10 +1,6 @@
 var searchData=
 [
-<<<<<<< HEAD
-  ['main_0',['main',['../main_8c.html#a6288eba0f8e8ad3ab1544ad731eb7667',1,'main.c']]],
-  ['main_2ec_1',['main.c',['../main_8c.html',1,'']]]
-=======
-  ['page_5ft_0',['Page_t',['../group___l_c_d__module.html#ga2b814679f4741865872a271f8c6e104c',1,'mainInterface.h']]],
-  ['project_20documentation_1',['Project Documentation',['../index.html#autotoc_md1',1,'']]]
->>>>>>> LCD-Temperature
+  ['latitude_0',['latitude',['../struct_gps_g_g_a_data__t.html#ac9dc11490843e74fae5bd8e789e866a5',1,'GpsGGAData_t::latitude'],['../struct_gps_r_m_c_data__t.html#ac9dc11490843e74fae5bd8e789e866a5',1,'GpsRMCData_t::latitude']]],
+  ['lcd_1',['LCD',['../group___l_c_d__module.html',1,'']]],
+  ['longitude_2',['longitude',['../struct_gps_g_g_a_data__t.html#a9d5d63fe6c893acdcbcb6022dfa34c18',1,'GpsGGAData_t::longitude'],['../struct_gps_r_m_c_data__t.html#a9d5d63fe6c893acdcbcb6022dfa34c18',1,'GpsRMCData_t::longitude']]]
 ];

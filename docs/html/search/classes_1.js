@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['satdata_5ft_0',['SatData_t',['../struct_sat_data__t.html',1,'']]]
+  ['model_5ft_0',['model_t',['../structmodel__t.html',1,'']]]
 ];

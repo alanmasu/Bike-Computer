@@ -72,19 +72,79 @@ $(function() {
 
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">ADC</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga27c5e947cca4b8e98323253543557b23" id="r_ga27c5e947cca4b8e98323253543557b23"><td class="memItemLeft" align="right" valign="top"><a id="ga27c5e947cca4b8e98323253543557b23" name="ga27c5e947cca4b8e98323253543557b23"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>adcInit</b> ()</td></tr>
-<tr class="memdesc:ga27c5e947cca4b8e98323253543557b23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inizialitation of ADC module. <br /></td></tr>
-<tr class="separator:ga27c5e947cca4b8e98323253543557b23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9fa2875556d48df2ba3c9c148667b8f5" id="r_ga9fa2875556d48df2ba3c9c148667b8f5"><td class="memItemLeft" align="right" valign="top"><a id="ga9fa2875556d48df2ba3c9c148667b8f5" name="ga9fa2875556d48df2ba3c9c148667b8f5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ADC14_IRQHandler</b> (void)</td></tr>
+<tr class="separator:ga9fa2875556d48df2ba3c9c148667b8f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:gafab9c2b72fb74b7cc658f1ccd1d0ecf0" id="r_gafab9c2b72fb74b7cc658f1ccd1d0ecf0"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gafab9c2b72fb74b7cc658f1ccd1d0ecf0">flagTemp</a></td></tr>
+<tr class="memdesc:gafab9c2b72fb74b7cc658f1ccd1d0ecf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to arise if a new temperature value is sampled.  <br /></td></tr>
+<tr class="separator:gafab9c2b72fb74b7cc658f1ccd1d0ecf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf5f4e51cd909ce10579e10403ebe32e4" id="r_gaf5f4e51cd909ce10579e10403ebe32e4"><td class="memItemLeft" align="right" valign="top"><a id="gaf5f4e51cd909ce10579e10403ebe32e4" name="gaf5f4e51cd909ce10579e10403ebe32e4"></a>
+volatile int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>conRes</b></td></tr>
+<tr class="memdesc:gaf5f4e51cd909ce10579e10403ebe32e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intermediate temperature value sampled from ADC unit. <br /></td></tr>
+<tr class="separator:gaf5f4e51cd909ce10579e10403ebe32e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafab9c2b72fb74b7cc658f1ccd1d0ecf0" id="r_gafab9c2b72fb74b7cc658f1ccd1d0ecf0"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gafab9c2b72fb74b7cc658f1ccd1d0ecf0">flagTemp</a></td></tr>
+<tr class="memdesc:gafab9c2b72fb74b7cc658f1ccd1d0ecf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inizialitation of ADC module.  <br /></td></tr>
+<tr class="separator:gafab9c2b72fb74b7cc658f1ccd1d0ecf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf5f4e51cd909ce10579e10403ebe32e4" id="r_gaf5f4e51cd909ce10579e10403ebe32e4"><td class="memItemLeft" align="right" valign="top"><a id="gaf5f4e51cd909ce10579e10403ebe32e4" name="gaf5f4e51cd909ce10579e10403ebe32e4"></a>
+volatile int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>conRes</b></td></tr>
+<tr class="memdesc:gaf5f4e51cd909ce10579e10403ebe32e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intermediate temperature value sampled from ADC unit. <br /></td></tr>
+<tr class="separator:gaf5f4e51cd909ce10579e10403ebe32e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="gafab9c2b72fb74b7cc658f1ccd1d0ecf0" name="gafab9c2b72fb74b7cc658f1ccd1d0ecf0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafab9c2b72fb74b7cc658f1ccd1d0ecf0">&#9670;&#160;</a></span>flagTemp <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool flagTemp</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Flag to arise if a new temperature value is sampled. </p>
+<p>Inizialitation of ADC module. </p>
+
+</div>
+</div>
+<a id="gafab9c2b72fb74b7cc658f1ccd1d0ecf0" name="gafab9c2b72fb74b7cc658f1ccd1d0ecf0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafab9c2b72fb74b7cc658f1ccd1d0ecf0">&#9670;&#160;</a></span>flagTemp <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool flagTemp</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Inizialitation of ADC module. </p>
+<p>Inizialitation of ADC module. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

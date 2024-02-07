@@ -135,20 +135,38 @@ Functions</h2></td></tr>
 <tr class="memitem:ga6ccdb8245b89ca23840ec02d748c6ddf" id="r_ga6ccdb8245b89ca23840ec02d748c6ddf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___g_p_s___module.html#ga6ccdb8245b89ca23840ec02d748c6ddf">gpsParseData</a> (const char *packet)</td></tr>
 <tr class="memdesc:ga6ccdb8245b89ca23840ec02d748c6ddf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse GPS data.  <br /></td></tr>
 <tr class="separator:ga6ccdb8245b89ca23840ec02d748c6ddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8933e0536c24ee3aa945ac05ea3ba401" id="r_ga8933e0536c24ee3aa945ac05ea3ba401"><td class="memItemLeft" align="right" valign="top">
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>addPointToGPXFromGPS</b> (char *gpsData, FILE_TYPE file)</td></tr>
-<tr class="separator:ga8933e0536c24ee3aa945ac05ea3ba401"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7667dd97bacc32c0c65e84522500ff49" id="r_ga7667dd97bacc32c0c65e84522500ff49"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>getGpsData</b> (int *sats, float *gpsSpeed, float *gpsAltitude, float *gpsHdop)</td></tr>
+<tr class="separator:ga7667dd97bacc32c0c65e84522500ff49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga03fb3e1e17a226c951e4b7a2c9d861ef" id="r_ga03fb3e1e17a226c951e4b7a2c9d861ef"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="struct_gps_g_g_a_data__t.html">GpsGGAData_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getGGAData</b> (void)</td></tr>
+<tr class="separator:ga03fb3e1e17a226c951e4b7a2c9d861ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga074494a349f6a41586cec0a2b45f1cb3" id="r_ga074494a349f6a41586cec0a2b45f1cb3"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="struct_gps_r_m_c_data__t.html">GpsRMCData_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getRMCData</b> (void)</td></tr>
+<tr class="separator:ga074494a349f6a41586cec0a2b45f1cb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8883426a8b2d2b1185e45f68de41046b" id="r_ga8883426a8b2d2b1185e45f68de41046b"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="struct_gps_g_s_a_data__t.html">GpsGSAData_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getGSAData</b> (void)</td></tr>
+<tr class="separator:ga8883426a8b2d2b1185e45f68de41046b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa6b723f6e44385a29e4cc851b7bb5831" id="r_gaa6b723f6e44385a29e4cc851b7bb5831"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="struct_gps_g_s_v_data__t.html">GpsGSVData_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getGSVData</b> (void)</td></tr>
+<tr class="separator:gaa6b723f6e44385a29e4cc851b7bb5831"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaee90d232e5c5f217faea0464a68bb6b4" id="r_gaee90d232e5c5f217faea0464a68bb6b4"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="struct_gps_v_t_g_data__t.html">GpsVTGData_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getVTGData</b> (void)</td></tr>
+<tr class="separator:gaee90d232e5c5f217faea0464a68bb6b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2d57fd24699b437dc44e3b46b5db7fba" id="r_ga2d57fd24699b437dc44e3b46b5db7fba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___g_p_s___module.html#ga2d57fd24699b437dc44e3b46b5db7fba">addPointToGPXFromGPS</a> (FILE_TYPE file)</td></tr>
+<tr class="memdesc:ga2d57fd24699b437dc44e3b46b5db7fba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add point to GPX file from GPS data.  <br /></td></tr>
+<tr class="separator:ga2d57fd24699b437dc44e3b46b5db7fba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ga428a3f6ad42b2c5727e262e8d33e1c56" id="r_ga428a3f6ad42b2c5727e262e8d33e1c56"><td class="memItemLeft" align="right" valign="top">
-volatile uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>uartData</b> [RX_BUFFER_SIZE]</td></tr>
-<tr class="memdesc:ga428a3f6ad42b2c5727e262e8d33e1c56"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPS UART RX buffer. <br /></td></tr>
-<tr class="separator:ga428a3f6ad42b2c5727e262e8d33e1c56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga39f4a5757801683c2262327235bf9398" id="r_ga39f4a5757801683c2262327235bf9398"><td class="memItemLeft" align="right" valign="top">
-volatile bool&#160;</td><td class="memItemRight" valign="bottom"><b>stringEnd</b> = false</td></tr>
-<tr class="memdesc:ga39f4a5757801683c2262327235bf9398"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag for end of string. <br /></td></tr>
-<tr class="separator:ga39f4a5757801683c2262327235bf9398"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaffe41fc9a1116af04dbf5776435134c7" id="r_gaffe41fc9a1116af04dbf5776435134c7"><td class="memItemLeft" align="right" valign="top">
+volatile uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>gpsUartBuffer</b> [RX_BUFFER_SIZE]</td></tr>
+<tr class="memdesc:gaffe41fc9a1116af04dbf5776435134c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPS UART RX buffer. <br /></td></tr>
+<tr class="separator:gaffe41fc9a1116af04dbf5776435134c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga00e72437510c402eb291d765d8aed45e" id="r_ga00e72437510c402eb291d765d8aed45e"><td class="memItemLeft" align="right" valign="top">
+volatile bool&#160;</td><td class="memItemRight" valign="bottom"><b>gpsStringEnd</b> = false</td></tr>
+<tr class="memdesc:ga00e72437510c402eb291d765d8aed45e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag for end of string. <br /></td></tr>
+<tr class="separator:ga00e72437510c402eb291d765d8aed45e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae021a0d3978fc330c79c1ee6d4127815" id="r_gae021a0d3978fc330c79c1ee6d4127815"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="struct_gps_g_g_a_data__t.html">GpsGGAData_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>gpsGGAData</b></td></tr>
 <tr class="memdesc:gae021a0d3978fc330c79c1ee6d4127815"><td class="mdescLeft">&#160;</td><td class="mdescRight">GGA data. <br /></td></tr>

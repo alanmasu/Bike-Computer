@@ -1,30 +1,8 @@
 var searchData=
 [
-<<<<<<< HEAD
-<<<<<<< HEAD
-  ['getdatefromstring_0',['getDateFromString',['../group___g_p_s___module.html#ga5bb4c00987ab49117489206ecc74d538',1,'getDateFromString(const char *time, const char *date):&#160;GPS.c'],['../group___g_p_s___module.html#ga5bb4c00987ab49117489206ecc74d538',1,'getDateFromString(const char *time, const char *date):&#160;GPS.c']]],
-  ['getlatitudefromstring_1',['getLatitudeFromString',['../group___g_p_s___module.html#ga07b763e689b8994afd0a5cc705c3d5af',1,'getLatitudeFromString(char *str):&#160;GPS.c'],['../group___g_p_s___module.html#ga07b763e689b8994afd0a5cc705c3d5af',1,'getLatitudeFromString(char *str):&#160;GPS.c']]],
-  ['getlongitudefromstring_2',['getLongitudeFromString',['../group___g_p_s___module.html#ga433207ca74eacde33dc944a4b810a826',1,'getLongitudeFromString(char *str):&#160;GPS.c'],['../group___g_p_s___module.html#ga433207ca74eacde33dc944a4b810a826',1,'getLongitudeFromString(char *str):&#160;GPS.c']]],
-  ['gettimefromstring_3',['getTimeFromString',['../group___g_p_s___module.html#ga2ca620ddfdffeb60dd2dade210e7447e',1,'getTimeFromString(const char *str):&#160;GPS.c'],['../group___g_p_s___module.html#ga2ca620ddfdffeb60dd2dade210e7447e',1,'getTimeFromString(const char *str):&#160;GPS.c']]],
-  ['gpsdmaconfiguration_4',['gpsDMAConfiguration',['../group___g_p_s___module.html#gaa65fe8033648cd0d8db16826914854ec',1,'gpsDMAConfiguration(void):&#160;GPS.c'],['../group___g_p_s___module.html#gaa65fe8033648cd0d8db16826914854ec',1,'gpsDMAConfiguration(void):&#160;GPS.c']]],
-  ['gpsdmarestorechannel_5',['gpsDMARestoreChannel',['../group___g_p_s___module.html#gaf47632cdd5d24f0eba6a351be4d7d965',1,'gpsDMARestoreChannel(void):&#160;GPS.c'],['../group___g_p_s___module.html#gaf47632cdd5d24f0eba6a351be4d7d965',1,'gpsDMARestoreChannel(void):&#160;GPS.c']]],
-  ['gpsparsedata_6',['gpsParseData',['../group___g_p_s___module.html#ga6ccdb8245b89ca23840ec02d748c6ddf',1,'gpsParseData(const char *packet):&#160;GPS.c'],['../group___g_p_s___module.html#ga6ccdb8245b89ca23840ec02d748c6ddf',1,'gpsParseData(const char *packet):&#160;GPS.c']]],
-  ['gpsuartconfig_7',['gpsUartConfig',['../group___g_p_s___module.html#ga4093f2712484f9929c0888ffac40c43e',1,'gpsUartConfig(void):&#160;GPS.c'],['../group___g_p_s___module.html#ga4093f2712484f9929c0888ffac40c43e',1,'gpsUartConfig(void):&#160;GPS.c']]],
-  ['gpxaddnewtracksegment_8',['GPXAddNewTrackSegment',['../group___g_p_x___module.html#ga9b20d87062d878a816fec95084671e20',1,'GPXAddNewTrackSegment(FILE_TYPE file):&#160;GPX.c'],['../group___g_p_x___module.html#ga9b20d87062d878a816fec95084671e20',1,'GPXAddNewTrackSegment(FILE_TYPE file):&#160;GPX.c']]],
-  ['gpxaddtrack_9',['GPXAddTrack',['../group___g_p_x___module.html#ga4558fc2ee488de655a9fc6d8965dab8b',1,'GPXAddTrack(FILE_TYPE file, const char *time):&#160;GPX.c'],['../group___g_p_x___module.html#ga4558fc2ee488de655a9fc6d8965dab8b',1,'GPXAddTrack(FILE_TYPE file, const char *time):&#160;GPX.c']]],
-  ['gpxaddtrackname_10',['GPXAddTrackName',['../group___g_p_x___module.html#gaad9a2c7504d573939e4f79cb5280a29f',1,'GPXAddTrackName(FILE_TYPE file, const char *name):&#160;GPX.c'],['../group___g_p_x___module.html#gaad9a2c7504d573939e4f79cb5280a29f',1,'GPXAddTrackName(FILE_TYPE file, const char *name):&#160;GPX.c']]],
-  ['gpxaddtrackpoint_11',['GPXAddTrackPoint',['../group___g_p_x___module.html#gaeba2828014017709427570a3715b70de',1,'GPXAddTrackPoint(FILE_TYPE file, const char *lat, const char *lon, const char *ele, const char *time):&#160;GPX.c'],['../group___g_p_x___module.html#gaeba2828014017709427570a3715b70de',1,'GPXAddTrackPoint(FILE_TYPE file, const char *lat, const char *lon, const char *ele, const char *time):&#160;GPX.c']]],
-  ['gpxaddtracksegment_12',['GPXAddTrackSegment',['../group___g_p_x___module.html#ga98fc665328e61104618799da2342c762',1,'GPXAddTrackSegment(FILE_TYPE file):&#160;GPX.c'],['../group___g_p_x___module.html#ga98fc665328e61104618799da2342c762',1,'GPXAddTrackSegment(FILE_TYPE file):&#160;GPX.c']]],
-  ['gpxaddtracktype_13',['GPXAddTrackType',['../group___g_p_x___module.html#ga429f25ca9f24c62adf1ef5e28ad9bada',1,'GPXAddTrackType(FILE_TYPE file, const char *type):&#160;GPX.c'],['../group___g_p_x___module.html#ga429f25ca9f24c62adf1ef5e28ad9bada',1,'GPXAddTrackType(FILE_TYPE file, const char *type):&#160;GPX.c']]],
-  ['gpxclosefile_14',['GPXCloseFile',['../group___g_p_x___module.html#gac39b6b265c6355806f4ee93dd7020cc4',1,'GPXCloseFile(FILE_TYPE file):&#160;GPX.c'],['../group___g_p_x___module.html#gac39b6b265c6355806f4ee93dd7020cc4',1,'GPXCloseFile(FILE_TYPE file):&#160;GPX.c']]],
-  ['gpxclosetrack_15',['GPXCloseTrack',['../group___g_p_x___module.html#ga95fda0a1bace01ffa54496678c0b830b',1,'GPXCloseTrack(FILE_TYPE file):&#160;GPX.c'],['../group___g_p_x___module.html#ga95fda0a1bace01ffa54496678c0b830b',1,'GPXCloseTrack(FILE_TYPE file):&#160;GPX.c']]],
-  ['gpxclosetracksegment_16',['GPXCloseTrackSegment',['../group___g_p_x___module.html#ga1490a3a2911ac6e4b8283b6151d48032',1,'GPXCloseTrackSegment(FILE_TYPE file):&#160;GPX.c'],['../group___g_p_x___module.html#ga1490a3a2911ac6e4b8283b6151d48032',1,'GPXCloseTrackSegment(FILE_TYPE file):&#160;GPX.c']]],
-  ['gpxinitfile_17',['GPXInitFile',['../group___g_p_x___module.html#ga4290d61b28e904b6f5343b4c598d2a49',1,'GPXInitFile(FILE_TYPE file, const char *filename):&#160;GPX.c'],['../group___g_p_x___module.html#ga4290d61b28e904b6f5343b4c598d2a49',1,'GPXInitFile(FILE_TYPE file, const char *filename):&#160;GPX.c']]]
-=======
-  ['drawgrid1_0',['drawGrid1',['../group___l_c_d__module.html#gaf4e89960258b6df032691612941d1c80',1,'mainInterface.c']]],
-  ['drawgrid2_1',['drawGrid2',['../group___l_c_d__module.html#gac203cbd46a5a6e3812d51060c0da6291',1,'mainInterface.c']]]
->>>>>>> LCD-Temperature
-=======
-  ['timerinit_0',['timerInit',['../group__speed___module.html#gaf927959e78504fd1afe1be1e10791ae0',1,'timerInit():&#160;speed.c'],['../group__speed___module.html#gaf927959e78504fd1afe1be1e10791ae0',1,'timerInit():&#160;speed.c']]]
->>>>>>> speed-hallSensor
+  ['distancecovered_0',['distanceCovered',['../group__speed___module.html#gaeb3ee8cb97d89518abaf7589d7ace824',1,'distanceCovered():&#160;speed.c'],['../group__speed___module.html#gaeb3ee8cb97d89518abaf7589d7ace824',1,'distanceCovered():&#160;speed.c']]],
+  ['dma_5fint1_5firqhandler_1',['DMA_INT1_IRQHandler',['../group___g_p_s___module.html#ga2db538345499749ea158c96b0f4f8318',1,'GPS.c']]],
+  ['dmainit_2',['dmaInit',['../_d_m_a_module_8c.html#a2efa21dedda1992b5cb10ca9335d17f2',1,'dmaInit(void):&#160;DMAModule.c'],['../_d_m_a_module_8h.html#a2efa21dedda1992b5cb10ca9335d17f2',1,'dmaInit(void):&#160;DMAModule.c']]],
+  ['drawgrid1_3',['drawGrid1',['../group___l_c_d__module.html#gaf4e89960258b6df032691612941d1c80',1,'mainInterface.c']]],
+  ['drawgrid2_4',['drawGrid2',['../group___l_c_d__module.html#gac203cbd46a5a6e3812d51060c0da6291',1,'mainInterface.c']]]
 ];

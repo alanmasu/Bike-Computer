@@ -85,21 +85,29 @@ $(function() {
 <p><a href="speed_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader">Speed Module</h2></td></tr>
-<tr class="memitem:gac3012347411c5e706cc5d002f1e9e5dd" id="r_gac3012347411c5e706cc5d002f1e9e5dd"><td class="memItemLeft" align="right" valign="top">
-volatile bool&#160;</td><td class="memItemRight" valign="bottom"><b>isrFlag</b></td></tr>
-<tr class="separator:gac3012347411c5e706cc5d002f1e9e5dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga242341ffd8d5f006694fafe1c94246d6" id="r_ga242341ffd8d5f006694fafe1c94246d6"><td class="memItemLeft" align="right" valign="top">
+volatile bool&#160;</td><td class="memItemRight" valign="bottom"><b>speedFlag</b></td></tr>
+<tr class="memdesc:ga242341ffd8d5f006694fafe1c94246d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to arise if wheel has completed one round. <br /></td></tr>
+<tr class="separator:ga242341ffd8d5f006694fafe1c94246d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga81cac9d54f7e26ae6ff3e9e8633f85dc" id="r_ga81cac9d54f7e26ae6ff3e9e8633f85dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__speed___module.html#ga81cac9d54f7e26ae6ff3e9e8633f85dc">setWheelDiameter</a> (float userDiameter)</td></tr>
 <tr class="memdesc:ga81cac9d54f7e26ae6ff3e9e8633f85dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets wheel diameter for this module.  <br /></td></tr>
 <tr class="separator:ga81cac9d54f7e26ae6ff3e9e8633f85dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga36bdc446e9ae4502ab871d98815006db" id="r_ga36bdc446e9ae4502ab871d98815006db"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__speed___module.html#ga36bdc446e9ae4502ab871d98815006db">speedCompute</a> (uint_fast16_t capturedValue)</td></tr>
 <tr class="memdesc:ga36bdc446e9ae4502ab871d98815006db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes speed using captured value from sensor.  <br /></td></tr>
 <tr class="separator:ga36bdc446e9ae4502ab871d98815006db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf927959e78504fd1afe1be1e10791ae0" id="r_gaf927959e78504fd1afe1be1e10791ae0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__speed___module.html#gaf927959e78504fd1afe1be1e10791ae0">timerInit</a> ()</td></tr>
-<tr class="memdesc:gaf927959e78504fd1afe1be1e10791ae0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes timer in continuous mode and capture mode and starts counter.  <br /></td></tr>
-<tr class="separator:gaf927959e78504fd1afe1be1e10791ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab8891b7a3741e00ce2a34fecda9c99b9" id="r_gab8891b7a3741e00ce2a34fecda9c99b9"><td class="memItemLeft" align="right" valign="top">
-uint_fast16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getTimerAcapturedValue</b> ()</td></tr>
+<tr class="memitem:ga84829048ccd77637b4be7583d3bcfd92" id="r_ga84829048ccd77637b4be7583d3bcfd92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__speed___module.html#ga84829048ccd77637b4be7583d3bcfd92">timerInit</a> (const Timer_A_ContinuousModeConfig *continuousModeConfig, const Timer_A_CaptureModeConfig *captureModeConfig)</td></tr>
+<tr class="memdesc:ga84829048ccd77637b4be7583d3bcfd92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes timer in continuous mode and capture mode and starts counter.  <br /></td></tr>
+<tr class="separator:ga84829048ccd77637b4be7583d3bcfd92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab8891b7a3741e00ce2a34fecda9c99b9" id="r_gab8891b7a3741e00ce2a34fecda9c99b9"><td class="memItemLeft" align="right" valign="top">uint_fast16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__speed___module.html#gab8891b7a3741e00ce2a34fecda9c99b9">getTimerAcapturedValue</a> ()</td></tr>
+<tr class="memdesc:gab8891b7a3741e00ce2a34fecda9c99b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for timerAcapturedValue.  <br /></td></tr>
 <tr class="separator:gab8891b7a3741e00ce2a34fecda9c99b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaeb3ee8cb97d89518abaf7589d7ace824" id="r_gaeb3ee8cb97d89518abaf7589d7ace824"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__speed___module.html#gaeb3ee8cb97d89518abaf7589d7ace824">distanceCovered</a> ()</td></tr>
+<tr class="memdesc:gaeb3ee8cb97d89518abaf7589d7ace824"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes distance covered since wheel starts moving.  <br /></td></tr>
+<tr class="separator:gaeb3ee8cb97d89518abaf7589d7ace824"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae1792c43fdb2a538d67b5c72ecc4faec" id="r_gae1792c43fdb2a538d67b5c72ecc4faec"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>resetRoundsCounter</b> ()</td></tr>
+<tr class="memdesc:gae1792c43fdb2a538d67b5c72ecc4faec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets rounds counter to reset distance. <br /></td></tr>
+<tr class="separator:gae1792c43fdb2a538d67b5c72ecc4faec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Speed functions definition. </p>

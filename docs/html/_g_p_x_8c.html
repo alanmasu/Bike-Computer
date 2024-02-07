@@ -145,10 +145,19 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= <span class="stringliteral">&quot;\</span></div>
-<div class="line"><span class="stringliteral">&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;\n\</span></div>
-<div class="line"><span class="stringliteral">&lt;gpx version=\&quot;1.1\&quot; creator=\&quot;IoTProject2023\&quot; xmlns=\&quot;http://www.topografix.com/GPX/1/1\&quot; \</span></div>
+<div class="line"><span class="stringliteral">&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;UTF-8\&quot;?&gt;\n\</span></div>
+<div class="line"><span class="stringliteral">&lt;gpx xmlns=\&quot;http://www.topografix.com/GPX/1/1\&quot; \</span></div>
+<div class="line"><span class="stringliteral">xmlns:gpxtpx=\&quot;http://www.garmin.com/xmlschemas/TrackPointExtension/v1\&quot; \</span></div>
+<div class="line"><span class="stringliteral">xmlns:gpxx=\&quot;http://www.garmin.com/xmlschemas/GpxExtensions/v3\&quot; \</span></div>
 <div class="line"><span class="stringliteral">xmlns:xsi=\&quot;http://www.w3.org/2001/XMLSchema-instance\&quot; \</span></div>
-<div class="line"><span class="stringliteral">xsi:schemaLocation=\&quot;http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\&quot;&gt;\n&quot;</span></div>
+<div class="line"><span class="stringliteral">xsi:schemaLocation=\&quot;http://www.topografix.com/GPX/1/1 \</span></div>
+<div class="line"><span class="stringliteral">http://www.topografix.com/GPX/1/1/gpx.xsd \</span></div>
+<div class="line"><span class="stringliteral">http://www.garmin.com/xmlschemas/GpxExtensions/v3 \</span></div>
+<div class="line"><span class="stringliteral">http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd \</span></div>
+<div class="line"><span class="stringliteral">http://www.garmin.com/xmlschemas/TrackPointExtension/v1 \</span></div>
+<div class="line"><span class="stringliteral">http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd\&quot; \</span></div>
+<div class="line"><span class="stringliteral">version=\&quot;1.1\&quot; \</span></div>
+<div class="line"><span class="stringliteral">creator=\&quot;IoTProject2023\&quot;&gt;\n&quot;</span></div>
 </div><!-- fragment -->
 <p>GPX Header Constant String. </p>
 <p>Constant string containing the GPX header, it is used to:</p><ul>
