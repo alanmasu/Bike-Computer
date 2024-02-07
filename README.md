@@ -26,14 +26,14 @@ The functionality of this bike computer is identical to the commercial ones, the
 Thanks to GPS the user is able to download GPX tracks (possibly via bluetooth on your phone) to create a map with an online tool.
 All parts built to contain the project's components, like the MSP and other sensors, are made in PLA at the Fablab laboratoty, at the University of Trento.
 
-Some improvements:
+## Some improvements:
 - Rather then using a lcd monitor, we can use the screen of a mobile phone connected to the bike computer via Bluetooth
 	+ more “IoT” project
 	+ more effective
 	+ everybody has his phone with him
 	- more complex
 
-How to build the project:
+## How to build the project:
   - Installing Code Composer studio
   - Download the DriverLib from Moodle and unpack in a directory which you prefer
   - Open CCS Preferences (Window > Preferences)
