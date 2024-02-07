@@ -1,3 +1,10 @@
+/*!
+    @file   BSS.c
+    @brief  Defining functions for initializing BSS, compute, classify and manage status and lights of bike. 
+    @date   14/12/2023
+    @author Alberto Dal Bosco
+*/
+
 //#define SIMULATE_HARDWARE
 
 #ifndef SIMULATE_HARDWARE
@@ -24,6 +31,11 @@
     #include <time.h>
 
 #endif
+
+/*!
+    @addtogroup BSS_module
+    @{
+*/
 
 volatile static model_t model_BSS;
 
@@ -335,6 +347,11 @@ void classify(model_t* model){                          // establish model class
         }
         Timer_A_clearCaptureCompareInterrupt(TIMER_A2_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_0);
     }
+
+
+/*
+    @}
+*/
 
 #endif
 
