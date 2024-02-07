@@ -3,10 +3,10 @@
 "Bike computer" is a university project for the course of Embedded Software for the IoT, at the University of Trento.
 
 Authors:
-- [@AlbertoDB20](https://github.com/AlbertoDB20)
-- [@alanmasu](https://github.com/alanmasu)
-- [@sofiaz17](https://github.com/Sofiaz17)
-- [@kikalore](https://github.com/kikalore)
+- Alberto Dal Bosco [@AlbertoDB20](https://github.com/AlbertoDB20)
+- Alan Masutti [@alanmasu](https://github.com/alanmasu)
+- Sofia Zandonà [@sofiaz17](https://github.com/Sofiaz17)
+- Federica Lorenzini [@kikalore](https://github.com/kikalore)
 
 The goal of the project is the realization of a bike computer equipped with many functions common to many odometers on the market today, such as reporting instantaneous speed, average speed, clock, and distance traveled but also more advanced statistics such as altitude, GPS coordinates, automatic management of lights based on external ambient light and a safe system which, in the event of sudden braking, flashes the rear lights to warn other cyclists or cars of the emergency.
 
