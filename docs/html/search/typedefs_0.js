@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['toshowpage1_0',['toShowPage1',['../group___l_c_d__module.html#gae462f8463bc74b57bc3bb4f4001b665c',1,'mainInterface.h']]],
-  ['toshowpage2_1',['toShowPage2',['../group___l_c_d__module.html#gacfb3f14921b72a9fced834b669ac65ab',1,'mainInterface.h']]]
+  ['accelwindow_0',['accelWindow',['../group___b_s_s__module.html#ga7eef7767ced179d672c640817c621d75',1,'BSS.h']]]
 ];

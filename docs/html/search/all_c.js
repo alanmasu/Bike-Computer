@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['others_0',['others',['../struct_gps_r_m_c_data__t.html#a51d57d82487a5e72232218bb0954dd8f',1,'GpsRMCData_t']]]
+  ['nmeachecksumvalidate_0',['nmeaChecksumValidate',['../group___g_p_s___module.html#ga5003c94ceae9e3f2905c59148060dc54',1,'nmeaChecksumValidate(const char *sentence, char **nextSentence):&#160;GPS.c'],['../group___g_p_s___module.html#ga5003c94ceae9e3f2905c59148060dc54',1,'nmeaChecksumValidate(const char *sentence, char **nextSentence):&#160;GPS.c']]]
 ];

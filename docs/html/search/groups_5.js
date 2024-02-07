@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['temperature_0',['Temperature',['../group___temp__module.html',1,'']]]
+  ['mpu6050_0',['MPU6050',['../group___m_p_u6050__module.html',1,'']]]
 ];

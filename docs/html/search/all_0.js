@@ -1,11 +1,8 @@
 var searchData=
 [
-  ['adc_0',['ADC',['../group___a_d_c__module.html',1,'']]],
-  ['adc_2ec_1',['adc.c',['../adc_8c.html',1,'']]],
-  ['adc_2eh_2',['adc.h',['../adc_8h.html',1,'']]],
-  ['adc14init_3',['ADC14Init',['../group___photoresistor___module.html#ga434fa178dcefee1f9b16a0d62e821280',1,'ADC14Init(const Timer_A_UpModeConfig *upModeConfig, const Timer_A_CompareModeConfig *compareConfig):&#160;photoresistor.c'],['../group___photoresistor___module.html#ga434fa178dcefee1f9b16a0d62e821280',1,'ADC14Init(const Timer_A_UpModeConfig *upModeConfig, const Timer_A_CompareModeConfig *compareConfig):&#160;photoresistor.c']]],
-  ['addpointtogpxfromgps_4',['addPointToGPXFromGPS',['../group___g_p_s___module.html#ga2d57fd24699b437dc44e3b46b5db7fba',1,'addPointToGPXFromGPS(FILE_TYPE file):&#160;GPS.c'],['../group___g_p_s___module.html#ga2d57fd24699b437dc44e3b46b5db7fba',1,'addPointToGPXFromGPS(FILE_TYPE file):&#160;GPS.c']]],
-  ['altitude_5',['altitude',['../struct_gps_g_g_a_data__t.html#aca65215c5de0ad10740ce2e7ed480a69',1,'GpsGGAData_t::altitude'],['../struct_gps_r_m_c_data__t.html#aca65215c5de0ad10740ce2e7ed480a69',1,'GpsRMCData_t::altitude']]],
-  ['altitude_5fwsg84_6',['altitude_WSG84',['../struct_gps_g_g_a_data__t.html#a05f514ce4a2727d93b79b33f0e7e5052',1,'GpsGGAData_t']]],
-  ['azimuth_7',['azimuth',['../struct_sat_data__t.html#a14c591b85d71b4501d3653e4dbf72b06',1,'SatData_t']]]
+  ['_5f_5fattribute_5f_5f_0',['__attribute__',['../group___b_s_s__module.html#ga5e135ab23e5a1397cdab323bad1ea7a6',1,'BSS.c']]],
+  ['_5fbssinit_1',['_BSSInit',['../group___b_s_s__module.html#ga4ab7747c3087d93a1896ee1a89f4a150',1,'BSS.c']]],
+  ['_5fledinit_2',['_ledInit',['../group___b_s_s__module.html#gaf992b2fda8c49535140ab57663b8b0d9',1,'BSS.c']]],
+  ['_5fmpu6050sensorinit_3',['_MPU6050SensorInit',['../group___b_s_s__module.html#ga11e58491cfdbd2a583fbcc558891b3c0',1,'BSS.c']]],
+  ['_5ftimerflashinit_4',['_timerFlashInit',['../group___b_s_s__module.html#gaff92219f94d50598e22400c86a58eb9d',1,'BSS.c']]]
 ];

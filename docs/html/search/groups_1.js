@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['gps_0',['GPS',['../group___g_p_s___module.html',1,'']]],
-  ['gpx_1',['GPX',['../group___g_p_x___module.html',1,'']]]
+  ['bss_0',['BSS',['../group___b_s_s__module.html',1,'']]]
 ];

@@ -79,41 +79,57 @@ $(function() { codefold.init(0); });
   <div class="headertitle"><div class="title">MPU6050.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef __MPU6050_H_</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define __MPU6050_H_</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">/* MPU6050 COSTANTS */</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#define MPU6050_SLAVE_ADDR              0x68</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#define I2C_SCL                         BIT7</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#define I2C_SDA                         BIT6</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">/* MPU6050 SENSOR REGISTER DEFINITIONS */</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#define PWR_MGMT_1                      0x6B</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#define MPU6050_ACCEL_CONFIG_REG        0x1C</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#define WHO_AM_I_REGISTER               0x75           </span><span class="comment">// Who am I register --&gt; Contains the 6-bit I2C address of the MPU-60X0.</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#define ACCEL_XOUT_MS_REG               0x3B</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#define ACCEL_XOUT_LS_REG               0x3C</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#define ACCEL_YOUT_MS_REG               0x3D</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#define ACCEL_YOUT_LS_REG               0x3E</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#define ACCEL_ZOUT_MS_REG               0x3F</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#define ACCEL_ZOUT_LS_REG               0x40</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#define TEMP_OUT_MS_REG                 0x41</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#define TEMP_OUT_LS_REG                 0x42</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">/* CONFIGURATION REGISTER SETTINGS */</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#define MPU6050_DEVICE_RESET            0x80           </span><span class="comment">// bit 7 of PWR_MGMT register, when set to 1, resets all internal registers to their default values.</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#define MPU6050_INIT_VALUE              0x00</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#define MPU6050_AFS_SEL_REG             0x10</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keywordtype">void</span> MPU6050_init(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="keywordtype">int</span> MPU6050_readDeviceId(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keywordtype">double</span> MPU6050_readXvalue(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keywordtype">double</span> MPU6050_readYvalue(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="keywordtype">double</span> MPU6050_readZvalue(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keywordtype">double</span> MPU6050_readTemp_chip(<span class="keywordtype">void</span>);</div>
+<a href="_m_p_u6050_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#ifndef __MPU6050_H_</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#define __MPU6050_H_</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">/* MPU6050 COSTANTS */</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#define MPU6050_SLAVE_ADDR              0x68</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#define I2C_SCL                         BIT7</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#define I2C_SDA                         BIT6</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">/* MPU6050 SENSOR REGISTER DEFINITIONS */</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#define PWR_MGMT_1                      0x6B</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#define MPU6050_ACCEL_CONFIG_REG        0x1C</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#define WHO_AM_I_REGISTER               0x75           </span><span class="comment">// Who am I register --&gt; Contains the 6-bit I2C address of the MPU-60X0.</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#define ACCEL_XOUT_MS_REG               0x3B</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#define ACCEL_XOUT_LS_REG               0x3C</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#define ACCEL_YOUT_MS_REG               0x3D</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#define ACCEL_YOUT_LS_REG               0x3E</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#define ACCEL_ZOUT_MS_REG               0x3F</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#define ACCEL_ZOUT_LS_REG               0x40</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#define TEMP_OUT_MS_REG                 0x41</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#define TEMP_OUT_LS_REG                 0x42</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">/* CONFIGURATION REGISTER SETTINGS */</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#define MPU6050_DEVICE_RESET            0x80           </span><span class="comment">// bit 7 of PWR_MGMT register, when set to 1, resets all internal registers to their default values.</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#define MPU6050_INIT_VALUE              0x00</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#define MPU6050_AFS_SEL_REG             0x10</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="keywordtype">void</span> <a class="code hl_function" href="group___m_p_u6050__module.html#gae49507a5d33bca6a2cc2c635de8b141e">MPU6050_init</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="keywordtype">int</span> <a class="code hl_function" href="group___m_p_u6050__module.html#ga46870de72aa8a57cc8bc0b274f85f6a4">MPU6050_readDeviceId</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="keywordtype">double</span> <a class="code hl_function" href="group___m_p_u6050__module.html#gabc75121c7b2ccc8a61d8c031da52dfd0">MPU6050_readXvalue</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="keywordtype">double</span> <a class="code hl_function" href="group___m_p_u6050__module.html#ga9d46945b8064e8f612ba8b6b84e24c89">MPU6050_readYvalue</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="keywordtype">double</span> <a class="code hl_function" href="group___m_p_u6050__module.html#gaf7d84f6196d65baf4d8a041517dcad20">MPU6050_readZvalue</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="keywordtype">double</span> <a class="code hl_function" href="group___m_p_u6050__module.html#ga381c23a425c5c3f3bddcc42c775a467d">MPU6050_readTemp_chip</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment">    @}</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment">*/</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="agroup___m_p_u6050__module_html_ga381c23a425c5c3f3bddcc42c775a467d"><div class="ttname"><a href="group___m_p_u6050__module.html#ga381c23a425c5c3f3bddcc42c775a467d">MPU6050_readTemp_chip</a></div><div class="ttdeci">double MPU6050_readTemp_chip(void)</div><div class="ttdoc">Read temperature of the chip.</div><div class="ttdef"><b>Definition</b> MPU6050.c:81</div></div>
+<div class="ttc" id="agroup___m_p_u6050__module_html_ga46870de72aa8a57cc8bc0b274f85f6a4"><div class="ttname"><a href="group___m_p_u6050__module.html#ga46870de72aa8a57cc8bc0b274f85f6a4">MPU6050_readDeviceId</a></div><div class="ttdeci">int MPU6050_readDeviceId(void)</div><div class="ttdoc">Read accelerometer id, just for test.</div><div class="ttdef"><b>Definition</b> MPU6050.c:44</div></div>
+<div class="ttc" id="agroup___m_p_u6050__module_html_ga9d46945b8064e8f612ba8b6b84e24c89"><div class="ttname"><a href="group___m_p_u6050__module.html#ga9d46945b8064e8f612ba8b6b84e24c89">MPU6050_readYvalue</a></div><div class="ttdeci">double MPU6050_readYvalue(void)</div><div class="ttdoc">Read acceleration along y axis.</div><div class="ttdef"><b>Definition</b> MPU6050.c:61</div></div>
+<div class="ttc" id="agroup___m_p_u6050__module_html_gabc75121c7b2ccc8a61d8c031da52dfd0"><div class="ttname"><a href="group___m_p_u6050__module.html#gabc75121c7b2ccc8a61d8c031da52dfd0">MPU6050_readXvalue</a></div><div class="ttdeci">double MPU6050_readXvalue(void)</div><div class="ttdoc">Read acceleration along x axis.</div><div class="ttdef"><b>Definition</b> MPU6050.c:51</div></div>
+<div class="ttc" id="agroup___m_p_u6050__module_html_gae49507a5d33bca6a2cc2c635de8b141e"><div class="ttname"><a href="group___m_p_u6050__module.html#gae49507a5d33bca6a2cc2c635de8b141e">MPU6050_init</a></div><div class="ttdeci">void MPU6050_init(void)</div><div class="ttdoc">Init of accelerometer sensor.</div><div class="ttdef"><b>Definition</b> MPU6050.c:18</div></div>
+<div class="ttc" id="agroup___m_p_u6050__module_html_gaf7d84f6196d65baf4d8a041517dcad20"><div class="ttname"><a href="group___m_p_u6050__module.html#gaf7d84f6196d65baf4d8a041517dcad20">MPU6050_readZvalue</a></div><div class="ttdeci">double MPU6050_readZvalue(void)</div><div class="ttdoc">Read acceleration along z axis.</div><div class="ttdef"><b>Definition</b> MPU6050.c:71</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

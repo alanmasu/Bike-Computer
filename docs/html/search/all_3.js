@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['distancecovered_0',['distanceCovered',['../group__speed___module.html#gaeb3ee8cb97d89518abaf7589d7ace824',1,'distanceCovered():&#160;speed.c'],['../group__speed___module.html#gaeb3ee8cb97d89518abaf7589d7ace824',1,'distanceCovered():&#160;speed.c']]],
-  ['dma_5fint1_5firqhandler_1',['DMA_INT1_IRQHandler',['../group___g_p_s___module.html#ga2db538345499749ea158c96b0f4f8318',1,'GPS.c']]],
-  ['dmainit_2',['dmaInit',['../_d_m_a_module_8c.html#a2efa21dedda1992b5cb10ca9335d17f2',1,'dmaInit(void):&#160;DMAModule.c'],['../_d_m_a_module_8h.html#a2efa21dedda1992b5cb10ca9335d17f2',1,'dmaInit(void):&#160;DMAModule.c']]],
-  ['dmamodule_2ec_3',['DMAModule.c',['../_d_m_a_module_8c.html',1,'']]],
-  ['dmamodule_2eh_4',['DMAModule.h',['../_d_m_a_module_8h.html',1,'']]],
-  ['documentation_5',['Project Documentation',['../index.html#autotoc_md1',1,'']]],
-  ['drawgrid1_6',['drawGrid1',['../group___l_c_d__module.html#gaf4e89960258b6df032691612941d1c80',1,'mainInterface.c']]],
-  ['drawgrid2_7',['drawGrid2',['../group___l_c_d__module.html#gac203cbd46a5a6e3812d51060c0da6291',1,'mainInterface.c']]]
+  ['class_0',['class',['../group___b_s_s__module.html#gadcc97267aaedee8c4576f7260b15f653',1,'model_t']]],
+  ['class_5ft_1',['class_t',['../group___b_s_s__module.html#ga17c986b35a3279592149e28dd4be4b67',1,'BSS.h']]],
+  ['classify_2',['classify',['../group___b_s_s__module.html#gab50fd06bf2d5af7ca450d7db0733b0d0',1,'BSS.c']]],
+  ['compute_3',['compute',['../group___b_s_s__module.html#ga24485a1ede5bc2fcb2b7f197a7cb5689',1,'BSS.c']]],
+  ['computer_4',['BIKE COMPUTER',['../index.html',1,'']]],
+  ['conres_5',['conRes',['../group___a_d_c__module.html#gaf5f4e51cd909ce10579e10403ebe32e4',1,'conRes:&#160;adc.c'],['../group___a_d_c__module.html#gaf5f4e51cd909ce10579e10403ebe32e4',1,'conRes:&#160;adc.c']]],
+  ['course_6',['course',['../struct_gps_r_m_c_data__t.html#ae70fbc267f03473adc5185e3c1e527f2',1,'GpsRMCData_t']]],
+  ['coursem_7',['courseM',['../struct_gps_v_t_g_data__t.html#a5ae35bf9911da3cde8ceb9bd4938619f',1,'GpsVTGData_t']]]
 ];

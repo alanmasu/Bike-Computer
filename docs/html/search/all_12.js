@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['vdop_0',['vdop',['../struct_gps_g_s_a_data__t.html#a465cb134b5de046d9f398a5eba555fff',1,'GpsGSAData_t']]]
+  ['uart0config_0',['UART0Config',['../main_8c.html#a98d493df725185f895d921f2f3263779',1,'main.c']]],
+  ['uartconfig_1',['uartConfig',['../group___g_p_s___module.html#gad359190a2ebcf7279dc06e2c6e41aac6',1,'GPS.c']]]
 ];
