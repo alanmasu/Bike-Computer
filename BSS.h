@@ -73,7 +73,7 @@ typedef struct {
     @param[in] model: model struct.
     @param[in] light: light from photoresistor.
 */
-void set_light(model_t* model, float light);
+void set_light(float light);
 
 /*!
     @brief getter for the model
