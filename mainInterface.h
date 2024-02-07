@@ -21,6 +21,7 @@
     @{
 */
 
+extern float wheelDim;
 extern Graphics_Context g_sContext;
 extern tRectangle mutipleData;
 extern tRectangle instSpeed;

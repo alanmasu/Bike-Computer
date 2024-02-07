@@ -342,14 +342,14 @@ void main(void){
 
         id = MPU6050_readDeviceId();
 
+        //Setting Wheel from LCD
+        setWheelDiameter(wheelDim);
+
+    
         //if wheel has completed one round, compute speed and distance travelled
         if(speedFlag){
-
-//            printf("Register value: %d\n", getTimerAcapturedValue());
             myParamStruct.speed = speedCompute(getTimerAcapturedValue());
             myParamStruct.distance = distanceCovered();
-//            printf("Speed: %f Km/h \n", myParamStruct.speed);
-//            printf("Distance: %f m \n", myParamStruct.distance);
             speedFlag = false;
         }
             
@@ -358,16 +358,11 @@ void main(void){
         if(photoresFlag){
             for(i=0; i<LIGHT_BUFFER_LENGTH; i++){
                 samplingAverage = samplingAverage + getResultBuffer()[i];
-                // printf("resultBuffer[%d]: %d\n",i,getResultBuffer()[i]);
             }
-            //printf("\n");
-            // printf("samplingAverage: %d\n",samplingAverage);
             samplingAverage /= LIGHT_BUFFER_LENGTH;
-            // printf("samplingAverage averaged: %d\n",samplingAverage);
 
             if(sendPos < 60){
                 lightToSend[sendPos] = samplingAverage;
-                //  printf("lightToSend[%d]: %d\n",sendPos, lightToSend[sendPos]);
             } else {
                 // printf("in else\n");
                 MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1,GPIO_PIN0);

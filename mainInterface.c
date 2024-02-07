@@ -34,7 +34,7 @@ int selectSpeed = 0;
 int selectDist = 0;
 int selectWheel = 0;
 int selectTemp = 0;
-static float wheelDim = 29.0;
+float wheelDim = 29.0;
 float metres = 0;     //!< To store distance in metres
 float miles = 0;      //!< To store distance in miles
 float fahrenheit = 0; //!< To store temperature in fahrenheit
@@ -83,8 +83,6 @@ void drawGrid1()
     GrStringDraw(&g_sContext, (int8_t *)"Temp:", -1, multipleData.xMin + 7, multipleData.yMin + 77, 1);
     GrRectDraw(&g_sContext, &instSpeed);
     GrStringDrawCentered(&g_sContext, (int8_t *)"Speed:", -1, 96, 42, 1);
-    GrRectDraw(&g_sContext, &tripTime);
-    GrStringDrawCentered(&g_sContext, (int8_t *)"Trip Time (h:m:s):", -1, 64, 110, 1);
 }
 
 void showPage1(toShowPage1 *paramToShow1)
@@ -136,7 +134,7 @@ void showPage1(toShowPage1 *paramToShow1)
     }
 
     // speed and time
-    snprintf(tmpString, 39, "Time: %s", paramToShow1->time);
+    snprintf(tmpString, 39, "%s", paramToShow1->time);
     GrStringDraw(&g_sContext, (int8_t *)tmpString, -1, 95, 7, 1);
 
     switch (selectSpeed)

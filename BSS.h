@@ -8,9 +8,9 @@
 #define GPIO_PORT_REAR_LIGHT    GPIO_PORT_P6            
 #define GPIO_PIN_REAR_LIGHT     GPIO_PIN7
 
-#define ACCEL_WINDOW_SIZE 1
-#define ACC_THREASHOLD -0.1
-#define LIGHT_THREASHOLD 40            // TODO: DEFINE IT WITH REAL VALUE --> 40 stands for 40% of light
+#define ACCEL_WINDOW_SIZE 10
+#define ACC_THREASHOLD -0.5
+#define LIGHT_THREASHOLD 30            
 #define ACC_MIN -4.5
 #define ACC_MAX 1.0
 #define NUM_FLASH 4
