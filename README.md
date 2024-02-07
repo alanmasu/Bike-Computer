@@ -55,7 +55,9 @@ All parts built to contain the project's components, like the MSP and other sens
         Variables > IOT_SDK_DRIVERLIB_FILE > OK
       - Repeat also for the GRLIB file
 Here you can find some useful files, used during the development -> Google Drive link:
-https://drive.google.com/drive/folders/1Llw7UDmaANK1lYZJ6caN6bu0Kb6bvCJu?usp=sharing
+ - [Drive Folder](https://drive.google.com/drive/folders/1Llw7UDmaANK1lYZJ6caN6bu0Kb6bvCJu?usp=sharing)
+ - [Presentation](https://docs.google.com/presentation/d/1XRmJYuBsh4i6TJ98qoTDD1GnXDNXojS6/edit?usp=drive_link&ouid=111557183141028025511&rtpof=true&sd=true)
+ - [link](https://youtu.be/bff7uGHaUnk) to the video   
 
 ## Project Documentation
 
