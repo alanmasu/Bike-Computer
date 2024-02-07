@@ -331,6 +331,8 @@ void main(void){
     uint_fast16_t samplingAverage = 0;
     uint_fast16_t lightToSendAverage = 0;
 
+    uint8_t id;
+
     while(1){ 
 
         // BSS functions
