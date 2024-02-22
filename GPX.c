@@ -48,6 +48,32 @@ const char* GPX_TRACK_POINT = "\
             </trkpt>\n";
 
 /*!
+    @brief      GPX Track Point start constant string
+    @details    Constant string containing the GPX track point schema and placeholders for point data;
+                it is used to add a track point to the GPX file but it is not closed, so that extensions can be added
+*/
+const char* GPX_START_TRACK_POINT = "\
+            <trkpt lat=\"%s\" lon=\"%s\">\n\
+                <ele>%s</ele>\n\
+                <time>%s</time>\n";
+const char* GPX_EXTENSION = "\
+                <extensions>\n \
+                    <gpxtpx:TrackPointExtension xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v1\">\n";
+
+
+const char* GPX_TEMP = "\
+                    <gpxtpx:atemp>%.2f</gpxtpx:atemp>\n";
+
+const char* GPX_CADENCE = "\
+                    <gpxtpx:cad>%.2f</gpxtpx:cad>\n";
+
+const char* GPX_END_EXTENSION = "\
+                    </gpxtpx:TrackPointExtension>\n \
+                </extensions>\n";
+
+const char* GPX_END_TRACK_POINT = "\
+            </trkpt>\n";
+/*!
     @brief      GPX MetaData Constant String
     @details    Constant string containing the metadata tag and placeholder for the time;
                 it is used to add the metadata mamespace to the GPX file
@@ -223,6 +249,91 @@ void GPXAddTrackPoint(FILE_TYPE file, const char* lat, const char* lon, const ch
         }
         fprintf(*file, GPX_TRACK_POINT, lat, lon, ele, time);
     #endif
+}
+
+/*!
+    @brief      GPXOpenTrackPoint
+    @details    Opens a track point to the file, but does not close it, so that extensions can be added
+    @param      file: Pointer to the file handler
+    @param      lat: Latitude of the track point
+    @param      lon: Longitude of the track point
+    @param      ele: Elevation of the track point
+    @param      time: Time of the track point
+    @pre        @ref GPXInitFile must be called before this function and almost one track and segment must be added
+*/
+void GPXOpenTrackPoint(FILE_TYPE file, const char* lat, const char* lon, const char* ele, const char* time){
+    #ifndef SIMULATE_HARDWARE
+        f_printf(file, GPX_START_TRACK_POINT, lat, lon, ele, time);
+    #else
+        if(*file == NULL){
+            return;
+        }
+        fprintf(*file, GPX_START_TRACK_POINT, lat, lon, ele, time);
+    #endif
+}
+
+void GPXAddExtensionToPoint(FILE_TYPE file){
+    #ifndef SIMULATE_HARDWARE
+        f_printf(file, GPX_EXTENSION);
+    #else
+        if(*file == NULL){
+            return;
+        }
+        fprintf(*file, GPX_EXTENSION);
+    #endif
+}
+
+void GPXAddTempToPoint(FILE_TYPE file, float temp){
+    #ifndef SIMULATE_HARDWARE
+        f_printf(file, GPX_TEMP, temp);
+    #else
+        if(*file == NULL){
+            return;
+        }
+        fprintf(*file, GPX_TEMP, temp);
+    #endif
+}
+
+void GPXAddCadenceToPoint(FILE_TYPE file, float cadence){
+    #ifndef SIMULATE_HARDWARE
+        f_printf(file, GPX_CADENCE, cadence);
+    #else
+        if(*file == NULL){
+            return;
+        }
+        fprintf(*file, GPX_CADENCE, cadence);
+    #endif
+}
+
+void GPXCloseExtension(FILE_TYPE file){
+    #ifndef SIMULATE_HARDWARE
+        f_printf(file, GPX_END_EXTENSION);
+    #else
+        if(*file == NULL){
+            return;
+        }
+        fprintf(*file, GPX_END_EXTENSION);
+    #endif
+}
+
+void GPXCloseTrackPoint(FILE_TYPE file){
+    #ifndef SIMULATE_HARDWARE
+        f_printf(file, GPX_END_TRACK_POINT);
+    #else
+        if(*file == NULL){
+            return;
+        }
+        fprintf(*file, GPX_END_TRACK_POINT);
+    #endif
+}
+
+void GPXAddCompleteTrackPoint(FILE_TYPE file, const char* lat, const char* lon, const char* ele, const char* time, float temp, float cadence){
+    GPXOpenTrackPoint(file, lat, lon, ele, time);
+    GPXAddExtensionToPoint(file);
+    GPXAddTempToPoint(file, temp);
+    GPXAddCadenceToPoint(file, cadence);
+    GPXCloseExtension(file);
+    GPXCloseTrackPoint(file);
 }
 
 /*!
